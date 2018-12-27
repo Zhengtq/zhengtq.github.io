@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/26/newwork/" itemprop="url"><网络结构>理解residual的激活方式</网络结构></a></h1>
+                <a class="post-title-link" href="/2018/12/26/newwork/" itemprop="url"><network>Understanding the activation of the residual block</network></a></h1>
         
 
         <div class="post-meta">
@@ -300,15 +300,18 @@
       
         
           
-            <h1 id="residual-模型演化"><a href="#residual-模型演化" class="headerlink" title="residual 模型演化"></a>residual 模型演化</h1><pre><code>用了residual 模块的模型结构大致有下面几个网络：
+            <h1 id="The-evloution-of-the-activation-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-in-Residual-Blocks" class="headerlink" title="The evloution of the activation in Residual Blocks"></a>The evloution of the activation in Residual Blocks</h1><pre><code>用了residual 模块的几个主流网络的activation的位置有所不同:
 </code></pre><ul>
-<li>resnet_v1    </li>
-<li>resnet_v2</li>
-<li>resnext</li>
-<li>mobilenet_v1</li>
-<li>mobilenet_v2</li>
+<li><p>resnet_v1<br>concat后有激活<br>shortcut后有激活（如过这路的shortcut有卷积的话）<br>residual后无激活</p>
+</li>
+<li><p>resnet_v2<br>concat后有激活<br>shorcut后无激活<br>residual后无激活</p>
+</li>
 </ul>
-
+<ul>
+<li>mobilenet_v2<br>concat后无激活<br>shortcut后无激活<br>residual后无激活</li>
+</ul>
+<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><pre><code>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. However, the &quot;add&quot; operation is actually a kind of nonlinear transformation for both shortcut and residual. So there is no need to use activation before and after &quot;add&quot; operation. On the other side, if we use the common &quot;relu&quot; for activation before or after concat operation, if information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the &quot;add&quot; operation in the resiudal structure.
+</code></pre>
           
         
       

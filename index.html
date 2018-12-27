@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/26/newwork/" itemprop="url"><network>Understanding the activation of the residual block</network></a></h1>
+                <a class="post-title-link" href="/2018/12/26/newwork/" itemprop="url">< Network > Understanding the activation of the residual block</a></h1>
         
 
         <div class="post-meta">
@@ -310,7 +310,7 @@
 <ul>
 <li>mobilenet_v2<br>concat后无激活<br>shortcut后无激活<br>residual后无激活</li>
 </ul>
-<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residual. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after concat operation, if information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
+<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. <strong>However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residua</strong>l. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after concat operation, if information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
 
           
         

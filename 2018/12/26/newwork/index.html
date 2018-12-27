@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="ALL STAR">
 <meta property="og:description" content="The evloution of the activation in Residual Blocks用了residual 模块的几个主流网络的activation的位置有所不同:  resnet_v1concat后有激活shortcut后有激活（如过这路的shortcut有卷积的话）residual后无激活  resnet_v2concat后有激活shorcut后无激活residual后无激活">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-27T01:56:42.513Z">
+<meta property="og:updated_time" content="2018-12-27T01:59:25.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;Network&gt;Understanding the activation of the residual block">
 <meta name="twitter:description" content="The evloution of the activation in Residual Blocks用了residual 模块的几个主流网络的activation的位置有所不同:  resnet_v1concat后有激活shortcut后有激活（如过这路的shortcut有卷积的话）residual后无激活  resnet_v2concat后有激活shorcut后无激活residual后无激活">
@@ -299,8 +299,8 @@
       
 
       
-        <h1 id="The-evloution-of-the-activation-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-in-Residual-Blocks" class="headerlink" title="The evloution of the activation in Residual Blocks"></a>The evloution of the activation in Residual Blocks</h1><pre><code>用了residual 模块的几个主流网络的activation的位置有所不同:
-</code></pre><ul>
+        <h1 id="The-evloution-of-the-activation-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-in-Residual-Blocks" class="headerlink" title="The evloution of the activation in Residual Blocks"></a>The evloution of the activation in Residual Blocks</h1><p>用了residual 模块的几个主流网络的activation的位置有所不同:</p>
+<ul>
 <li><p>resnet_v1<br>concat后有激活<br>shortcut后有激活（如过这路的shortcut有卷积的话）<br>residual后无激活</p>
 </li>
 <li><p>resnet_v2<br>concat后有激活<br>shorcut后无激活<br>residual后无激活</p>
@@ -309,8 +309,8 @@
 <ul>
 <li>mobilenet_v2<br>concat后无激活<br>shortcut后无激活<br>residual后无激活</li>
 </ul>
-<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><pre><code>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. However, the &quot;add&quot; operation is actually a kind of nonlinear transformation for both shortcut and residual. So there is no need to use activation before and after &quot;add&quot; operation. On the other side, if we use the common &quot;relu&quot; for activation before or after concat operation, if information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the &quot;add&quot; operation in the resiudal structure.
-</code></pre>
+<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residual. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after concat operation, if information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
+
       
     </div>
     

@@ -543,15 +543,14 @@
           
             <h1 id="The-evloution-of-the-activation-style-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-style-in-Residual-Blocks" class="headerlink" title="The evloution of the activation style in Residual Blocks"></a>The evloution of the activation style in Residual Blocks</h1><p>The activation style is different between different resiudal structure.</p>
 <ul>
-<li><p>resnet_v1<br>concat: activation after<br>shortcut: activation after if there is conv operation on shortcut<br>residual : no activaion after</p>
+<li><p>resnet_v1<br>shortcut: activation after if there is conv operation on shortcut<br>residual : no activaion after<br>add: activation after</p>
 </li>
-<li><p>resnet_v2<br>concat: activation after<br>shorcut: no activation after<br>residual: no acitvation after</p>
+<li><p>resnet_v2<br>shorcut: no activation after<br>residual: no acitvation after<br>add: activation after</p>
+</li>
+<li><p>mobilenet_v2<br>shortcut: no acitvation after<br>residual: no activation after<br>add: no acitvation after</p>
 </li>
 </ul>
-<ul>
-<li>mobilenet_v2<br>concat: no acitvation after<br>shortcut: no acitvation after<br>residual: no activation after</li>
-</ul>
-<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. <strong>However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residua</strong>l. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after concat operation, if information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
+<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. <strong>However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residual</strong>. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after add operation, the information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
 
           
         

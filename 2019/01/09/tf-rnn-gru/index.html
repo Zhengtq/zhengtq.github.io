@@ -87,7 +87,8 @@
 <meta property="og:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/1.png">
-<meta property="og:updated_time" content="2019-01-09T11:50:30.437Z">
+<meta property="og:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/2.png">
+<meta property="og:updated_time" content="2019-01-09T12:26:02.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; Tensorflow &gt; Implenment RNN_GRU structure in pure C">
 <meta name="twitter:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
@@ -318,6 +319,7 @@
       
         <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/09/tf-rnn-gru/1.png" alt=""> </p>
 <p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong></p>
+<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/09/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
 
       
     </div>

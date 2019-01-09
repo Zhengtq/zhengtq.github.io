@@ -79,17 +79,19 @@
 
 
 
-<meta name="description" content="Hash table and decision treeHash table is famous data structure. As all of we know, hash table is kind of dictionary, and the complexity is O(1) if you want to check a content by its key.From my point">
+<meta name="description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Algorithm &gt; Hash table and decision tree">
-<meta property="og:url" content="http://yoursite.com/2019/01/07/algorithm-hash-table/index.html">
+<meta property="og:title" content="&lt; Tensorflow &gt; Implenment RNN_GRU structure in pure C">
+<meta property="og:url" content="http://yoursite.com/2019/01/09/tf-rnn-gru/index.html">
 <meta property="og:site_name" content="ALL STAR">
-<meta property="og:description" content="Hash table and decision treeHash table is famous data structure. As all of we know, hash table is kind of dictionary, and the complexity is O(1) if you want to check a content by its key.From my point">
+<meta property="og:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-07T01:26:46.175Z">
+<meta property="og:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/1.png">
+<meta property="og:updated_time" content="2019-01-09T11:50:30.437Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Algorithm &gt; Hash table and decision tree">
-<meta name="twitter:description" content="Hash table and decision treeHash table is famous data structure. As all of we know, hash table is kind of dictionary, and the complexity is O(1) if you want to check a content by its key.From my point">
+<meta name="twitter:title" content="&lt; Tensorflow &gt; Implenment RNN_GRU structure in pure C">
+<meta name="twitter:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/1.png">
 
 
 
@@ -119,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/07/algorithm-hash-table/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/09/tf-rnn-gru/">
 
 
 
 
 
-  <title>< Algorithm > Hash table and decision tree | ALL STAR</title>
+  <title>< Tensorflow > Implenment RNN_GRU structure in pure C | ALL STAR</title>
   
 
 
@@ -232,7 +234,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/07/algorithm-hash-table/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/tf-rnn-gru/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhengtq">
@@ -249,7 +251,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Algorithm > Hash table and decision tree</h1>
+          <h1 class="post-title" itemprop="name headline">< Tensorflow > Implenment RNN_GRU structure in pure C</h1>
         
 
         <div class="post-meta">
@@ -261,8 +263,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-07T09:19:22+08:00">
-                2019-01-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T19:04:09+08:00">
+                2019-01-09
               </time>
             
 
@@ -280,8 +282,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/07/algorithm-hash-table/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/07/algorithm-hash-table/" itemprop="commentCount"></span>
+                <a href="/2019/01/09/tf-rnn-gru/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/tf-rnn-gru/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -314,7 +316,8 @@
       
 
       
-        <h1 id="Hash-table-and-decision-tree"><a href="#Hash-table-and-decision-tree" class="headerlink" title="Hash table and decision tree"></a>Hash table and decision tree</h1><p>Hash table is famous data structure. As all of we know, hash table is kind of dictionary, and the complexity is O(1) if you want to check a content by its key.<br>From my point of view, <strong>hash table can be seen as a simple decision tree. The key of a hash table can be seen as a branch feature of a decision tree.</strong> The content of the corresponding key is the classification result. So hash table can be used as a simple classifier to filter some data samples by its easy feature.</p>
+        <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/09/tf-rnn-gru/1.png" alt=""> </p>
+<p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong></p>
 
       
     </div>
@@ -339,8 +342,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/03/softmax-sigmoid-cross-entropy/" rel="next" title="< Tensorflow > Softmax cross entropy & Sigmoid cross entropy">
-                <i class="fa fa-chevron-left"></i> < Tensorflow > Softmax cross entropy & Sigmoid cross entropy
+              <a href="/2019/01/07/c-c-1/" rel="next" title="< C\C++ > Compile on linux">
+                <i class="fa fa-chevron-left"></i> < C\C++ > Compile on linux
               </a>
             
           </div>
@@ -348,10 +351,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/07/c-c-1/" rel="prev" title="< C\C++ > Compile on linux">
-                < C\C++ > Compile on linux <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -470,7 +469,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash-table-and-decision-tree"><span class="nav-number">1.</span> <span class="nav-text">Hash table and decision tree</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What’s-the-implementation-of-GRU-cell-in-tensorflow"><span class="nav-number">1.</span> <span class="nav-text">What’s the implementation of GRU cell in tensorflow?</span></a></li></ol></div>
             
 
           </div>

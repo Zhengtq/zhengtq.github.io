@@ -79,20 +79,14 @@
 
 
 
-<meta name="description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Tensorflow &gt; What is the implementation of GRU in tensorflow">
-<meta property="og:url" content="http://yoursite.com/2019/01/09/tf-rnn-gru/index.html">
+<meta property="og:title" content="Some python tricks you may never use *But* you should know">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/python-tricks-1/index.html">
 <meta property="og:site_name" content="ALL STAR">
-<meta property="og:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/1.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/2.png">
-<meta property="og:updated_time" content="2019-01-10T06:30:15.323Z">
+<meta property="og:updated_time" content="2019-01-10T07:27:11.151Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Tensorflow &gt; What is the implementation of GRU in tensorflow">
-<meta name="twitter:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
-<meta name="twitter:image" content="http://yoursite.com/2019/01/09/tf-rnn-gru/1.png">
+<meta name="twitter:title" content="Some python tricks you may never use *But* you should know">
 
 
 
@@ -122,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/09/tf-rnn-gru/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/10/python-tricks-1/">
 
 
 
 
 
-  <title>< Tensorflow > What is the implementation of GRU in tensorflow | ALL STAR</title>
+  <title>Some python tricks you may never use *But* you should know | ALL STAR</title>
   
 
 
@@ -235,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/tf-rnn-gru/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/python-tricks-1/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhengtq">
@@ -252,7 +246,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Tensorflow > What is the implementation of GRU in tensorflow</h1>
+          <h1 class="post-title" itemprop="name headline">Some python tricks you may never use *But* you should know</h1>
         
 
         <div class="post-meta">
@@ -264,8 +258,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T19:04:09+08:00">
-                2019-01-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T15:25:52+08:00">
+                2019-01-10
               </time>
             
 
@@ -283,8 +277,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/tf-rnn-gru/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/tf-rnn-gru/" itemprop="commentCount"></span>
+                <a href="/2019/01/10/python-tricks-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/10/python-tricks-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -317,13 +311,7 @@
       
 
       
-        <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/09/tf-rnn-gru/1.png" alt=""> </p>
-<p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memery of h_now to h_prev for evry cell. </p>
-<pre><code class="c"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; all_cell_num; i++)
-       <span class="built_in">memcpy</span>(h_prev[i].data_ptr, h_now[i].data_ptr, hidden_num * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));
-</code></pre>
-<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/09/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
-
+        
       
     </div>
     
@@ -347,8 +335,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/07/c-c-1/" rel="next" title="< C\C++ > Compile on linux">
-                <i class="fa fa-chevron-left"></i> < C\C++ > Compile on linux
+              <a href="/2019/01/09/tf-rnn-gru/" rel="next" title="< Tensorflow > What is the implementation of GRU in tensorflow">
+                <i class="fa fa-chevron-left"></i> < Tensorflow > What is the implementation of GRU in tensorflow
               </a>
             
           </div>
@@ -356,10 +344,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/10/python-tricks-1/" rel="prev" title="Some python tricks you may never use *But* you should know">
-                Some python tricks you may never use *But* you should know <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -414,17 +398,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -468,22 +443,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What’s-the-implementation-of-GRU-cell-in-tensorflow"><span class="nav-number">1.</span> <span class="nav-text">What’s the implementation of GRU cell in tensorflow?</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Tensorflow,">
+  <meta name="keywords" content="Deeplearning,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Using data flow queue to read data(abandoned, not support in future tensorflow verion)If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I sugg">
-<meta name="keywords" content="Tensorflow">
+<meta name="description" content="Align or not, Texture or shapeRelationship with Face Recognition(FR)The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example,">
+<meta name="keywords" content="Deeplearning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Tensorflow &gt; Data flow in tensorflow">
-<meta property="og:url" content="http://yoursite.com/2019/01/09/tf-read-data/index.html">
+<meta property="og:title" content="&lt; Antisppofing &gt; Does we should align in Face Antispoofing">
+<meta property="og:url" content="http://yoursite.com/2019/02/01/face-as/index.html">
 <meta property="og:site_name" content="ALL STAR">
-<meta property="og:description" content="Using data flow queue to read data(abandoned, not support in future tensorflow verion)If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I sugg">
+<meta property="og:description" content="Align or not, Texture or shapeRelationship with Face Recognition(FR)The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example,">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-11T07:48:32.767Z">
+<meta property="og:updated_time" content="2019-02-01T02:10:34.639Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Tensorflow &gt; Data flow in tensorflow">
-<meta name="twitter:description" content="Using data flow queue to read data(abandoned, not support in future tensorflow verion)If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I sugg">
+<meta name="twitter:title" content="&lt; Antisppofing &gt; Does we should align in Face Antispoofing">
+<meta name="twitter:description" content="Align or not, Texture or shapeRelationship with Face Recognition(FR)The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example,">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/09/tf-read-data/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/01/face-as/">
 
 
 
 
 
-  <title>< Tensorflow > Data flow in tensorflow | ALL STAR</title>
+  <title>< Antisppofing > Does we should align in Face Antispoofing | ALL STAR</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/tf-read-data/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/01/face-as/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhengtq">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Tensorflow > Data flow in tensorflow</h1>
+          <h1 class="post-title" itemprop="name headline">< Antisppofing > Does we should align in Face Antispoofing</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T19:04:09+08:00">
-                2019-01-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-01T09:19:16+08:00">
+                2019-02-01
               </time>
             
 
@@ -305,8 +305,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tensorflow/" itemprop="url" rel="index">
-                    <span itemprop="name">Tensorflow</span>
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
                   </a>
                 </span>
 
@@ -323,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/tf-read-data/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/tf-read-data/" itemprop="commentCount"></span>
+                <a href="/2019/02/01/face-as/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/01/face-as/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -357,19 +357,11 @@
       
 
       
-        <h1 id="Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion"><a href="#Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion" class="headerlink" title="Using data flow queue to read data(abandoned, not support in future tensorflow verion)"></a>Using data flow queue to read data(abandoned, not support in future tensorflow verion)</h1><p>If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I suggest you to read by FIFO_queue to directly read image by its root.<br>Firstly, you have to set up a FIFOQueue:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input_queue = data_flow_ops.FIFOQueue(capacity=3000000,</span><br><span class="line">		                    dtypes=[tf.string, tf.int64],</span><br><span class="line">		                    shapes=[(1,), (1,)],</span><br><span class="line">		                    shared_name=None, name=None)</span><br></pre></td></tr></table></figure>
-<p>The queue above contain two values. The first is image root, and the second is image label.<br>To load image roots and labels to the FIFOQqueue, to have to use the a enqueue_op.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enqueue_op = input_queue.enqueue_many([image_paths_placeholder, labels_placeholder], name=&apos;enqueue_op&apos;)</span><br></pre></td></tr></table></figure>
-<p>Next, you just should open up a session to feed your true image roots and labels to respective placeholder.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess.run(enqueue_op, &#123;image_paths_placeholder: image_paths_array, labels_placeholder: labels_array&#125;)</span><br></pre></td></tr></table></figure>
-<p>During training, we have to dequeue the FIFOQqueue and we should use multi-thread to accelerate the process. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">images_and_labels_list = []</span><br><span class="line">for _ in range(preprocess_threads):</span><br><span class="line">	filenames, label= input_queue.dequeue()</span><br><span class="line">	images = []</span><br><span class="line">               image_depths = []</span><br><span class="line">	for filename, single_label in zip(tf.unstack(filenames), tf.unstack(label)):</span><br><span class="line">	    file_contents = tf.read_file(filename)</span><br><span class="line">   		    image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">   		    image = tf.reshape(image, original_img_shape)</span><br><span class="line">	    images.append(image)</span><br><span class="line">	images_and_labels_list.append([images, label])</span><br></pre></td></tr></table></figure>
-<p>Finally, to create batches of examples, you should use “tf.train.batch_join”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">img_batch, img_depth_batch,label_batch = tf.train.batch_join(</span><br><span class="line">	images_and_labels_list, batch_size=batch_size, </span><br><span class="line">	shapes=[[to_height, to_width, channels], ()], enqueue_many=True,</span><br><span class="line">	capacity=4 * preprocess_threads * 100,</span><br><span class="line">	allow_smaller_final_batch=True)</span><br></pre></td></tr></table></figure>
-<h1 id="Using-tf-data-API"><a href="#Using-tf-data-API" class="headerlink" title="Using tf.data API"></a>Using tf.data API</h1><p>Tensorflow officially promote using tf.data api. Using tf.data api is reletively easy to coding.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   def _parse_data(line):</span><br><span class="line">       file_contents = tf.read_file(image_filepath)</span><br><span class="line">image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">       image = tf.reshape(image, original_img_shape)</span><br><span class="line">       return image, single_label</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   dataset = tf.data.TextLineDataset([file_root])</span><br><span class="line"></span><br><span class="line">   dataset = dataset.map(map_func=_parse_data,  num_parallel_calls=4)</span><br><span class="line">   dataset = dataset.shuffle(buffer_size=batch_size * 3)</span><br><span class="line">   dataset = dataset.batch(batch_size)</span><br><span class="line">   dataset = dataset.repeat(epoc)</span><br><span class="line">   dataset = dataset.prefetch(2000)</span><br><span class="line">   data_iterator = dataset.make_one_shot_iterator()</span><br><span class="line"> </span><br><span class="line">   return data_iterator</span><br></pre></td></tr></table></figure>
-<p>To accelerate the reading process, <strong>do not foget to use dataset.prefetch and num_parallel_calls</strong>. </p>
+        <h1 id="Align-or-not-Texture-or-shape"><a href="#Align-or-not-Texture-or-shape" class="headerlink" title="Align or not, Texture or shape"></a>Align or not, Texture or shape</h1><h2 id="Relationship-with-Face-Recognition-FR"><a href="#Relationship-with-Face-Recognition-FR" class="headerlink" title="Relationship with Face Recognition(FR)"></a>Relationship with Face Recognition(FR)</h2><p>The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example, FR should shorten the distance between the person in real life and the person’s picture in paper or tv or phone.</p>
+<p>However, Face Antispoofing(FA) just did the opposite thing. FA should shorten the person from the same medium. For example, FA should shroten the distance between the two different person from the same medium. And FA should widen the distance the people from different medium, even the two persons are the same. </p>
+<p>So as we can see, to differentiate medium is the key in FA.</p>
+<h2 id="What-the-convlutional-neural-networks-are-learning"><a href="#What-the-convlutional-neural-networks-are-learning" class="headerlink" title="What the convlutional neural networks are learning"></a>What the convlutional neural networks are learning</h2><p>As we all know, FR should grab the feature from two persons’ faces and differentiate the two persons’s faces. The texture(skin) from different person is nearly same. So FR should differentiate two persons’ face by their faces’ shape. <strong>Sadly, convlutional neural networks are good at grabbing the feature of textrue of a image, and do very poorly at grabbing the feature of shape.</strong>So strictly aligment of the face is very import in FR. The aim of alignment in FR is to let the deep network to learn the difference of the face shape regardless of the texture.</p>
+<p>On the opposite of FR, <strong>FA mainly learns the feature of texture of the medium regardless of the shape of ons’s face which could take the advantage of learning capcity of the convlutional neural networks</strong>. So alignment is not important in FA.</p>
 
       
     </div>
@@ -387,7 +379,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+            <a href="/tags/Deeplearning/" rel="tag"># Deeplearning</a>
           
         </div>
       
@@ -400,8 +392,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/07/c-c-1/" rel="next" title="< C\C++ > Compile on linux">
-                <i class="fa fa-chevron-left"></i> < C\C++ > Compile on linux
+              <a href="/2019/01/24/py-check/" rel="next" title="< Python > To check elements in Python">
+                <i class="fa fa-chevron-left"></i> < Python > To check elements in Python
               </a>
             
           </div>
@@ -409,10 +401,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/09/tf-rnn-gru/" rel="prev" title="< Tensorflow > What is the implementation of GRU in tensorflow">
-                < Tensorflow > What is the implementation of GRU in tensorflow <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -549,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion"><span class="nav-number">1.</span> <span class="nav-text">Using data flow queue to read data(abandoned, not support in future tensorflow verion)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-tf-data-API"><span class="nav-number">2.</span> <span class="nav-text">Using tf.data API</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Align-or-not-Texture-or-shape"><span class="nav-number">1.</span> <span class="nav-text">Align or not, Texture or shape</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Relationship-with-Face-Recognition-FR"><span class="nav-number">1.1.</span> <span class="nav-text">Relationship with Face Recognition(FR)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-the-convlutional-neural-networks-are-learning"><span class="nav-number">1.2.</span> <span class="nav-text">What the convlutional neural networks are learning</span></a></li></ol></li></ol></div>
             
 
           </div>

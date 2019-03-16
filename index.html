@@ -249,6 +249,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/16/antispoof-multi-task-learn/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhengtq">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ALL STAR">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/16/antispoof-multi-task-learn/" itemprop="url">< Antisppofing > Multi-Task-Learning in Face Antispoofing</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-16T11:39:28+08:00">
+                2019-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/16/antispoof-multi-task-learn/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/16/antispoof-multi-task-learn/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Is-Face-Antispoofing-only-a-binary-classification-task"><a href="#Is-Face-Antispoofing-only-a-binary-classification-task" class="headerlink" title="Is Face Antispoofing only a binary classification task?"></a>Is Face Antispoofing only a binary classification task?</h1><p>Of course, we can consider face antispoofing task a binary classification task. We can train a classifier to seperate a human face image from liveness to fake. It may work well but it can not fully use all information in an face image. In order to push the limite of our trained data and our trained classifier, we have to cultivate other information that could help us to better discriminate a attack image.</p>
+<p>So what information could use from an image beyoud its label. <strong>It’s depth information(We do not consider real face mask or face model). The fake image which normally are paper, screen dose not contain any depth information.</strong> However, the real face contain depth information. So we can use this extra information to seperate the real face from fake face.</p>
+<h1 id="Multi-Task-Learning-in-Face-antispoofing"><a href="#Multi-Task-Learning-in-Face-antispoofing" class="headerlink" title="Multi-Task-Learning in Face antispoofing"></a>Multi-Task-Learning in Face antispoofing</h1><p>Muti-Task-Learning means that a model could achieve aim by learning multi task simultaneously. Specially in deep learning, we could combine multiple loss together to train a deep model.</p>
+<p>More specially in face antispoofing task, we could combine the depth loss and classification loss together to get a more generalized. To picture below shows the main process.<br><img src="/2019/03/16/antispoof-multi-task-learn/process.png" alt=""> </p>
+<p>As for how to combine the classification loss and depth loss, you could try many ways(to add together or to optimize separately).<br>May this could help bring you some insight in your task.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/06/dataset-cut/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1655,167 +1811,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/newwork/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhengtq">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ALL STAR">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/newwork/" itemprop="url">< Network > Understanding the activation of the residual block</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-14T13:24:24+08:00">
-                2018-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/14/newwork/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/14/newwork/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="The-evloution-of-the-activation-style-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-style-in-Residual-Blocks" class="headerlink" title="The evloution of the activation style in Residual Blocks"></a>The evloution of the activation style in Residual Blocks</h1><p>The activation style is different between different resiudal structure.</p>
-<ul>
-<li><p>resnet_v1<br>shortcut: activation after if there is conv operation on shortcut<br>residual : no activaion after<br>add: activation after</p>
-</li>
-<li><p>resnet_v2<br>shorcut: no activation after<br>residual: no acitvation after<br>add: activation after</p>
-</li>
-<li><p>mobilenet_v2<br>shortcut: no acitvation after<br>residual: no activation after<br>add: no acitvation after</p>
-</li>
-</ul>
-<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. <strong>However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residual</strong>. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after add operation, the information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1868,7 +1863,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

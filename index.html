@@ -249,6 +249,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/tf-quant/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhengtq">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ALL STAR">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/25/tf-quant/" itemprop="url">< Tensorflow >How dose tensorflow do quant aware training?</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-25T17:22:38+08:00">
+                2019-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">Tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/25/tf-quant/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/25/tf-quant/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Quantization-aware-training-in-Tensorflow"><a href="#Quantization-aware-training-in-Tensorflow" class="headerlink" title="Quantization aware training in Tensorflow"></a>Quantization aware training in Tensorflow</h1><p>You can either train your quantized model by restroing a ever trained floating point model or from scratch. In any cases, you have to firstly create a quantization training graph.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br></pre></td></tr></table></figure></p>
+<p>The <em>DELAY_STEP</em> means number of steps after which weights and activations are quantized during training. Just put the above code after you create your normal training graph(exclude the optimization operation).  If you use multi-gpu training, you have to create a new quantization graph on every gpu card. Just like the code as following:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope()):</span><br><span class="line">     <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(GPU_NUM_ID)):</span><br><span class="line">          <span class="keyword">with</span> tf.device(<span class="string">'/gpu:%d'</span> % GPU_NUM_ID[i]):</span><br><span class="line">                <span class="keyword">with</span> tf.name_scope(<span class="string">'%s_%d'</span> % (<span class="string">'cnn_mg'</span>, i)) <span class="keyword">as</span> scope:</span><br><span class="line">                            images, abels = load_batch_images()           </span><br><span class="line">                            logits, out_data = net.inference(images, reuse=tf.AUTO_REUSE,  num_classes=LABEL_NUM)</span><br><span class="line">                            <span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope(), reuse=tf.AUTO_REUSE):</span><br><span class="line">                                tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br><span class="line">                            loss = conpute_loss(labels, logits)</span><br><span class="line">                            tf.get_variable_scope().reuse_variables()</span><br><span class="line">                            grads = optimizer.compute_gradients(loss_total_sep)</span><br><span class="line">                            tower_grads.append(grads)</span><br></pre></td></tr></table></figure></p>
+<p>One thing I have to mention is that the quantized aware training process is fake training. Fake training means that during the forward process,  the training graph just simulate the integer multiply by using corrsponding floating point mulipy, The word ‘Corrosponding’ means that the simulated float point weights are the reversd quantization of the corresponding fixed integer point. So the training forward output may silightly different from the actual quantization computed result.</p>
+<h1 id="Save-Frozen-Convert-and-Test"><a href="#Save-Frozen-Convert-and-Test" class="headerlink" title="Save, Frozen, Convert and Test"></a>Save, Frozen, Convert and Test</h1><h2 id="Save"><a href="#Save" class="headerlink" title="Save"></a>Save</h2><p>Next, you have to save your trained quantized model. However, to save your quantized model, you have to create a quantized evaluation graph by using the following code:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g = tf.get_default_graph()</span><br><span class="line">tf.contrib.quantize.create_eval_graph(input_graph=g)</span><br></pre></td></tr></table></figure></p>
+<p>Then just writing the graph and save it.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'./your_quantized_graph.pb'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">       f.write(str(g.as_graph_def()))\</span><br><span class="line">``` </span><br><span class="line"><span class="comment">## Frozen</span></span><br><span class="line">To make your model more compact, you can froze your model. Frozen a model means that getting rid of useless operations <span class="keyword">and</span> fusing redundant operations. To froze your graph, you can use the standard frozen tool.</span><br><span class="line">```bash</span><br><span class="line">bazel build tensorflow/python/tools:freeze_graph &amp;&amp; \</span><br><span class="line">bazel-bin/tensorflow/python/tools/freeze_graph \</span><br><span class="line">--input_graph=some_graph_def.pb \</span><br><span class="line">--input_checkpoint=model.ckpt<span class="number">-8361242</span> \</span><br><span class="line">--output_graph=/tmp/frozen_graph.pb --output_node_names=softmax</span><br></pre></td></tr></table></figure></p>
+<h2 id="Convert"><a href="#Convert" class="headerlink" title="Convert"></a>Convert</h2><p>The next step is to convert your frozen graph to tflite for future delopy.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">path_to_frozen_graphdef_pb = <span class="string">'./your_frozen_graph.pb'</span></span><br><span class="line">input_shapes = &#123;<span class="string">'validate_input/imgs'</span>:[<span class="number">1</span>,<span class="number">320</span>,<span class="number">320</span>,<span class="number">3</span>]&#125;</span><br><span class="line">(tf_verion&gt;<span class="number">1.11</span>)converter = tf.contrib.lite.TFLiteConverter.from_frozen_graph(path_to_frozen_graphdef_pb, [<span class="string">'validate_input/imgs'</span>], [<span class="string">'output_node'</span>])</span><br><span class="line">(tf_version&lt;=<span class="number">1.11</span>)converter = tf.contrib.lite.TocoConverter.from_frozen_graph(path_to_frozen_graphdef_pb, [<span class="string">'validate_input/imgs'</span>], [<span class="string">'output_node'</span>])</span><br><span class="line">converter.inference_type = tf.contrib.lite.constants.QUANTIZED_UINT8</span><br><span class="line">converter.quantized_input_stats = &#123;<span class="string">'validate_input/imgs'</span>:(<span class="number">0.</span>,<span class="number">1.</span>)&#125;</span><br><span class="line">converter.allow_custom_ops = <span class="keyword">True</span></span><br><span class="line">converter.default_ranges_stats = (<span class="number">0</span>,<span class="number">255</span>)</span><br><span class="line">converter.post_training_quantize = <span class="keyword">True</span></span><br><span class="line">tflite_model = converter.convert()</span><br><span class="line">open(<span class="string">"sfnv2.tflite"</span>, <span class="string">"wb"</span>).write(tflite_model)</span><br></pre></td></tr></table></figure></p>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>Finally, your can test your converted tflite. By the following code, you can test your quantized model:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">interpreter = tf.contrib.lite.Interpreter(model_path=<span class="string">"your.tflite"</span>) </span><br><span class="line">interpreter.allocate_tensors() </span><br><span class="line">input_details = interpreter.get_input_details() </span><br><span class="line">output_details = interpreter.get_output_details() </span><br><span class="line">interpreter.set_tensor(input_details[<span class="number">0</span>][<span class="string">'index'</span>], batch_validate_img)</span><br><span class="line">interpreter.invoke()</span><br><span class="line">score = interpreter.get_tensor(output_details[<span class="number">0</span>][<span class="string">'index'</span>])</span><br><span class="line">score = score[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">zero_point = xxx</span><br><span class="line">scale = xxx</span><br><span class="line">reverse_socre = scale  * (score - zero_point)</span><br></pre></td></tr></table></figure></p>
+<p>One thing to mention is that the final score you get is a fixted point integer value. You have to convert the fixed point integer value to the corresponing float value. In order to do that, you have to check the corresponding zero point and scale in the corresponding output layer and then descaling the original output value.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/16/antispoof-multi-task-learn/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1657,160 +1816,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/20/tf-tur-perspective-transform/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhengtq">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ALL STAR">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/20/tf-tur-perspective-transform/" itemprop="url">< Tensorflow >Tensorflow Data Augmentation affine transformation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-20T18:42:47+08:00">
-                2018-12-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tensorflow/" itemprop="url" rel="index">
-                    <span itemprop="name">Tensorflow</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/20/tf-tur-perspective-transform/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/20/tf-tur-perspective-transform/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>This method augment image by changing image through affine transformation.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">transform_perspective</span><span class="params">(image)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">x_y_1</span><span class="params">()</span>:</span></span><br><span class="line">        x = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">-0.15</span>)</span><br><span class="line">        y = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">-0.15</span>)</span><br><span class="line">        <span class="keyword">return</span> x, y</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">x_y_2</span><span class="params">()</span>:</span></span><br><span class="line">        x = tf.random_uniform([], minval=<span class="number">0.15</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        y = tf.random_uniform([], minval=<span class="number">0.15</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        <span class="keyword">return</span> x, y       </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trans</span><span class="params">(image)</span>:</span></span><br><span class="line">        ran = tf.random_uniform([])</span><br><span class="line">        x = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        x_com = tf.random_uniform([], minval=<span class="number">1</span>-x<span class="number">-0.1</span>, maxval=<span class="number">1</span>-x+<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">        y = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        y_com = tf.random_uniform([], minval=<span class="number">1</span>-y<span class="number">-0.1</span>, maxval=<span class="number">1</span>-y+<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">        transforms =  [x_com, x,<span class="number">0</span>,y,y_com,<span class="number">0</span>,<span class="number">0.00</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        ran = tf.random_uniform([]) </span><br><span class="line">        image = tf.cond(ran&lt;<span class="number">0.5</span>, <span class="keyword">lambda</span>:tf.contrib.image.transform(image,transforms,interpolation=<span class="string">'NEAREST'</span>, name=<span class="keyword">None</span>), </span><br><span class="line">                <span class="keyword">lambda</span>:tf.contrib.image.transform(image,transforms,interpolation=<span class="string">'BILINEAR'</span>, name=<span class="keyword">None</span>))</span><br><span class="line">        <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line">    ran = tf.random_uniform([])</span><br><span class="line">    image = tf.cond(ran&lt;<span class="number">1</span>, <span class="keyword">lambda</span>: trans(image), <span class="keyword">lambda</span>:image)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
-<p> The origin image and transfered image are below<br> <img src="/2018/12/20/tf-tur-perspective-transform/1.bmp" alt=""><br> <img src="/2018/12/20/tf-tur-perspective-transform/2.bmp" alt=""><br><img src="/2018/12/20/tf-tur-perspective-transform/3.bmp" alt=""><br><img src="/2018/12/20/tf-tur-perspective-transform/4.bmp" alt=""> </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1863,7 +1868,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

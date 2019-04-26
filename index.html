@@ -249,6 +249,185 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/24/op-summary/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhengtq">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ALL STAR">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/24/op-summary/" itemprop="url"><deeplearning> A simple way to distinguish different optimizers in DeepLearning</deeplearning></a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T16:58:01+08:00">
+                2019-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/24/op-summary/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/24/op-summary/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="The-optimizers"><a href="#The-optimizers" class="headerlink" title="The optimizers"></a>The optimizers</h1><p>Let’s simply list the optimizers that may or may not be used in your project.</p>
+<ul>
+<li>SGDOptimizer</li>
+<li>MomentumOptimizer</li>
+<li>NesterovOptimizer</li>
+<li>AdagradOptimizer</li>
+<li>AdadeltaOptimizer</li>
+<li>RMSPropOptimizer</li>
+<li>AdamOptimizer</li>
+<li>NadamOptimizer</li>
+</ul>
+<p>#　There type of these optimizers<br>We can categorize these optimizers into three types:</p>
+<ul>
+<li>Type1:  Base type(SGDOptimizer)</li>
+<li>Type2: Add Momentum to gradient(Base on the historical gradient)(MomentumOptimizer, AdamOptimizer, NadamOptimizer)</li>
+<li>Type3: Change LearningRate accordingly(According to the changing speed(second derivative of the gradient) of each variable)(AdagradOptimizer, Adadelta, RMSPropOptimizer, NadamOptimizer)</li>
+<li>Type4: Change direction of the gradient(Weight firstly update by the historical gradient, and then compute the new gradient)(NesterovOptimizer, NadamOptimizer)</li>
+</ul>
+<h1 id="Let-make-some-equations"><a href="#Let-make-some-equations" class="headerlink" title="Let make some equations"></a>Let make some equations</h1><ul>
+<li>SGDOptimizer = T1</li>
+<li>MomentumOptimizer = T1 + T2</li>
+<li>NesterovOptimizer = T1 + T4</li>
+<li>AdagradOptimizer = T1 + T3</li>
+<li>Adadelta = T1 + T3(Add window on the squared gradient)</li>
+<li>RMSPropOptimizer = T1 + T3(Add window on the squared gradient)</li>
+<li>AdamOptimizer = T1 + T3(Add window on the squared gradient  And add window on the gradient(momentum) itself)</li>
+<li>NadamOptimizer = T1 + T3 + T4</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/motion-blink-rnn/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1642,160 +1821,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/tf-rnn-gru/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhengtq">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ALL STAR">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/05/tf-rnn-gru/" itemprop="url">< Tensorflow > What is the implementation of GRU in tensorflow</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-05T19:04:09+08:00">
-                2019-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/05/tf-rnn-gru/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/05/tf-rnn-gru/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/05/tf-rnn-gru/1.png" alt=""> </p>
-<p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memery of h_now to h_prev for evry cell. </p>
-<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/05/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1848,7 +1873,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

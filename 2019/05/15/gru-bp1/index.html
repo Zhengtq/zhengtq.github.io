@@ -79,21 +79,18 @@
 
 
 
-<meta name="description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
+<meta name="description" content="Understanding GRUAs we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, so it could encode the information from very ear">
 <meta name="keywords" content="Deeplearning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Tensorflow &gt; What is the implementation of GRU in tensorflow">
-<meta property="og:url" content="http://yoursite.com/2019/01/05/tf-rnn-gru/index.html">
+<meta property="og:title" content="&lt; Deeplarning &gt; Understand Backpropagation of RNN&#x2F;GRU and Implement It in Pure Python---1">
+<meta property="og:url" content="http://yoursite.com/2019/05/15/gru-bp1/index.html">
 <meta property="og:site_name" content="ALL STAR">
-<meta property="og:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
+<meta property="og:description" content="Understanding GRUAs we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, so it could encode the information from very ear">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2019/01/05/tf-rnn-gru/1.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/05/tf-rnn-gru/2.png">
-<meta property="og:updated_time" content="2019-02-01T08:17:18.725Z">
+<meta property="og:updated_time" content="2019-05-15T11:19:43.445Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Tensorflow &gt; What is the implementation of GRU in tensorflow">
-<meta name="twitter:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:   The chart above shows how a two-ce">
-<meta name="twitter:image" content="http://yoursite.com/2019/01/05/tf-rnn-gru/1.png">
+<meta name="twitter:title" content="&lt; Deeplarning &gt; Understand Backpropagation of RNN&#x2F;GRU and Implement It in Pure Python---1">
+<meta name="twitter:description" content="Understanding GRUAs we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, so it could encode the information from very ear">
 
 
 
@@ -123,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/05/tf-rnn-gru/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/15/gru-bp1/">
 
 
 
 
 
-  <title>< Tensorflow > What is the implementation of GRU in tensorflow | ALL STAR</title>
+  <title>< Deeplarning > Understand Backpropagation of RNN/GRU and Implement It in Pure Python---1 | ALL STAR</title>
   
 
 
@@ -256,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/tf-rnn-gru/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/gru-bp1/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhengtq">
@@ -273,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Tensorflow > What is the implementation of GRU in tensorflow</h1>
+          <h1 class="post-title" itemprop="name headline">< Deeplarning > Understand Backpropagation of RNN/GRU and Implement It in Pure Python---1</h1>
         
 
         <div class="post-meta">
@@ -285,8 +282,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-05T19:04:09+08:00">
-                2019-01-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-15T16:08:56+08:00">
+                2019-05-15
               </time>
             
 
@@ -308,8 +305,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
+                  <a href="/categories/Tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">Tensorflow</span>
                   </a>
                 </span>
 
@@ -326,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/05/tf-rnn-gru/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/05/tf-rnn-gru/" itemprop="commentCount"></span>
+                <a href="/2019/05/15/gru-bp1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/gru-bp1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -360,9 +357,12 @@
       
 
       
-        <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/05/tf-rnn-gru/1.png" alt=""> </p>
-<p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memery of h_now to h_prev for evry cell. </p>
-<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/05/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
+        <h1 id="Understanding-GRU"><a href="#Understanding-GRU" class="headerlink" title="Understanding GRU"></a>Understanding GRU</h1><p>As we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, <strong>so it could encode the information from very early time. Similarly to residual structure in CNN, GRU(or LSTM) could be seen RNN with residual block. That is to say that former hidden state is identically added to the newly computed hidden state(with a gate)</strong>.<br>For more details about GRU structure, you could check my former <a href="https://zhengtq.github.io/2019/01/05/tf-rnn-gru/" target="_blank" rel="noopener">blog</a>.</p>
+<p>#Forward Propagation of GRU<br>In this section, I will implement my pure python version of GRU forward propagation same to the implementation in TensorFlow.Talk is cheap, show you the code:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, prev_s, W,Wb,C,Cb, V, Vb)</span>:</span></span><br><span class="line">    self.x_prev_s = np.concatenate((x, prev_s), axis = <span class="number">0</span>)</span><br><span class="line">    self.hidden_mum = len(prev_s)</span><br><span class="line">    self.mulw = mulGate.forward(W, Wb,self.x_prev_s)</span><br><span class="line">    self.mulwsig = sig_act.forward(self.mulw) </span><br><span class="line"></span><br><span class="line">    self.r = self.mulwsig[:len(self.mulwsig)/<span class="number">2</span>]</span><br><span class="line">    self.u = self.mulwsig[len(self.mulwsig)/<span class="number">2</span>:]</span><br><span class="line"></span><br><span class="line">    self.r_state = eltwise_mul.forward(self.r, prev_s)</span><br><span class="line">    self.x_r_state = np.concatenate((x, self.r_state), axis = <span class="number">0</span>)</span><br><span class="line">    self.x_r_state_mulc =mulGate.forward(C,Cb, self.x_r_state)</span><br><span class="line">    self.x_r_state_mulc_tan = tan_act.forward(self.x_r_state_mulc)</span><br><span class="line"></span><br><span class="line">    self.tmpadd1 = eltwise_mul.forward(self.u, prev_s)</span><br><span class="line">    self.u_fu = <span class="number">1</span> - self.u</span><br><span class="line">    self.tmpadd2 = eltwise_mul.forward(self.u_fu, self.x_r_state_mulc_tan)</span><br><span class="line">    self.s = addGate.forward(self.tmpadd1, self.tmpadd2)</span><br><span class="line">    self.mulv = mulGate.forward(V,Vb, self.s)</span><br></pre></td></tr></table></figure></p>
+<p>As you can see, we firstly concat ‘hpre’ and ‘x’ together, and then multiply with our first weigth ‘W’(Same to ‘hpre’ and ‘x’ seperatly multiply its weight and add together). <strong>Variable’r’ and ‘u’ are two gates. Gate ‘r’ controls how much hidden state infromation could be mixed with ‘x’. Gate ‘u’ controls how much hidden state information could be directly and identically flow to the next state</strong>.</p>
+<p>#Back Propagation of GRU<br> As we know, RNN use <strong>back propagation through time(PBTT)</strong> to compute gradients for each weights. PBTT means the gradients should flow through time(reversely) which also means you should comput the gradient of hidden state at each time step and then feed back to the RNN block to furture compute gradients of the inner variables. The bellow code snippet is the gradient flow inner the GRU structure at one time step:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, x, prev_s, W, Wb, C, Cb, V, Vb,diff_s, dmulv)</span>:</span></span><br><span class="line"></span><br><span class="line">    dV,dVb, dsv = mulGate.backward(V,Vb, self.s, dmulv)</span><br><span class="line">    ds = dsv + diff_s</span><br><span class="line">    dtmpadd1, dtmpadd2 = addGate.backward(self.tmpadd1, self.tmpadd2, ds)</span><br><span class="line">    du_fu, dx_r_state_mulc_tan = eltwise_mul.backward(self.u_fu, self.x_r_state_mulc_tan, dtmpadd2)</span><br><span class="line">    du1 = -du_fu</span><br><span class="line">    </span><br><span class="line">    du2, dprev_s0 = eltwise_mul.backward(self.u, prev_s, dtmpadd1)</span><br><span class="line">    du = du1 + du2</span><br><span class="line">    dx_r_state_mulc = tan_act.backward(self.x_r_state_mulc, dx_r_state_mulc_tan)</span><br><span class="line">    dC,dCb, dx_x_r_state = mulGate.backward(C,Cb, self.x_r_state, dx_r_state_mulc)</span><br><span class="line">    dx = dx_x_r_state[:len(x)]</span><br><span class="line">    dr_state = dx_x_r_state[len(x):]</span><br><span class="line">   </span><br><span class="line">    dr, dprev_s1 = eltwise_mul.backward(self.r, prev_s, dr_state)</span><br><span class="line">    dmulwsig = np.concatenate((dr, du), axis = <span class="number">0</span>)</span><br><span class="line">    dmulw = sig_act.backward(self.mulw, dmulwsig)</span><br><span class="line">    dW,dWb, dx_prev_s = mulGate.backward(W, Wb, self.x_prev_s, dmulw)</span><br><span class="line">    dprev_s = dx_prev_s[-self.hidden_mum:] + dprev_s1 + dprev_s0</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (dprev_s, dW,dWb, dC,dCb, dV,dVb)</span><br></pre></td></tr></table></figure>
+<p>Here I have admit that to write a back propagation algorithm is a fussy thing, for you should carefully compute the gradient flow through every operations without any error. There are some note for you. Firstly, while hidden state is used three times in the forward propagation(First branch: compute gate ‘r’ and gate ‘u’. Second branch: to mix information with input ‘x’. Third branch, identically add to the final hidden state), so you should add every gradient of hidden state computed from each branch<strong>(A way to prevent gradient vanishing)</strong>. Second thing to remember, feed your compute final gradient of hidden state to your last time step(or last layer of your model). </p>
 
       
     </div>
@@ -393,8 +393,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/02/dl-question/" rel="next" title="<Deeplarning> Some DeepLearning Questions to Think About">
-                <i class="fa fa-chevron-left"></i> <deeplarning> Some DeepLearning Questions to Think About
+              <a href="/2019/04/24/op-summary/" rel="next" title="<Deeplarning> A simple way to distinguish different optimizers in DeepLearning">
+                <i class="fa fa-chevron-left"></i> <deeplarning> A simple way to distinguish different optimizers in DeepLearning
               </deeplarning></a>
             
           </div>
@@ -402,10 +402,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/09/tf-read-data/" rel="prev" title="< Tensorflow > Data flow in tensorflow">
-                < Tensorflow > Data flow in tensorflow <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -542,7 +538,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What’s-the-implementation-of-GRU-cell-in-tensorflow"><span class="nav-number">1.</span> <span class="nav-text">What’s the implementation of GRU cell in tensorflow?</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Understanding-GRU"><span class="nav-number">1.</span> <span class="nav-text">Understanding GRU</span></a></li></ol></div>
             
 
           </div>

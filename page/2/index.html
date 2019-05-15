@@ -249,6 +249,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/tf-read-data/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhengtq">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ALL STAR">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/09/tf-read-data/" itemprop="url">< Tensorflow > Data flow in tensorflow</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T19:04:09+08:00">
+                2019-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">Tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/09/tf-read-data/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/tf-read-data/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion"><a href="#Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion" class="headerlink" title="Using data flow queue to read data(abandoned, not support in future tensorflow verion)"></a>Using data flow queue to read data(abandoned, not support in future tensorflow verion)</h1><p>If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I suggest you to read by FIFO_queue to directly read image by its root.<br>Firstly, you have to set up a FIFOQueue:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input_queue = data_flow_ops.FIFOQueue(capacity=3000000,</span><br><span class="line">		                    dtypes=[tf.string, tf.int64],</span><br><span class="line">		                    shapes=[(1,), (1,)],</span><br><span class="line">		                    shared_name=None, name=None)</span><br></pre></td></tr></table></figure>
+<p>The queue above contain two values. The first is image root, and the second is image label.<br>To load image roots and labels to the FIFOQqueue, to have to use the a enqueue_op.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enqueue_op = input_queue.enqueue_many([image_paths_placeholder, labels_placeholder], name=&apos;enqueue_op&apos;)</span><br></pre></td></tr></table></figure>
+<p>Next, you just should open up a session to feed your true image roots and labels to respective placeholder.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess.run(enqueue_op, &#123;image_paths_placeholder: image_paths_array, labels_placeholder: labels_array&#125;)</span><br></pre></td></tr></table></figure>
+<p>During training, we have to dequeue the FIFOQqueue and we should use multi-thread to accelerate the process. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">images_and_labels_list = []</span><br><span class="line">for _ in range(preprocess_threads):</span><br><span class="line">	filenames, label= input_queue.dequeue()</span><br><span class="line">	images = []</span><br><span class="line">               image_depths = []</span><br><span class="line">	for filename, single_label in zip(tf.unstack(filenames), tf.unstack(label)):</span><br><span class="line">	    file_contents = tf.read_file(filename)</span><br><span class="line">   		    image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">   		    image = tf.reshape(image, original_img_shape)</span><br><span class="line">	    images.append(image)</span><br><span class="line">	images_and_labels_list.append([images, label])</span><br></pre></td></tr></table></figure>
+<p>Finally, to create batches of examples, you should use “tf.train.batch_join”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">img_batch, img_depth_batch,label_batch = tf.train.batch_join(</span><br><span class="line">	images_and_labels_list, batch_size=batch_size, </span><br><span class="line">	shapes=[[to_height, to_width, channels], ()], enqueue_many=True,</span><br><span class="line">	capacity=4 * preprocess_threads * 100,</span><br><span class="line">	allow_smaller_final_batch=True)</span><br></pre></td></tr></table></figure>
+<h1 id="Using-tf-data-API"><a href="#Using-tf-data-API" class="headerlink" title="Using tf.data API"></a>Using tf.data API</h1><p>Tensorflow officially promote using tf.data api. Using tf.data api is reletively easy to coding.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   def _parse_data(line):</span><br><span class="line">       file_contents = tf.read_file(image_filepath)</span><br><span class="line">image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">       image = tf.reshape(image, original_img_shape)</span><br><span class="line">       return image, single_label</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   dataset = tf.data.TextLineDataset([file_root])</span><br><span class="line"></span><br><span class="line">   dataset = dataset.map(map_func=_parse_data,  num_parallel_calls=4)</span><br><span class="line">   dataset = dataset.shuffle(buffer_size=batch_size * 3)</span><br><span class="line">   dataset = dataset.batch(batch_size)</span><br><span class="line">   dataset = dataset.repeat(epoc)</span><br><span class="line">   dataset = dataset.prefetch(2000)</span><br><span class="line">   data_iterator = dataset.make_one_shot_iterator()</span><br><span class="line"> </span><br><span class="line">   return data_iterator</span><br></pre></td></tr></table></figure>
+<p>To accelerate the reading process, <strong>do not foget to use dataset.prefetch and num_parallel_calls</strong>. </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/tf-rnn-gru/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1628,181 +1792,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/05/python-tricks-1/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhengtq">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ALL STAR">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/05/python-tricks-1/" itemprop="url">< Python > Some python tricks you may never use But you should know</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-05T15:25:52+08:00">
-                2018-12-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/05/python-tricks-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/05/python-tricks-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="namedtuple"><a href="#namedtuple" class="headerlink" title="namedtuple"></a>namedtuple</h1><p>If you are too lazy to create a class but you still want to use a variable that can act as a class object, then you should use namedtuple:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line">user = namedtuple(<span class="string">'u'</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">ztq = user(a=<span class="string">'a'</span>, b=<span class="string">'b'</span>,c=<span class="string">'c'</span>)</span><br><span class="line">print(ztq.a, ztq.b, ztq.c)</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">result:</span><br><span class="line"></span><br><span class="line">```console</span><br><span class="line">(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="decorator"><a href="#decorator" class="headerlink" title="decorator"></a>decorator</h1><p>If you are too lazy to change a function from inner code but you still want to add some new features to a function, you should use decorator. For example, if you want to print “hello” when you add two numbers:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(fn)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        aa = fn(*args, **kwargs)   </span><br><span class="line">        print(<span class="string">'hello'</span>)             </span><br><span class="line">        <span class="keyword">return</span> aa                  </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line">                                        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_add</span><span class="params">(a,b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a+b</span><br><span class="line">my_add = hello(my_add)</span><br><span class="line">                                                               </span><br><span class="line">aa = my_add(<span class="number">10</span>,<span class="number">10</span>)</span><br><span class="line">print(aa)</span><br></pre></td></tr></table></figure>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello</span><br><span class="line">20</span><br></pre></td></tr></table></figure></p>
-<p>or you can use operator “@” to implement your function elegantly:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(fn)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        aa = fn(*args, **kwargs)   </span><br><span class="line">        print(<span class="string">'hello'</span>)             </span><br><span class="line">        <span class="keyword">return</span> aa                  </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line">                                        </span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_add</span><span class="params">(a,b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a+b</span><br><span class="line">                                                               </span><br><span class="line">aa = my_add(<span class="number">10</span>,<span class="number">10</span>)</span><br><span class="line">print(aa)</span><br></pre></td></tr></table></figure></p>
-<h1 id="enumerate"><a href="#enumerate" class="headerlink" title="enumerate"></a>enumerate</h1><p>If you are too lazy to count the index of a list in a loop but you still need the index, then you shoud use enumerate:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br><span class="line"><span class="keyword">for</span> ind, item <span class="keyword">in</span> a:</span><br><span class="line">	print(ind, item)</span><br></pre></td></tr></table></figure>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(0, 'a')</span><br><span class="line">(1, 'b')</span><br><span class="line">(2, 'c')</span><br></pre></td></tr></table></figure></p>
-<h1 id="iterator"><a href="#iterator" class="headerlink" title="iterator"></a>iterator</h1><p>If you are too lazy to get the every elements in a list by index or “for” loop but you still need to get every element in order, then you should use iterator:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inc</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        <span class="keyword">yield</span> i        </span><br><span class="line">x = inc()</span><br><span class="line">                       </span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br></pre></td></tr></table></figure>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td></tr></table></figure></p>
-<h1 id="Do-not-easily-copy-object-in-python"><a href="#Do-not-easily-copy-object-in-python" class="headerlink" title="Do not easily copy object in python"></a>Do not easily copy object in python</h1><p>If you are too lazy to get deepcopy a other oject but you still want get a copy of a exists one, then you many creating a bug in you program!<br>In python, all things are objects, even class is a kind of object. If you want to copy a object another object, then the ID of two objects are same which means the two objects are. If you modify one object, then another object are also modified.</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">sample</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, items = [])</span>:</span></span><br><span class="line">        self.items = items            </span><br><span class="line">                                      </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">append</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        self.items.append(value)      </span><br><span class="line">                                      </span><br><span class="line">s1 = sample(items=[<span class="string">'1'</span>])</span><br><span class="line">s2 = s1</span><br><span class="line">s1.append(<span class="string">'a'</span>)</span><br><span class="line">s2.append(<span class="string">'b'</span>)</span><br><span class="line">                                      </span><br><span class="line">print(s1.items, s2.items)</span><br></pre></td></tr></table></figure>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(['1', 'a', 'b'], ['1', 'a', 'b'])</span><br></pre></td></tr></table></figure></p>
-<p>another example:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">b = a</span><br><span class="line">b[<span class="number">0</span>] = <span class="number">100</span></span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure></p>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[100,2,3,4]</span><br><span class="line">[100,2,3,4]</span><br></pre></td></tr></table></figure></p>
-<p>Instead, you should use “deepcopy” to copy two objects<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">b = copy.deepcopy(a)</span><br><span class="line">b[<span class="number">0</span>] = <span class="number">100</span></span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure></p>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1,2,3,4]</span><br><span class="line">[100,2,3,4]</span><br></pre></td></tr></table></figure></p>
-<h1 id="itertools"><a href="#itertools" class="headerlink" title="itertools"></a>itertools</h1><p>If you are too lazy to write a infinite loop in an iterator but you still want to reset to loop in iterator, then you should use itertools:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line">                                                </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inc</span><span class="params">()</span>:</span></span><br><span class="line">    a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">    cs = itertools.cycle(a) </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> cs:</span><br><span class="line">        <span class="keyword">yield</span> i             </span><br><span class="line">x = inc()</span><br><span class="line">                            </span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">print(next(x))</span><br><span class="line">``` </span><br><span class="line">result:</span><br><span class="line">```console</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h1 id="concurrent-futures"><a href="#concurrent-futures" class="headerlink" title="concurrent.futures"></a>concurrent.futures</h1><p>If you are too lazy to write a multi-thread to process all the elements of a list which may cost lots of time, then you should use a python build-in multi-thread tools:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_num</span><span class="params">(num)</span>:</span></span><br><span class="line">    print(num)</span><br><span class="line">                                                          </span><br><span class="line">a = range(<span class="number">5</span>)</span><br><span class="line"><span class="keyword">with</span> concurrent.futures.ProcessPoolExecutor() <span class="keyword">as</span> executor:</span><br><span class="line">    executor.map(load_and_resize, a)</span><br></pre></td></tr></table></figure>
-<p>result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1855,7 +1844,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

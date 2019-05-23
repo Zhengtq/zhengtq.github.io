@@ -79,20 +79,23 @@
 
 
 
-<meta name="description" content="Let’s see a very simple handwriting formula derivation">
+<meta name="description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations   Gradient of the variable in layer L(last layer)dWL = dLoss * aL   Gradient of the varia">
 <meta name="keywords" content="Deeplearning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Deeplearning &gt; How to make backpropagation simple">
+<meta property="og:title" content="&lt; Deeplearning &gt; Break up backpropagation">
 <meta property="og:url" content="http://yoursite.com/2018/12/09/bp-simple/index.html">
 <meta property="og:site_name" content="ALL STAR">
-<meta property="og:description" content="Let’s see a very simple handwriting formula derivation">
+<meta property="og:description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations   Gradient of the variable in layer L(last layer)dWL = dLoss * aL   Gradient of the varia">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/bp1.jpeg">
-<meta property="og:updated_time" content="2019-04-22T06:24:59.092Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/4.png">
+<meta property="og:updated_time" content="2019-05-23T09:16:16.474Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Deeplearning &gt; How to make backpropagation simple">
-<meta name="twitter:description" content="Let’s see a very simple handwriting formula derivation">
-<meta name="twitter:image" content="http://yoursite.com/2018/12/09/bp-simple/bp1.jpeg">
+<meta name="twitter:title" content="&lt; Deeplearning &gt; Break up backpropagation">
+<meta name="twitter:description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations   Gradient of the variable in layer L(last layer)dWL = dLoss * aL   Gradient of the varia">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/09/bp-simple/1.png">
 
 
 
@@ -128,7 +131,7 @@
 
 
 
-  <title>< Deeplearning > How to make backpropagation simple | ALL STAR</title>
+  <title>< Deeplearning > Break up backpropagation | ALL STAR</title>
   
 
 
@@ -272,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Deeplearning > How to make backpropagation simple</h1>
+          <h1 class="post-title" itemprop="name headline">< Deeplearning > Break up backpropagation</h1>
         
 
         <div class="post-meta">
@@ -359,7 +362,17 @@
       
 
       
-        <h1 id="Let’s-see-a-very-simple-handwriting-formula-derivation"><a href="#Let’s-see-a-very-simple-handwriting-formula-derivation" class="headerlink" title="Let’s see a very simple handwriting formula derivation"></a>Let’s see a very simple handwriting formula derivation</h1><p> <img src="/2018/12/09/bp-simple/bp1.jpeg" alt=""> </p>
+        <h1 id="Let’s-see-a-very-simple-handwriting-formula-derivation"><a href="#Let’s-see-a-very-simple-handwriting-formula-derivation" class="headerlink" title="Let’s see a very simple handwriting formula derivation"></a>Let’s see a very simple handwriting formula derivation</h1><p>#Define<br>Firstly, let define some variables and operations<br> <img src="/2018/12/09/bp-simple/1.png" alt=""> </p>
+<h1 id="Gradient-of-the-variable-in-layer-L-last-layer"><a href="#Gradient-of-the-variable-in-layer-L-last-layer" class="headerlink" title="Gradient of the variable in layer L(last layer)"></a>Gradient of the variable in layer L(last layer)</h1><p>dWL = dLoss * aL<br> <img src="/2018/12/09/bp-simple/2.png" alt=""> </p>
+<h1 id="Gradient-of-the-variable-in-layer-L-1"><a href="#Gradient-of-the-variable-in-layer-L-1" class="headerlink" title="Gradient of the variable in layer L-1"></a>Gradient of the variable in layer L-1</h1><p>dW(L-1) = dLoss <em> WL </em> dF(L-1) * a(L-1)<br> <img src="/2018/12/09/bp-simple/3.png" alt=""> </p>
+<h1 id="Gradient-of-the-variable-in-layer-L-2"><a href="#Gradient-of-the-variable-in-layer-L-2" class="headerlink" title="Gradient of the variable in layer L-2"></a>Gradient of the variable in layer L-2</h1><p> dW(L-2) = dLoss <em> WL </em> dF(L-1) <em> a(L-1) </em> W(L-1) <em> dF(L-2) </em> a(L-2)<br> <img src="/2018/12/09/bp-simple/4.png" alt=""> </p>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><p>So, as we can see, the gradient of any training variables only depends on the variable itself(W), the derivative of activation function(dF), and the activated value(a).</p>
+<h1 id="Relations-with-gradient-vanishing-or-exploding"><a href="#Relations-with-gradient-vanishing-or-exploding" class="headerlink" title="Relations with gradient vanishing or exploding"></a>Relations with gradient vanishing or exploding</h1><h3 id="Gradient-exploding"><a href="#Gradient-exploding" class="headerlink" title="Gradient exploding"></a>Gradient exploding</h3><p>Training variables are larger than 1,  or the derivative of activation function are larger than 1, or the nd the activated value are larger than 1.</p>
+<h3 id="Gradient-vanishing"><a href="#Gradient-vanishing" class="headerlink" title="Gradient vanishing"></a>Gradient vanishing</h3><p>Training variables are smaller than 1,  or the derivative of activation function are smaller than 1, or the nd the activated value are smaller than 1.</p>
+<h1 id="To-prevent-graident-vanishing-or-exploding"><a href="#To-prevent-graident-vanishing-or-exploding" class="headerlink" title="To prevent graident vanishing or exploding"></a>To prevent graident vanishing or exploding</h1><h3 id="From-the-view-of-training-variables"><a href="#From-the-view-of-training-variables" class="headerlink" title="From the view of training variables"></a>From the view of training variables</h3><p>To limit the traning variables into a proper range. We shoudl use a  good variable initialization technic, such as xavier initialization.</p>
+<h3 id="From-the-view-of-derivative-of-activation-function"><a href="#From-the-view-of-derivative-of-activation-function" class="headerlink" title="From the view of derivative of activation function"></a>From the view of derivative of activation function</h3><p>To limit derivative of activation function to a proper range, we should use non-saturated activation function as activation instead of sigmoid</p>
+<h3 id="From-the-view-of-activated-value"><a href="#From-the-view-of-activated-value" class="headerlink" title="From the view of activated value"></a>From the view of activated value</h3><p>To limit the activation value in to proper range, we should  use batchnorm to make the activated value into a zero centered and variance to one.</p>
+<h3 id="From-the-view-of-model-structure"><a href="#From-the-view-of-model-structure" class="headerlink" title="From the view of model structure"></a>From the view of model structure</h3><p>To future enhance the gradient to the shallow layer, we should use residual block to construct our network.</p>
 
       
     </div>
@@ -539,7 +552,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Let’s-see-a-very-simple-handwriting-formula-derivation"><span class="nav-number">1.</span> <span class="nav-text">Let’s see a very simple handwriting formula derivation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Let’s-see-a-very-simple-handwriting-formula-derivation"><span class="nav-number">1.</span> <span class="nav-text">Let’s see a very simple handwriting formula derivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradient-of-the-variable-in-layer-L-last-layer"><span class="nav-number">2.</span> <span class="nav-text">Gradient of the variable in layer L(last layer)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradient-of-the-variable-in-layer-L-1"><span class="nav-number">3.</span> <span class="nav-text">Gradient of the variable in layer L-1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradient-of-the-variable-in-layer-L-2"><span class="nav-number">4.</span> <span class="nav-text">Gradient of the variable in layer L-2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Relations-with-gradient-vanishing-or-exploding"><span class="nav-number">6.</span> <span class="nav-text">Relations with gradient vanishing or exploding</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradient-exploding"><span class="nav-number">6.0.1.</span> <span class="nav-text">Gradient exploding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradient-vanishing"><span class="nav-number">6.0.2.</span> <span class="nav-text">Gradient vanishing</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#To-prevent-graident-vanishing-or-exploding"><span class="nav-number">7.</span> <span class="nav-text">To prevent graident vanishing or exploding</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#From-the-view-of-training-variables"><span class="nav-number">7.0.1.</span> <span class="nav-text">From the view of training variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#From-the-view-of-derivative-of-activation-function"><span class="nav-number">7.0.2.</span> <span class="nav-text">From the view of derivative of activation function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#From-the-view-of-activated-value"><span class="nav-number">7.0.3.</span> <span class="nav-text">From the view of activated value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#From-the-view-of-model-structure"><span class="nav-number">7.0.4.</span> <span class="nav-text">From the view of model structure</span></a></li></ol></li></div>
             
 
           </div>

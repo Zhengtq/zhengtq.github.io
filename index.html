@@ -249,6 +249,157 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/27/structure-summary/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/27/structure-summary/" itemprop="url">< Network > A summary for many DeepLearning net structure</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T11:24:52+08:00">
+                2019-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/27/structure-summary/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/27/structure-summary/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="To-be-continued"><a href="#To-be-continued" class="headerlink" title="To be continued"></a>To be continued</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/gru-bp1/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1046,7 +1197,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/03/25/tf-quant/" itemprop="url">< Tensorflow >How dose tensorflow do quant aware training?</a></h1>
+                <a class="post-title-link" href="/2019/03/25/tf-quant/" itemprop="url">< Tensorflow >How dose TensorFlow do Quant Aware Training?</a></h1>
         
 
         <div class="post-meta">
@@ -1130,7 +1281,25 @@
       
         
           
-            <h1 id="Quantization-aware-training-in-Tensorflow"><a href="#Quantization-aware-training-in-Tensorflow" class="headerlink" title="Quantization aware training in Tensorflow"></a>Quantization aware training in Tensorflow</h1><p>You can either train your quantized model by restroing a ever trained floating point model or from scratch. In any cases, you have to firstly create a quantization training graph.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br></pre></td></tr></table></figure></p>
+            <h1 id="Let-firstly-simplify-the-quant-process-in-TF"><a href="#Let-firstly-simplify-the-quant-process-in-TF" class="headerlink" title="Let　firstly simplify the quant process in TF"></a>Let　firstly simplify the quant process in TF</h1><h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>q_a1:Quanted activation value in layer 1</li>
+<li><p>S_a1, Z_a1: <strong>Estimated</strong> scale and zero point in layer 1</p>
+</li>
+<li><p>q_w1:Quanted weight in layer 1</p>
+</li>
+<li><p>S_w1, Z_w1: <strong>Statistical</strong> scale and zero point in layer 1</p>
+</li>
+<li><p>q_a0:Quanted activation value in layer 0</p>
+</li>
+<li>S_a0, Z_a0: <strong>Estimated</strong> scale and zero point in layer 0</li>
+</ul>
+<p>As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S_a0, Z_a0, q_a1, Z_a1.To get S_w1/Z_w1 is simple, we can get the Statistical maximum of the weights in each layer we want. The only tricky thing is how to get S_a1/Z_a1/S_a0/Z_a0, which have to be estimated from the training data.</p>
+<h3 id="Why-we-have-to-get-the-estimation-of-S-Z-after-activation-instead-of-before"><a href="#Why-we-have-to-get-the-estimation-of-S-Z-after-activation-instead-of-before" class="headerlink" title="Why we have to get the estimation of S/Z after activation instead of before?"></a>Why we have to get the estimation of S/Z after activation instead of before?</h3><p>Of course we can estimate the S/Z before actication. And then we activate(relu) the quantized value. However, there one one drawbacks:</p>
+<p>Estimate S/Z before activation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conv -&gt;  (before activation)estimate S/Z=[0-&gt;255] -&gt; truncation（relu）= [Z-&gt;255] (if relu6 : [Z-&gt;X])</span><br></pre></td></tr></table></figure></p>
+<p>Estimate S/Z after activation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conv -&gt;  (after activation)estimate S/Z=[-A-&gt;A] -&gt; truncation（relu）= [0-&gt;255](if relu6: [0-&gt;255])</span><br></pre></td></tr></table></figure></p>
+<p>As we can see, if we can see, if we can see, the quantized activation range for estimated S/Z after activation is always 0 to 255. However, the quantized activation range for estimated S/Z before activation is narrow than 0 to 255. So if estimate S/Z before activation, the quantized activated value is more compressive which could lead to accuracy loss.</p>
+<h1 id="Quantization-aware-training-in-Tensorflow"><a href="#Quantization-aware-training-in-Tensorflow" class="headerlink" title="Quantization aware training in Tensorflow"></a>Quantization aware training in Tensorflow</h1><p>You can either train your quantized model by restroing a ever trained floating point model or from scratch. In any cases, you have to firstly create a quantization training graph.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br></pre></td></tr></table></figure></p>
 <p>The <em>DELAY_STEP</em> means number of steps after which weights and activations are quantized during training. Just put the above code after you create your normal training graph(exclude the optimization operation).  If you use multi-gpu training, you have to create a new quantization graph on every gpu card. Just like the code as following:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope()):</span><br><span class="line">     <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(GPU_NUM_ID)):</span><br><span class="line">          <span class="keyword">with</span> tf.device(<span class="string">'/gpu:%d'</span> % GPU_NUM_ID[i]):</span><br><span class="line">                <span class="keyword">with</span> tf.name_scope(<span class="string">'%s_%d'</span> % (<span class="string">'cnn_mg'</span>, i)) <span class="keyword">as</span> scope:</span><br><span class="line">                            images, abels = load_batch_images()           </span><br><span class="line">                            logits, out_data = net.inference(images, reuse=tf.AUTO_REUSE,  num_classes=LABEL_NUM)</span><br><span class="line">                            <span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope(), reuse=tf.AUTO_REUSE):</span><br><span class="line">                                tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br><span class="line">                            loss = conpute_loss(labels, logits)</span><br><span class="line">                            tf.get_variable_scope().reuse_variables()</span><br><span class="line">                            grads = optimizer.compute_gradients(loss_total_sep)</span><br><span class="line">                            tower_grads.append(grads)</span><br></pre></td></tr></table></figure></p>
 <p>One thing I have to mention is that the quantized aware training process is fake training. Fake training means that during the forward process,  the training graph just simulate the integer multiply by using corrsponding floating point mulipy, The word ‘Corrosponding’ means that the simulated float point weights are the reversd quantization of the corresponding fixed integer point. So the training forward output may silightly different from the actual quantization computed result.</p>
 <h1 id="Save-Frozen-Convert-and-Test"><a href="#Save-Frozen-Convert-and-Test" class="headerlink" title="Save, Frozen, Convert and Test"></a>Save, Frozen, Convert and Test</h1><h2 id="Save"><a href="#Save" class="headerlink" title="Save"></a>Save</h2><p>Next, you have to save your trained quantized model. However, to save your quantized model, you have to create a quantized evaluation graph by using the following code:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g = tf.get_default_graph()</span><br><span class="line">tf.contrib.quantize.create_eval_graph(input_graph=g)</span><br></pre></td></tr></table></figure></p>
@@ -1661,159 +1830,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/30/face-as/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/30/face-as/" itemprop="url">< Antisppofing > Does we should align in Face Antispoofing</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T09:19:16+08:00">
-                2019-01-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/30/face-as/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/30/face-as/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Align-or-not-Texture-or-shape"><a href="#Align-or-not-Texture-or-shape" class="headerlink" title="Align or not, Texture or shape"></a>Align or not, Texture or shape</h1><h2 id="Relationship-with-Face-Recognition-FR"><a href="#Relationship-with-Face-Recognition-FR" class="headerlink" title="Relationship with Face Recognition(FR)"></a>Relationship with Face Recognition(FR)</h2><p>The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example, FR should shorten the distance between the person in real life and the person’s picture in paper or tv or phone.<br>However, Face Antispoofing(FA) just did the opposite thing. FA should shorten the person from the same medium. For example, FA should shroten the distance between the two different person from the same medium. And FA should widen the distance the people from different medium, even the two persons are the same.<br>So as we can see, to differentiate medium is the key in FA.</p>
-<h2 id="What-the-convlutional-neural-networks-are-learning"><a href="#What-the-convlutional-neural-networks-are-learning" class="headerlink" title="What the convlutional neural networks are learning"></a>What the convlutional neural networks are learning</h2><p>As we all know, FR should grab the feature from two persons’ faces and differentiate the two persons’s faces. The texture(skin) from different person is nearly same. So FR should differentiate two persons’ face by their faces’ shape. <strong>Sadly, convlutional neural networks are good at grabbing the feature of textrue of a image, and do very poorly at grabbing the feature of shape.</strong>So strictly aligment of the face is very import in FR. The aim of alignment in FR is to let the deep network to learn the difference of the face shape regardless of the texture.<br>On the opposite of FR, <strong>FA mainly learns the feature of texture of the medium regardless of the shape of ons’s face which could take the advantage of learning capcity of the convlutional neural networks</strong>. So alignment is not important in FA.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1866,7 +1882,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -249,6 +249,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/linux-install-config/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/19/linux-install-config/" itemprop="url">< Linux > As a AI-practitioner, what I install in my linux system</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T13:26:26+08:00">
+                2019-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/19/linux-install-config/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/19/linux-install-config/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>These are the tools(part) that I installed in my linux workspace. Hopefully it could help improve your efficiency.</p>
+<h1 id="System"><a href="#System" class="headerlink" title="System"></a>System</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tmux</span><br><span class="line">sudo apt-get install git</span><br><span class="line">sudo apt-get install openssh-server</span><br><span class="line">sudo apt-get install python-pip python-dev build-essential</span><br><span class="line">                                                         </span><br><span class="line">sudo pip install tensorflow-gpu</span><br><span class="line">git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim</span><br><span class="line">vim +PluginInstall +qall</span><br><span class="line">python ~/.vim/bundle/YouCompleteMe/install.py --all</span><br><span class="line"></span><br><span class="line">sudo pip install opencv-python</span><br><span class="line">sudo apt-get install python-imaging</span><br><span class="line">sudo apt-get install iotop -y</span><br><span class="line">sudo apt-get install curl</span><br><span class="line">sudo apt-get install autojump</span><br><span class="line"></span><br><span class="line">wget https://github.com/sharkdp/fd/releases/download/v7.0.0/fd_7.0.0_amd64.deb</span><br><span class="line">sudo dpkg -i fd_7.0.0_amd64.deb</span><br><span class="line"></span><br><span class="line">git clone https://github.com/xdegaye/pyclewn.git </span><br><span class="line">git clone https://github.com/seebi/dircolors-solarized.git</span><br><span class="line">eval `dircolors dircolors.256dark`</span><br><span class="line"></span><br><span class="line">sudo pip install tldr</span><br><span class="line">sudo apt-get install clang-format</span><br></pre></td></tr></table></figure>
+<h1 id="vimrc"><a href="#vimrc" class="headerlink" title="vimrc"></a>vimrc</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br></pre></td><td class="code"><pre><span class="line">set nocompatible              &quot; be iMproved, required</span><br><span class="line">filetype off                  &quot; required</span><br><span class="line"></span><br><span class="line">&quot; set the runtime path to include Vundle and initialize</span><br><span class="line">set rtp+=~/.vim/bundle/Vundle.vim</span><br><span class="line">call vundle#begin()</span><br><span class="line"></span><br><span class="line">Plugin &apos;VundleVim/Vundle.vim&apos;</span><br><span class="line">Bundle &apos;altercation/vim-colors-solarized&apos;</span><br><span class="line">Bundle &apos;ervandew/supertab&apos;</span><br><span class="line">Plugin &apos;Valloric/YouCompleteMe&apos;</span><br><span class="line">Plugin  &apos;taglist.vim&apos;</span><br><span class="line">Bundle &apos;Lokaltog/vim-easymotion&apos;</span><br><span class="line">Bundle &apos;bling/vim-airline&apos;</span><br><span class="line">Plugin &apos;vim-airline/vim-airline-themes&apos;</span><br><span class="line">Bundle &apos;thinca/vim-quickrun&apos;</span><br><span class="line">Bundle &apos;scrooloose/nerdcommenter&apos;</span><br><span class="line">Bundle &apos;scrooloose/nerdtree&apos;</span><br><span class="line">Plugin &apos;https://github.com/rhysd/vim-clang-format.git&apos;</span><br><span class="line">Plugin &apos;octol/vim-cpp-enhanced-highlight&apos;</span><br><span class="line">&quot;Plugin &apos;scrooloose/syntastic&apos;</span><br><span class="line">&quot;Plugin &apos;https://github.com/w0rp/ale&apos;</span><br><span class="line"></span><br><span class="line">if globpath( substitute($PATH, &apos;:&apos;, &apos;,&apos;, &apos;g&apos;), &apos;python3&apos; ) != &apos;&apos; </span><br><span class="line">	let $PYTHONPATH .= vundle#bundle_dir.&apos;/vim_pyclewn/usr/lib64/python3.4/site-packages&apos; </span><br><span class="line">	let g:pyclewn_python = &apos;python3&apos;    &quot; python3 version must &gt;= 3.4</span><br><span class="line">else</span><br><span class="line"></span><br><span class="line">	let $PYTHONPATH .= vundle#bundle_dir.&apos;/vim_pyclewn/usr/lib64/python2.7/site-packages&apos; </span><br><span class="line">endif</span><br><span class="line">Plugin &apos;clwu88/vim_pyclewn&apos; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot; All of your Plugins must be added before the following line</span><br><span class="line">call vundle#end()            &quot; required</span><br><span class="line">filetype plugin indent on    &quot; required</span><br><span class="line"></span><br><span class="line">let g:gundo_prefer_python3 = 1</span><br><span class="line"></span><br><span class="line">&quot; vim-colors-solarized</span><br><span class="line">if has(&apos;gui_running&apos;)</span><br><span class="line">  set background=light</span><br><span class="line">else</span><br><span class="line">  set background=dark</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">colorscheme solarized</span><br><span class="line">let g:solarized_termtrans=1</span><br><span class="line">let g:solarized_contrast=&quot;normal&quot;</span><br><span class="line">let g:solarized_visibility=&quot;normal&quot;</span><br><span class="line"></span><br><span class="line">&quot;vim</span><br><span class="line">set mouse=a</span><br><span class="line">set number</span><br><span class="line">set splitbelow</span><br><span class="line">set backspace=indent,eol,start</span><br><span class="line">set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936</span><br><span class="line">set termencoding=utf-8</span><br><span class="line">set encoding=utf-8</span><br><span class="line">set tags=./tags,./TAGS,tags;~,TAGS;~</span><br><span class="line">set incsearch</span><br><span class="line">&quot; set foldmarker=#ifdef,#endif</span><br><span class="line">&quot; set foldmethod=marker &quot; 用语法高亮来定义折叠</span><br><span class="line">&quot; set foldlevel=0 &quot; 启动vim时不要自动折叠代码</span><br><span class="line">&quot; set foldcolumn=3 &quot; 设置折叠栏宽度</span><br><span class="line"></span><br><span class="line">&quot; supertab</span><br><span class="line">let g:SuperTabRetainCompletionType=2</span><br><span class="line">let g:SuperTabDefaultCompletionType=&quot;context&quot;  </span><br><span class="line">let g:SuperTabDefaultCompletionType = &quot;&lt;c-n&gt;&quot;</span><br><span class="line"></span><br><span class="line">&quot;ctags</span><br><span class="line">set tags=tags;</span><br><span class="line">set autochdir</span><br><span class="line"></span><br><span class="line">&quot; taglist</span><br><span class="line">let Tlist_Ctags_Cmd=&quot;/usr/bin/ctags&quot;</span><br><span class="line">let Tlist_Use_SingleClick=1 </span><br><span class="line">let Tlist_Auto_Open = 0</span><br><span class="line">let Tlist_WinHeight = 100</span><br><span class="line">let Tlist_WinWidth = 20</span><br><span class="line">let Tlist_Exit_OnlyWindow = 1</span><br><span class="line">let Tlist_Show_One_File = 1</span><br><span class="line">noremap &lt;F8&gt; :TlistToggle&lt;CR&gt;</span><br><span class="line"></span><br><span class="line">&quot; tmux</span><br><span class="line">if exists(&apos;$TMUX&apos;)</span><br><span class="line">	  set term=screen-256color</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">&quot;YouCompleteMe</span><br><span class="line">set completeopt=longest,menu</span><br><span class="line">let g:ycm_error_symbol=&apos;&gt;&gt;&apos;</span><br><span class="line">let g:ycm_warning_symbol=&apos;&gt;*&apos;</span><br><span class="line">let g:ycm_key_list_select_completion=[&apos;&lt;c-n&gt;&apos;]</span><br><span class="line">let g:ycm_key_list_previous_completion=[&apos;&lt;c-p&gt;&apos;]</span><br><span class="line">let g:ycm_confirm_extra_conf=0</span><br><span class="line">let g:ycm_complete_in_strings=1</span><br><span class="line">let g:ycm_complete_in_comments=1</span><br><span class="line">let g:ycm_use_ultisnips_completer = 1</span><br><span class="line">let g:ycm_seed_identifiers_with_syntax=1</span><br><span class="line">let g:ycm_min_num_of_chars_for_completion=2</span><br><span class="line">let g:ycm_min_num_identifier_candidate_chars=0</span><br><span class="line">let g:ycm_collect_identifiers_from_tags_files=1</span><br><span class="line">let g:ycm_collect_identifiers_from_comments_and_strings=1</span><br><span class="line">let g:ycm_autoclose_preview_window_after_insertion = 1</span><br><span class="line">let g:ycm_autoclose_preview_window_after_completion = 1</span><br><span class="line">&quot; [ &apos;same-buffer&apos;, &apos;horizontal-split&apos;, &apos;vertical-split&apos;, &apos;new-tab&apos; ]</span><br><span class="line">let g:ycm_goto_buffer_command=&apos;vertical-split&apos;</span><br><span class="line">let g:ycm_global_ycm_extra_conf = &apos;~/.ycm_extra_conf.py&apos;</span><br><span class="line">let g:ycm_rust_src_path = &apos;/usr/local/rustc-1.6.0/src&apos;</span><br><span class="line">let g:ycm_filetype_blacklist = &#123;&apos;tagbar&apos; : 1, &apos;nerdtree&apos; : 1&#125;</span><br><span class="line">nnoremap &lt;leader&gt;jc :YcmCompleter GoToDeclaration&lt;CR&gt;</span><br><span class="line">nnoremap &lt;leader&gt;jd :YcmCompleter GoToDefinition&lt;CR&gt;</span><br><span class="line"></span><br><span class="line">&quot;Easy Motion</span><br><span class="line">let g:EasyMotion_smartcase = 1</span><br><span class="line">&quot;let g:EasyMotion_startofline = 0 &quot; keep cursor colum when JK motion</span><br><span class="line">map &lt;Leader&gt;&lt;leader&gt;h &lt;Plug&gt;(easymotion-linebackward)</span><br><span class="line">map &lt;Leader&gt;&lt;Leader&gt;j &lt;Plug&gt;(easymotion-j)</span><br><span class="line">map &lt;Leader&gt;&lt;Leader&gt;k &lt;Plug&gt;(easymotion-k)</span><br><span class="line">map &lt;Leader&gt;&lt;leader&gt;l &lt;Plug&gt;(easymotion-lineforward)</span><br><span class="line">&quot; 重复上一次操作, 类似repeat插件, 很强大</span><br><span class="line">map &lt;Leader&gt;&lt;leader&gt;. &lt;Plug&gt;(easymotion-repeat)</span><br><span class="line"></span><br><span class="line">&quot;ariline</span><br><span class="line">let g:airline#extensions#tabline#enabled = 1  </span><br><span class="line">let g:airline_solarized_bg=&apos;dark&apos;</span><br><span class="line">let g:airline_theme = &apos;solarized&apos; </span><br><span class="line">if !exists(&apos;g:airline_symbols&apos;)</span><br><span class="line">let g:airline_symbols = &#123;&#125;</span><br><span class="line">endif</span><br><span class="line">let g:airline_left_sep = &apos;▶&apos;</span><br><span class="line">let g:airline_left_alt_sep = &apos;❯&apos;</span><br><span class="line">let g:airline_right_sep = &apos;◀&apos;</span><br><span class="line">let g:airline_right_alt_sep = &apos;❮&apos;</span><br><span class="line">let g:airline_symbols.linenr = &apos;¶&apos;</span><br><span class="line">let g:airline_symbols.branch = &apos;⎇&apos;</span><br><span class="line">let g:airline#extensions#tabline#enabled = 1</span><br><span class="line"></span><br><span class="line">&quot;quickrun</span><br><span class="line">let g:quickrun_config = &#123;</span><br><span class="line">\   &quot;_&quot; : &#123;</span><br><span class="line">\       &quot;hook/close_unite_quickfix/enable_hook_loaded&quot; : 1,</span><br><span class="line">\       &quot;hook/unite_quickfix/enable_failure&quot; : 1,</span><br><span class="line">\       &quot;hook/close_quickfix/enable_exit&quot; : 1,</span><br><span class="line">\       &quot;hook/close_buffer/enable_failure&quot; : 1,</span><br><span class="line">\       &quot;hook/close_buffer/enable_empty_data&quot; : 1,</span><br><span class="line">\       &quot;runner/vimproc/updatetime&quot; : 60,</span><br><span class="line">\       &quot;outputter/buffer/split&quot; : &quot;:botright 8sp&quot;,</span><br><span class="line">\   &#125;,</span><br><span class="line">\&#125;</span><br><span class="line"></span><br><span class="line">nmap &lt;Leader&gt;r &lt;Plug&gt;(quickrun)</span><br><span class="line">map &lt;F5&gt; :QuickRun&lt;CR&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot;NERDCOMMENTER</span><br><span class="line">let g:NERDSpaceDelims=1</span><br><span class="line"></span><br><span class="line">&quot;NERDTree</span><br><span class="line">map &lt;F2&gt; :NERDTreeToggle&lt;CR&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot;clang_formate</span><br><span class="line">let g:chang_format#AllowShortFunctionsOnASingleLine=1</span><br><span class="line">let g:clang_format#auto_format_on_insert_leave=1</span><br><span class="line">let g:clang_format#AllowShortIfStatementsOnASingleLine=1</span><br><span class="line">let g:clang_format#AlignTrailingComments=1</span><br><span class="line">let g:clang_format#AlignConsecutiveAssignments=1</span><br><span class="line">let g:clang_format#IndentWrappedFunctionNames=1</span><br><span class="line">let g:clang_format#IndentWidth=4</span><br><span class="line">let g:AlignAfterOpenBracket=1</span><br><span class="line">let g:clang_format#style_options = &#123; </span><br><span class="line">            \ &quot;Standard&quot; : &quot;C++11&quot;,</span><br><span class="line">            \ &quot;IndentWidth&quot; : 4,</span><br><span class="line">            \ &quot;UseTab&quot; : &quot;false&quot;,</span><br><span class="line">            \ &quot;AccessModifierOffset&quot; : -2,</span><br><span class="line">            \ &quot;ColumnLimit&quot; : 99 &#125;</span><br><span class="line"></span><br><span class="line">map &lt;C-K&gt; :pyf &lt;path-to-this-file&gt;/clang-format.py&lt;cr&gt;</span><br><span class="line">imap &lt;C-K&gt; &lt;c-o&gt;:pyf &lt;path-to-this-file&gt;/clang-format.py&lt;cr&gt;</span><br><span class="line"></span><br><span class="line">&quot;cscope</span><br><span class="line">if filereadable(&quot;cscope.out&quot;) </span><br><span class="line">    cs add cscope.out </span><br><span class="line">endif </span><br><span class="line"></span><br><span class="line">&quot; &quot;cpplint</span><br><span class="line">&quot; let g:ale_linters = &#123;</span><br><span class="line">&quot; \	&apos;c&apos;: [&apos;gcc&apos;, &apos;cppcheck&apos;],</span><br><span class="line">&quot; \	&apos;cpp&apos;: [&apos;gcc&apos;, &apos;cppcheck&apos;],</span><br><span class="line">&quot; \&#125;</span><br><span class="line"></span><br><span class="line">&quot; nmap &lt;silent&gt; &lt;leader&gt;a &lt;Plug&gt;(ale_next_wrap)</span><br><span class="line">&quot; let g:ale_set_highlights = 0 </span><br><span class="line">&quot; let g:ale_lint_on_text_changed = &apos;never&apos;</span><br><span class="line">&quot; let g:ale_lint_on_enter = 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot;remove whitespace</span><br><span class="line">nnoremap &lt;F6&gt; :let _s=@/&lt;Bar&gt;:%s/\s\+$//e&lt;Bar&gt;:let @/=_s&lt;Bar&gt;&lt;CR&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="tmux-conf"><a href="#tmux-conf" class="headerlink" title="tmux.conf"></a>tmux.conf</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set -g prefix C-x</span><br><span class="line">unbind C-b</span><br><span class="line">set-option -g mouse on</span><br><span class="line">set -g default-terminal &quot;screen-256color&quot;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/network-depthwise/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -872,166 +1027,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/01/face-as-1/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/01/face-as-1/" itemprop="url">< Antispoofing > Data Augmentation in Face Antispoofing</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-01T10:12:19+08:00">
-                2019-02-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/01/face-as-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/01/face-as-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="How-dose-people-spoof-a-digital-device-with-face-recognition"><a href="#How-dose-people-spoof-a-digital-device-with-face-recognition" class="headerlink" title="How dose people spoof a digital device with face recognition"></a>How dose people spoof a digital device with face recognition</h1><p>To attack a image recognition system is easy. Even to change a single pixel could successfully let the recogniztion system lose efficacy.So people would use the loophole to simulate a set of conditions to spoof the face recogniztion system. In order to defense the spoofing, we should simulate all the possible attacking condition in the real life with limited training dataset.</p>
-<h1 id="Ways-to-simulate-the-spoofing-conditions-through-data-augmentation"><a href="#Ways-to-simulate-the-spoofing-conditions-through-data-augmentation" class="headerlink" title="Ways to simulate the spoofing conditions through data augmentation"></a>Ways to simulate the spoofing conditions through data augmentation</h1><p>The following data augmentation could simulate parts of the attacking condition.</p>
-<ul>
-<li>light condition<br>Light source location could be anywhere which could affect the deep nueral network</li>
-<li>image color</li>
-<li>face location</li>
-<li>image noise</li>
-<li>background proportion</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1084,7 +1079,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

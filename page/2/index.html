@@ -79,16 +79,13 @@
 
 
 
-<meta name="description" content="WeChat -- zhengtianqi123">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Billy&#39;s Blog">
 <meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="WeChat -- zhengtianqi123">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Billy&#39;s Blog">
-<meta name="twitter:description" content="WeChat -- zhengtianqi123">
 
 
 
@@ -252,7 +249,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/30/face-as/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/network-depthwise/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -271,7 +268,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/30/face-as/" itemprop="url">< Antispoofing > Does we should align in Face Antispoofing</a></h1>
+                <a class="post-title-link" href="/2019/03/29/network-depthwise/" itemprop="url">< Network > Understanding DepthWiseConv</a></h1>
         
 
         <div class="post-meta">
@@ -283,8 +280,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T09:19:16+08:00">
-                2019-01-30
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-29T11:14:45+08:00">
+                2019-03-29
               </time>
             
 
@@ -294,28 +291,6 @@
           </span>
 
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -324,8 +299,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/30/face-as/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/30/face-as/" itemprop="commentCount"></span>
+                <a href="/2019/03/29/network-depthwise/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/29/network-depthwise/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,8 +330,8 @@
       
         
           
-            <h1 id="Align-or-not-Texture-or-shape"><a href="#Align-or-not-Texture-or-shape" class="headerlink" title="Align or not, Texture or shape"></a>Align or not, Texture or shape</h1><h2 id="Relationship-with-Face-Recognition-FR"><a href="#Relationship-with-Face-Recognition-FR" class="headerlink" title="Relationship with Face Recognition(FR)"></a>Relationship with Face Recognition(FR)</h2><p>The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example, FR should shorten the distance between the person in real life and the person’s picture in paper or tv or phone.<br>However, Face Antispoofing(FA) just did the opposite thing. FA should shorten the person from the same medium. For example, FA should shroten the distance between the two different person from the same medium. And FA should widen the distance the people from different medium, even the two persons are the same.<br>So as we can see, to differentiate medium is the key in FA.</p>
-<h2 id="What-the-convlutional-neural-networks-are-learning"><a href="#What-the-convlutional-neural-networks-are-learning" class="headerlink" title="What the convlutional neural networks are learning"></a>What the convlutional neural networks are learning</h2><p>As we all know, FR should grab the feature from two persons’ faces and differentiate the two persons’s faces. The texture(skin) from different person is nearly same. So FR should differentiate two persons’ face by their faces’ shape. <strong>Sadly, convlutional neural networks are good at grabbing the feature of textrue of a image, and do very poorly at grabbing the feature of shape.</strong>So strictly aligment of the face is very import in FR. The aim of alignment in FR is to let the deep network to learn the difference of the face shape regardless of the texture.<br>On the opposite of FR, <strong>FA mainly learns the feature of texture of the medium regardless of the shape of ons’s face which could take the advantage of learning capcity of the convlutional neural networks</strong>. So alignment is not important in FA.</p>
+            <h1 id="Some-knowledge-about-DepthWiseConv"><a href="#Some-knowledge-about-DepthWiseConv" class="headerlink" title="Some knowledge about DepthWiseConv"></a>Some knowledge about DepthWiseConv</h1><p>As we all know, people invent DepthWiseConv for more efficient computation cost without accuracy loss. DepthwiseConv coupled with PointWiseConv could be equal to normal convlution. DepthWiseConv means that we assign a single kernel to each feature channel. PointWiseConv is a normal convolution kernel with kernel size 1 and stride 1. DepthWiseConv aims to extract the spatial feature of a feature map, while PointWiseConv aims to extrate the correlation of different feature maps.</p>
+<h1 id="What-pre-feature-should-be-fed-to-DeptWiseConv"><a href="#What-pre-feature-should-be-fed-to-DeptWiseConv" class="headerlink" title="What pre-feature should be fed to DeptWiseConv"></a>What pre-feature should be fed to DeptWiseConv</h1><p>In this section, we should discuss what pre-feature should be fed to DeptWiseConv. Of course we can feed normal feature from normal convolution layers. But people find it may be more efficient if we firstly expand the channels of the pre-feature and then feed them to the DepthWiseConv. Actually this is what mobilenet_v2 did in their network structure which called ‘inverted bottleneck’. We can treat the expansion of the pre-feature as a process of feature uncompression. Why we should uncompression feature before depthwise? <strong>From my point of view, if we want to extract more useful spatial information using DepthWiseConv, we should firstly extract more correlated information among pre-features.So there is why we want to expand the channels of the pre-feature.</strong></p>
 
           
         
@@ -405,7 +380,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/tf-read-data/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/tf-quant/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -424,7 +399,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/09/tf-read-data/" itemprop="url">< Tensorflow > Data flow in tensorflow</a></h1>
+                <a class="post-title-link" href="/2019/03/25/tf-quant/" itemprop="url">< Tensorflow >How dose TensorFlow do Quant Aware Training?</a></h1>
         
 
         <div class="post-meta">
@@ -436,8 +411,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T19:04:09+08:00">
-                2019-01-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-25T17:22:38+08:00">
+                2019-03-25
               </time>
             
 
@@ -477,8 +452,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/tf-read-data/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/tf-read-data/" itemprop="commentCount"></span>
+                <a href="/2019/03/25/tf-quant/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/25/tf-quant/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -508,1102 +483,32 @@
       
         
           
-            <h1 id="Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion"><a href="#Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion" class="headerlink" title="Using data flow queue to read data(abandoned, not support in future tensorflow verion)"></a>Using data flow queue to read data(abandoned, not support in future tensorflow verion)</h1><p>If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I suggest you to read by FIFO_queue to directly read image by its root.<br>Firstly, you have to set up a FIFOQueue:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input_queue = data_flow_ops.FIFOQueue(capacity=3000000,</span><br><span class="line">		                    dtypes=[tf.string, tf.int64],</span><br><span class="line">		                    shapes=[(1,), (1,)],</span><br><span class="line">		                    shared_name=None, name=None)</span><br></pre></td></tr></table></figure>
-<p>The queue above contain two values. The first is image root, and the second is image label.<br>To load image roots and labels to the FIFOQqueue, to have to use the a enqueue_op.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enqueue_op = input_queue.enqueue_many([image_paths_placeholder, labels_placeholder], name=&apos;enqueue_op&apos;)</span><br></pre></td></tr></table></figure>
-<p>Next, you just should open up a session to feed your true image roots and labels to respective placeholder.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess.run(enqueue_op, &#123;image_paths_placeholder: image_paths_array, labels_placeholder: labels_array&#125;)</span><br></pre></td></tr></table></figure>
-<p>During training, we have to dequeue the FIFOQqueue and we should use multi-thread to accelerate the process. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">images_and_labels_list = []</span><br><span class="line">for _ in range(preprocess_threads):</span><br><span class="line">	filenames, label= input_queue.dequeue()</span><br><span class="line">	images = []</span><br><span class="line">               image_depths = []</span><br><span class="line">	for filename, single_label in zip(tf.unstack(filenames), tf.unstack(label)):</span><br><span class="line">	    file_contents = tf.read_file(filename)</span><br><span class="line">   		    image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">   		    image = tf.reshape(image, original_img_shape)</span><br><span class="line">	    images.append(image)</span><br><span class="line">	images_and_labels_list.append([images, label])</span><br></pre></td></tr></table></figure>
-<p>Finally, to create batches of examples, you should use “tf.train.batch_join”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">img_batch, img_depth_batch,label_batch = tf.train.batch_join(</span><br><span class="line">	images_and_labels_list, batch_size=batch_size, </span><br><span class="line">	shapes=[[to_height, to_width, channels], ()], enqueue_many=True,</span><br><span class="line">	capacity=4 * preprocess_threads * 100,</span><br><span class="line">	allow_smaller_final_batch=True)</span><br></pre></td></tr></table></figure>
-<h1 id="Using-tf-data-API"><a href="#Using-tf-data-API" class="headerlink" title="Using tf.data API"></a>Using tf.data API</h1><p>Tensorflow officially promote using tf.data api. Using tf.data api is reletively easy to coding.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   def _parse_data(line):</span><br><span class="line">       file_contents = tf.read_file(image_filepath)</span><br><span class="line">image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">       image = tf.reshape(image, original_img_shape)</span><br><span class="line">       return image, single_label</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   dataset = tf.data.TextLineDataset([file_root])</span><br><span class="line"></span><br><span class="line">   dataset = dataset.map(map_func=_parse_data,  num_parallel_calls=4)</span><br><span class="line">   dataset = dataset.shuffle(buffer_size=batch_size * 3)</span><br><span class="line">   dataset = dataset.batch(batch_size)</span><br><span class="line">   dataset = dataset.repeat(epoc)</span><br><span class="line">   dataset = dataset.prefetch(2000)</span><br><span class="line">   data_iterator = dataset.make_one_shot_iterator()</span><br><span class="line"> </span><br><span class="line">   return data_iterator</span><br></pre></td></tr></table></figure>
-<p>To accelerate the reading process, <strong>do not foget to use dataset.prefetch and num_parallel_calls</strong>. </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/tf-rnn-gru/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/05/tf-rnn-gru/" itemprop="url">< Tensorflow > What is the implementation of GRU in tensorflow</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-05T19:04:09+08:00">
-                2019-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/05/tf-rnn-gru/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/05/tf-rnn-gru/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/05/tf-rnn-gru/1.png" alt=""> </p>
-<p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memery of h_now to h_prev for evry cell. </p>
-<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/05/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/dl-question/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/02/dl-question/" itemprop="url"><deeplarning> Some DeepLearning Questions to Think About</deeplarning></a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-02T16:38:37+08:00">
-                2019-01-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/02/dl-question/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/02/dl-question/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="For-data-augmentation-what-percentage-of-data-set-to-be-augmented-could-affect-the-model-performance"><a href="#For-data-augmentation-what-percentage-of-data-set-to-be-augmented-could-affect-the-model-performance" class="headerlink" title="For data augmentation, what percentage of data set to be augmented could affect the model performance?"></a>For data augmentation, what percentage of data set to be augmented could affect the model performance?</h1><p># </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/30/tf-lsoftmax/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/30/tf-lsoftmax/" itemprop="url">< Tensorflow > How to implement the larget margin softmax loss in tensorflow.</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-30T10:16:38+08:00">
-                2018-12-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/30/tf-lsoftmax/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/30/tf-lsoftmax/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="There-is-my-implementation-of-the-Large-Margin-Softmax-Loss-in-TF"><a href="#There-is-my-implementation-of-the-Large-Margin-Softmax-Loss-in-TF" class="headerlink" title="There is my implementation of the Large Margin Softmax Loss in TF."></a>There is my implementation of the Large Margin Softmax Loss in TF.</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">MARGIN = <span class="number">4</span></span><br><span class="line">c_m_n = <span class="keyword">lambda</span> m, n: math.factorial(n) / math.factorial(m) / math.factorial(n-m)</span><br><span class="line">c_map = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(MARGIN+<span class="number">1</span>):</span><br><span class="line">	c_map.append(c_m_n(i, MARGIN))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_k_multi</span><span class="params">(cos_t)</span>:</span></span><br><span class="line"></span><br><span class="line">        cos_t = tf.cast(cos_t, dtype = tf.float64)</span><br><span class="line">        i = tf.constant(<span class="number">0</span>, dtype = tf.float64)</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">l_cond</span><span class="params">(i)</span>:</span></span><br><span class="line">            tf_pi = tf.constant(math.pi ,tf.float64)</span><br><span class="line">            left_range = tf.cast(tf.cos(tf_pi*(i+<span class="number">1</span>)/MARGIN), dtype = tf.float64)</span><br><span class="line">            right_range = tf.cast(tf.cos(tf_pi*i/MARGIN), dtype = tf.float64)</span><br><span class="line">            logic = tf.logical_or(tf.greater(cos_t, right_range), tf.less(cos_t, left_range))</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> logic</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">l_body</span><span class="params">(i)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> tf.add(i, <span class="number">1</span>)</span><br><span class="line">        k = tf.while_loop(l_cond, l_body, [i])</span><br><span class="line">        k = tf.cast(k, dtype = tf.int32)</span><br><span class="line">        <span class="keyword">return</span> k, k </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">L_softmax</span><span class="params">(feature, labels,  softmax_w, softmax_b , batch_size, labmda = <span class="number">100</span>)</span>:</span></span><br><span class="line"></span><br><span class="line">	f_feature = []</span><br><span class="line">	l_softmax_loss = []</span><br><span class="line">	c_v = []</span><br><span class="line">	o_v = []</span><br><span class="line">	<span class="keyword">for</span> sample_index <span class="keyword">in</span> range(batch_size):</span><br><span class="line"></span><br><span class="line">		sample_feature = tf.slice(feature, [sample_index, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">512</span>])</span><br><span class="line">		label = tf.squeeze(tf.slice(labels, [sample_index],[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		label = tf.cast(label, tf.int32)</span><br><span class="line">		w_label = tf.slice(softmax_w, [<span class="number">0</span>, label], [<span class="number">512</span>, <span class="number">1</span>])</span><br><span class="line">		b_label = tf.squeeze(tf.slice(softmax_b, [label], [<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">		wx = tf.squeeze(tf.matmul(sample_feature, w_label)) </span><br><span class="line"></span><br><span class="line">		w_label_mod = tf.sqrt(<span class="number">2</span> * tf.nn.l2_loss(w_label))</span><br><span class="line">		b_label_mod = tf.sqrt(<span class="number">2</span> * tf.nn.l2_loss(tf.squeeze(b_label)))</span><br><span class="line">		sample_feature_mod = tf.sqrt(<span class="number">2</span> * tf.nn.l2_loss(tf.squeeze(sample_feature)))</span><br><span class="line">	</span><br><span class="line">		cos_theta = wx/(w_label_mod * sample_feature_mod)</span><br><span class="line"></span><br><span class="line">		sin_theta_t = <span class="number">1</span> - cos_theta * cos_theta</span><br><span class="line"></span><br><span class="line">		cos_m_theta = <span class="number">0</span></span><br><span class="line">		flag = <span class="number">-1</span></span><br><span class="line">		<span class="keyword">for</span> loop <span class="keyword">in</span> range(int(MARGIN/<span class="number">2</span>) + <span class="number">1</span>):</span><br><span class="line">			flag *= <span class="number">-1</span></span><br><span class="line">			cos_m_theta += flag * c_map[<span class="number">2</span> * loop] * tf.pow(cos_theta, MARGIN - <span class="number">2</span> *loop) * tf.pow(sin_theta_t, loop)</span><br><span class="line"></span><br><span class="line">		k, log = find_k_multi(cos_theta)</span><br><span class="line">		phi_theta = tf.to_float(tf.pow(tf.constant(<span class="number">-1</span>), k)) * cos_m_theta - <span class="number">2</span> * tf.to_float(k)</span><br><span class="line">		label_value = (labmda * (w_label_mod * sample_feature_mod * cos_theta + b_label_mod) + \</span><br><span class="line">			(w_label_mod * sample_feature_mod * phi_theta + b_label_mod))/(<span class="number">1.0</span> + labmda)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="comment"># label_value = tf.to_float(tf.pow(-1, k)) * w_label_mod * sample_feature_mod * cos_m_theta - \</span></span><br><span class="line">		<span class="comment"># 	2 * tf.to_float(k) * w_label_mod * sample_feature_mod</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		other_value = tf.squeeze(tf.matmul(sample_feature, softmax_w) + softmax_b)</span><br><span class="line">		old_value = tf.slice(other_value, [label], [<span class="number">1</span>])</span><br><span class="line">		to_substract_1 = tf.sparse_to_dense(label, other_value.get_shape(), old_value, default_value=<span class="number">0.</span>)</span><br><span class="line">		to_substract_2 = tf.sparse_to_dense(label, other_value.get_shape(), label_value, default_value=<span class="number">0.</span>)</span><br><span class="line"></span><br><span class="line">		l_feature = other_value - to_substract_1 + to_substract_2</span><br><span class="line">		f_feature.append(l_feature)</span><br><span class="line"></span><br><span class="line">		c_v.append(cos_theta)</span><br><span class="line">		o_v.append(k)</span><br><span class="line"></span><br><span class="line">	out_value = [c_v, o_v]</span><br><span class="line">	all_batch_feature  = tf.stack(f_feature)</span><br><span class="line">	<span class="keyword">return</span> all_batch_feature,   out_value</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/28/softmax-sigmoid-cross-entropy/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/28/softmax-sigmoid-cross-entropy/" itemprop="url">< Tensorflow > Softmax cross entropy & Sigmoid cross entropy</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-28T15:15:31+08:00">
-                2018-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/28/softmax-sigmoid-cross-entropy/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/28/softmax-sigmoid-cross-entropy/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="How-difference"><a href="#How-difference" class="headerlink" title="How difference"></a>How difference</h1><p>For multi-calss classication, if you want optimize only one category during training, you should use softmax cross entropy. Ohterwise, if you want to optimize more than one category, you should use sigmoid cross entropy.<br><strong>However,you can also use sigmoid cross entropy to optimize only one category. But this may lead to over confidence for the target. as the sigmoid cross entropy would optimize to target while supressing the none targets</strong>.</p>
-<p>The code below could demonstrate </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">np.set_printoptions(precision=<span class="number">4</span>, suppress=<span class="keyword">True</span>)  </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">()</span>:</span></span><br><span class="line">	x = tf.constant([<span class="number">7</span>, <span class="number">6</span>, <span class="number">-4</span>], tf.float64)</span><br><span class="line">	x_sig = tf.nn.sigmoid(x)</span><br><span class="line">	z = tf.constant([<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>], tf.float64)</span><br><span class="line">	loss_1 = tf.reduce_sum(z * -tf.log(x_sig) + (<span class="number">1</span> - z) * -tf.log(<span class="number">1</span> - x_sig))</span><br><span class="line">	loss_2 = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits=x, labels=z))</span><br><span class="line"></span><br><span class="line">	logits = tf.constant([[<span class="number">3</span>, <span class="number">-4</span>], [<span class="number">4</span>, <span class="number">-2</span>], [<span class="number">-2</span>, <span class="number">2</span>]], tf.float64)</span><br><span class="line">	y = tf.nn.sigmoid(logits)</span><br><span class="line">	y_ = tf.constant([[<span class="number">1</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>]], tf.float64)</span><br><span class="line">	loss_3 = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits=logits, labels = y_))</span><br><span class="line">	loss_4 = -tf.reduce_sum(y_ * tf.log(y))</span><br><span class="line">	loss_5 = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=y_))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line"></span><br><span class="line">                print(sess.run(loss_1))</span><br><span class="line">                print(sess.run(loss_2))</span><br><span class="line">                print(sess.run(loss_3))</span><br><span class="line">                print(sess.run(loss_4))</span><br><span class="line">                print(sess.run(loss_4))</span><br><span class="line"></span><br><span class="line">fun()</span><br></pre></td></tr></table></figure>
-<p>Below are the result:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loss1: 0.021537079509314265</span><br><span class="line">loss2: 0.02153707950931443</span><br><span class="line">loss3: 0.465671240538279</span><br><span class="line">loss4: 0.021537079509314265</span><br><span class="line">loss5: 0.021537079509314338</span><br></pre></td></tr></table></figure></p>
-<p>loss1 is the result the my implementation of sigmoid cross entropy. loss2 is the result of the standard tensorflow sigmoid cross entropy. loss4 is the result the my implementation of softmax cross entropy. loss5 is the result of the standard tensorflow softmax cross entropy. As you can see, the result of sigmoid cross entropy and softmax cross entropy are the same. <strong>This is mainly because sigmoid could be seen a sepcial case of sofmax.To sigmoid one number could equal to softmax two number which could sum to that num.</strong><br><strong>loss3 are larger to the other loss. It it manily becuase we use sigmoid cross entropy to optimize only one category, the sigmoid cross entropy would optimize to target while supressing the none targets.</strong></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/tf-rgb-disturb/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/tf-rgb-disturb/" itemprop="url">< Tensorflow >Tensorflow Data Augmentation RGB distortation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T09:28:48+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/22/tf-rgb-disturb/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/22/tf-rgb-disturb/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>This method could augment images by distrubing the RGB value of a image randomly. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">all_color_channel_tur</span><span class="params">(image)</span>:</span></span><br><span class="line"></span><br><span class="line">        color_range = <span class="number">30</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">add_color_mask_test</span><span class="params">(image)</span>:</span></span><br><span class="line">            img_shape = image.get_shape().as_list()</span><br><span class="line">            img_shape = [img_shape[<span class="number">0</span>], img_shape[<span class="number">1</span>], <span class="number">1</span>]</span><br><span class="line">            ran_color_range_0 = tf.random_uniform([], minval=-color_range, maxval=color_range,dtype=tf.float32)</span><br><span class="line">            color_mask_0 = tf.ones(img_shape, dtype = tf.float32) * ran_color_range_0</span><br><span class="line">            ran_color_range_1 = tf.random_uniform([], minval=-color_range, maxval=color_range,dtype=tf.float32)</span><br><span class="line">            color_mask_1 = tf.ones(img_shape, dtype = tf.float32) * ran_color_range_1</span><br><span class="line"></span><br><span class="line">            ran_color_range_2 = tf.random_uniform([], minval=-color_range, maxval=color_range,dtype=tf.float32)</span><br><span class="line">            color_mask_2 = tf.ones(img_shape, dtype = tf.float32) * ran_color_range_2</span><br><span class="line">            sep_channels = tf.split(image, <span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line">            sep_channels[<span class="number">0</span>] = tf.add(sep_channels[<span class="number">0</span>], color_mask_0)</span><br><span class="line">            sep_channels[<span class="number">1</span>] = tf.add(sep_channels[<span class="number">1</span>], color_mask_1)</span><br><span class="line">            sep_channels[<span class="number">2</span>] = tf.add(sep_channels[<span class="number">2</span>], color_mask_2)</span><br><span class="line">            image = tf.concat(sep_channels,<span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line"><span class="comment">#          ran = tf.random_uniform([])</span></span><br><span class="line">        <span class="comment">#  image = tf.cond(ran&lt;0.5, lambda:add_color_mask_test(image), lambda: image)</span></span><br><span class="line"></span><br><span class="line">        image = add_color_mask_test(image)</span><br><span class="line">        <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
-<p> The origin image and transfered image are below<br><img src="/2018/12/22/tf-rgb-disturb/1.bmp" alt=""><br><img src="/2018/12/22/tf-rgb-disturb/2.bmp" alt=""><br><img src="/2018/12/22/tf-rgb-disturb/3.bmp" alt=""><br><img src="/2018/12/22/tf-rgb-disturb/4.bmp" alt=""> </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/20/tf-tur-perspective-transform/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/20/tf-tur-perspective-transform/" itemprop="url">< Tensorflow >Tensorflow Data Augmentation affine transformation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-20T18:42:47+08:00">
-                2018-12-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/20/tf-tur-perspective-transform/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/20/tf-tur-perspective-transform/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>This method augment image by changing image through affine transformation.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">transform_perspective</span><span class="params">(image)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">x_y_1</span><span class="params">()</span>:</span></span><br><span class="line">        x = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">-0.15</span>)</span><br><span class="line">        y = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">-0.15</span>)</span><br><span class="line">        <span class="keyword">return</span> x, y</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">x_y_2</span><span class="params">()</span>:</span></span><br><span class="line">        x = tf.random_uniform([], minval=<span class="number">0.15</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        y = tf.random_uniform([], minval=<span class="number">0.15</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        <span class="keyword">return</span> x, y       </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trans</span><span class="params">(image)</span>:</span></span><br><span class="line">        ran = tf.random_uniform([])</span><br><span class="line">        x = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        x_com = tf.random_uniform([], minval=<span class="number">1</span>-x<span class="number">-0.1</span>, maxval=<span class="number">1</span>-x+<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">        y = tf.random_uniform([], minval=<span class="number">-0.3</span>, maxval=<span class="number">0.3</span>)</span><br><span class="line">        y_com = tf.random_uniform([], minval=<span class="number">1</span>-y<span class="number">-0.1</span>, maxval=<span class="number">1</span>-y+<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">        transforms =  [x_com, x,<span class="number">0</span>,y,y_com,<span class="number">0</span>,<span class="number">0.00</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        ran = tf.random_uniform([]) </span><br><span class="line">        image = tf.cond(ran&lt;<span class="number">0.5</span>, <span class="keyword">lambda</span>:tf.contrib.image.transform(image,transforms,interpolation=<span class="string">'NEAREST'</span>, name=<span class="keyword">None</span>), </span><br><span class="line">                <span class="keyword">lambda</span>:tf.contrib.image.transform(image,transforms,interpolation=<span class="string">'BILINEAR'</span>, name=<span class="keyword">None</span>))</span><br><span class="line">        <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line">    ran = tf.random_uniform([])</span><br><span class="line">    image = tf.cond(ran&lt;<span class="number">1</span>, <span class="keyword">lambda</span>: trans(image), <span class="keyword">lambda</span>:image)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
-<p> The origin image and transfered image are below<br> <img src="/2018/12/20/tf-tur-perspective-transform/1.bmp" alt=""><br> <img src="/2018/12/20/tf-tur-perspective-transform/2.bmp" alt=""><br><img src="/2018/12/20/tf-tur-perspective-transform/3.bmp" alt=""><br><img src="/2018/12/20/tf-tur-perspective-transform/4.bmp" alt=""> </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/newwork/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/newwork/" itemprop="url">< Network > Understanding the activation of the residual block</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-14T13:24:24+08:00">
-                2018-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/14/newwork/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/14/newwork/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="The-evloution-of-the-activation-style-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-style-in-Residual-Blocks" class="headerlink" title="The evloution of the activation style in Residual Blocks"></a>The evloution of the activation style in Residual Blocks</h1><p>The activation style is different between different resiudal structure.</p>
+            <h1 id="Let-firstly-simplify-the-quant-process-in-TF"><a href="#Let-firstly-simplify-the-quant-process-in-TF" class="headerlink" title="Let　firstly simplify the quant process in TF"></a>Let　firstly simplify the quant process in TF</h1><h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>resnet_v1<br>shortcut: activation after if there is conv operation on shortcut<br>residual : no activaion after<br>add: activation after</p>
+<li>q_a1:Quanted activation value in layer 1</li>
+<li><p>S_a1, Z_a1: <strong>Estimated</strong> scale and zero point in layer 1</p>
 </li>
-<li><p>resnet_v2<br>shorcut: no activation after<br>residual: no acitvation after<br>add: activation after</p>
+<li><p>q_w1:Quanted weight in layer 1</p>
 </li>
-<li><p>mobilenet_v2<br>shortcut: no acitvation after<br>residual: no activation after<br>add: no acitvation after</p>
+<li><p>S_w1, Z_w1: <strong>Statistical</strong> scale and zero point in layer 1</p>
 </li>
+<li><p>q_a0:Quanted activation value in layer 0</p>
+</li>
+<li>S_a0, Z_a0: <strong>Estimated</strong> scale and zero point in layer 0</li>
 </ul>
-<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. <strong>However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residual</strong>. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after add operation, the information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
+<p>As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S_a0, Z_a0, q_a1, Z_a1.To get S_w1/Z_w1 is simple, we can get the Statistical maximum of the weights in each layer we want. The only tricky thing is how to get S_a1/Z_a1/S_a0/Z_a0, which have to be estimated from the training data.</p>
+<h3 id="Why-we-have-to-get-the-estimation-of-S-Z-after-activation-instead-of-before"><a href="#Why-we-have-to-get-the-estimation-of-S-Z-after-activation-instead-of-before" class="headerlink" title="Why we have to get the estimation of S/Z after activation instead of before?"></a>Why we have to get the estimation of S/Z after activation instead of before?</h3><p>Of course we can estimate the S/Z before actication. And then we activate(relu) the quantized value. However, there one one drawbacks:</p>
+<p>Estimate S/Z before activation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conv -&gt;  (before activation)estimate S/Z=[0-&gt;255] -&gt; truncation（relu）= [Z-&gt;255] (if relu6 : [Z-&gt;X])</span><br></pre></td></tr></table></figure></p>
+<p>Estimate S/Z after activation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conv -&gt;  (after activation)estimate S/Z=[-A-&gt;A] -&gt; truncation（relu）= [0-&gt;255](if relu6: [0-&gt;255])</span><br></pre></td></tr></table></figure></p>
+<p>As we can see, if we can see, if we can see, the quantized activation range for estimated S/Z after activation is always 0 to 255. However, the quantized activation range for estimated S/Z before activation is narrow than 0 to 255. So if estimate S/Z before activation, the quantized activated value is more compressive which could lead to accuracy loss.</p>
+<h1 id="Quantization-aware-training-in-Tensorflow"><a href="#Quantization-aware-training-in-Tensorflow" class="headerlink" title="Quantization aware training in Tensorflow"></a>Quantization aware training in Tensorflow</h1><p>You can either train your quantized model by restroing a ever trained floating point model or from scratch. In any cases, you have to firstly create a quantization training graph.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br></pre></td></tr></table></figure></p>
+<p>The <em>DELAY_STEP</em> means number of steps after which weights and activations are quantized during training. Just put the above code after you create your normal training graph(exclude the optimization operation).  If you use multi-gpu training, you have to create a new quantization graph on every gpu card. Just like the code as following:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope()):</span><br><span class="line">     <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(GPU_NUM_ID)):</span><br><span class="line">          <span class="keyword">with</span> tf.device(<span class="string">'/gpu:%d'</span> % GPU_NUM_ID[i]):</span><br><span class="line">                <span class="keyword">with</span> tf.name_scope(<span class="string">'%s_%d'</span> % (<span class="string">'cnn_mg'</span>, i)) <span class="keyword">as</span> scope:</span><br><span class="line">                            images, abels = load_batch_images()           </span><br><span class="line">                            logits, out_data = net.inference(images, reuse=tf.AUTO_REUSE,  num_classes=LABEL_NUM)</span><br><span class="line">                            <span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope(), reuse=tf.AUTO_REUSE):</span><br><span class="line">                                tf.contrib.quantize.create_training_graph(quant_delay=DELAY_STEP)</span><br><span class="line">                            loss = conpute_loss(labels, logits)</span><br><span class="line">                            tf.get_variable_scope().reuse_variables()</span><br><span class="line">                            grads = optimizer.compute_gradients(loss_total_sep)</span><br><span class="line">                            tower_grads.append(grads)</span><br></pre></td></tr></table></figure></p>
+<p>One thing I have to mention is that the quantized aware training process is fake training. Fake training means that during the forward process,  the training graph just simulate the integer multiply by using corrsponding floating point mulipy, The word ‘Corrosponding’ means that the simulated float point weights are the reversd quantization of the corresponding fixed integer point. So the training forward output may silightly different from the actual quantization computed result.</p>
+<h1 id="Save-Frozen-Convert-and-Test"><a href="#Save-Frozen-Convert-and-Test" class="headerlink" title="Save, Frozen, Convert and Test"></a>Save, Frozen, Convert and Test</h1><h2 id="Save"><a href="#Save" class="headerlink" title="Save"></a>Save</h2><p>Next, you have to save your trained quantized model. However, to save your quantized model, you have to create a quantized evaluation graph by using the following code:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g = tf.get_default_graph()</span><br><span class="line">tf.contrib.quantize.create_eval_graph(input_graph=g)</span><br></pre></td></tr></table></figure></p>
+<p>Then just writing the graph and save it.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'./your_quantized_graph.pb'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">       f.write(str(g.as_graph_def()))\</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"><span class="comment">## Frozen</span></span><br><span class="line">To make your model more compact, you can froze your model. Frozen a model means that getting rid of useless operations <span class="keyword">and</span> fusing redundant operations. To froze your graph, you can use the standard frozen tool.</span><br><span class="line">```bash</span><br><span class="line">bazel build tensorflow/python/tools:freeze_graph &amp;&amp; \</span><br><span class="line">bazel-bin/tensorflow/python/tools/freeze_graph \</span><br><span class="line">--input_graph=some_graph_def.pb \</span><br><span class="line">--input_checkpoint=model.ckpt<span class="number">-8361242</span> \</span><br><span class="line">--output_graph=/tmp/frozen_graph.pb --output_node_names=softmax</span><br></pre></td></tr></table></figure></p>
+<h2 id="Convert"><a href="#Convert" class="headerlink" title="Convert"></a>Convert</h2><p>The next step is to convert your frozen graph to tflite for future delopy.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">path_to_frozen_graphdef_pb = <span class="string">'./your_frozen_graph.pb'</span></span><br><span class="line">input_shapes = &#123;<span class="string">'validate_input/imgs'</span>:[<span class="number">1</span>,<span class="number">320</span>,<span class="number">320</span>,<span class="number">3</span>]&#125;</span><br><span class="line">(tf_verion&gt;<span class="number">1.11</span>)converter = tf.contrib.lite.TFLiteConverter.from_frozen_graph(path_to_frozen_graphdef_pb, [<span class="string">'validate_input/imgs'</span>], [<span class="string">'output_node'</span>])</span><br><span class="line">(tf_version&lt;=<span class="number">1.11</span>)converter = tf.contrib.lite.TocoConverter.from_frozen_graph(path_to_frozen_graphdef_pb, [<span class="string">'validate_input/imgs'</span>], [<span class="string">'output_node'</span>])</span><br><span class="line">converter.inference_type = tf.contrib.lite.constants.QUANTIZED_UINT8</span><br><span class="line">converter.quantized_input_stats = &#123;<span class="string">'validate_input/imgs'</span>:(<span class="number">0.</span>,<span class="number">1.</span>)&#125;</span><br><span class="line">converter.allow_custom_ops = <span class="keyword">True</span></span><br><span class="line">converter.default_ranges_stats = (<span class="number">0</span>,<span class="number">255</span>)</span><br><span class="line">converter.post_training_quantize = <span class="keyword">True</span></span><br><span class="line">tflite_model = converter.convert()</span><br><span class="line">open(<span class="string">"sfnv2.tflite"</span>, <span class="string">"wb"</span>).write(tflite_model)</span><br></pre></td></tr></table></figure></p>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>Finally, your can test your converted tflite. By the following code, you can test your quantized model:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">interpreter = tf.contrib.lite.Interpreter(model_path=<span class="string">"your.tflite"</span>) </span><br><span class="line">interpreter.allocate_tensors() </span><br><span class="line">input_details = interpreter.get_input_details() </span><br><span class="line">output_details = interpreter.get_output_details() </span><br><span class="line">interpreter.set_tensor(input_details[<span class="number">0</span>][<span class="string">'index'</span>], batch_validate_img)</span><br><span class="line">interpreter.invoke()</span><br><span class="line">score = interpreter.get_tensor(output_details[<span class="number">0</span>][<span class="string">'index'</span>])</span><br><span class="line">score = score[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">zero_point = xxx</span><br><span class="line">scale = xxx</span><br><span class="line">reverse_socre = scale  * (score - zero_point)</span><br></pre></td></tr></table></figure></p>
+<p>One thing to mention is that the final score you get is a fixted point integer value. You have to convert the fixed point integer value to the corresponing float value. In order to do that, you have to check the corresponding zero point and scale in the corresponding output layer and then descaling the original output value.</p>
 
           
         
@@ -1652,7 +557,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/11/LINUX-COMMOND/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/16/antispoof-multi-task-learn/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -1671,7 +576,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/11/LINUX-COMMOND/" itemprop="url">< Linux > Commond</a></h1>
+                <a class="post-title-link" href="/2019/03/16/antispoof-multi-task-learn/" itemprop="url">< Antispoofing > Multi-Task-Learning in Face Antispoofing</a></h1>
         
 
         <div class="post-meta">
@@ -1683,8 +588,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-11T09:33:39+08:00">
-                2018-12-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-16T11:39:28+08:00">
+                2019-03-16
               </time>
             
 
@@ -1706,8 +611,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
                   </a>
                 </span>
 
@@ -1724,8 +629,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/11/LINUX-COMMOND/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/11/LINUX-COMMOND/" itemprop="commentCount"></span>
+                <a href="/2019/03/16/antispoof-multi-task-learn/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/16/antispoof-multi-task-learn/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1755,12 +660,343 @@
       
         
           
-            <h1 id="File-operation"><a href="#File-operation" class="headerlink" title="File operation"></a>File operation</h1><p><strong>To do some operations on a range of files, such as to rm file_1.txt to file_100.txt</strong></p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm file_&#123;1..100&#125;.txt</span><br></pre></td></tr></table></figure>
-<h1 id="System-state"><a href="#System-state" class="headerlink" title="System state"></a>System state</h1><p><strong>To check cpu usage</strong><br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">top</span><br><span class="line">htop</span><br></pre></td></tr></table></figure></p>
-<p><strong>To check memory usage</strong><br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -lh</span><br></pre></td></tr></table></figure></p>
-<p><strong>To check system IO</strong><br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iotop -oP</span><br></pre></td></tr></table></figure></p>
-<p><strong>To list all running process</strong><br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -aux</span><br></pre></td></tr></table></figure></p>
+            <h1 id="Is-Face-Antispoofing-only-a-binary-classification-task"><a href="#Is-Face-Antispoofing-only-a-binary-classification-task" class="headerlink" title="Is Face Antispoofing only a binary classification task?"></a>Is Face Antispoofing only a binary classification task?</h1><p>Of course, we can consider face antispoofing task a binary classification task. We can train a classifier to seperate a human face image from liveness to fake. It may work well but it can not fully use all information in an face image. In order to push the limite of our trained data and our trained classifier, we have to cultivate other information that could help us to better discriminate a attack image.</p>
+<p>So what information could use from an image beyoud its label. <strong>It’s depth information(We do not consider real face mask or face model). The fake image which normally are paper, screen dose not contain any depth information.</strong> However, the real face contain depth information. So we can use this extra information to seperate the real face from fake face.</p>
+<h1 id="Multi-Task-Learning-in-Face-antispoofing"><a href="#Multi-Task-Learning-in-Face-antispoofing" class="headerlink" title="Multi-Task-Learning in Face antispoofing"></a>Multi-Task-Learning in Face antispoofing</h1><p>Muti-Task-Learning means that a model could achieve aim by learning multi task simultaneously. Specially in deep learning, we could combine multiple loss together to train a deep model.</p>
+<p>More specially in face antispoofing task, we could combine the depth loss and classification loss together to get a more generalized. To picture below shows the main process.<br><img src="/2019/03/16/antispoof-multi-task-learn/process.png" alt=""> </p>
+<p>As for how to combine the classification loss and depth loss, you could try many ways(to add together or to optimize separately).<br>May this could help bring you some insight in your task.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/06/dataset-cut/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/06/dataset-cut/" itemprop="url">< DeepLearning > The Support Vectors in DeepLearning</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-06T15:35:55+08:00">
+                2019-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/06/dataset-cut/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/06/dataset-cut/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Dose-DeepLearning-has-‘Support-Vectors’"><a href="#Dose-DeepLearning-has-‘Support-Vectors’" class="headerlink" title="Dose DeepLearning has ‘Support Vectors’?"></a>Dose DeepLearning has ‘Support Vectors’?</h1><p>As we all know, support vectors is a notation in SVM(Support Vector Machine). Support vectors means that the data points in the decision boundary(the Maximum Margin in SVM) are very important in a classification algorithm.  We can train a SVM only with the ‘Support Vectors’ that can achieve the same accuracy with models trained with more data.  So does the ‘Support Vectors’ exists in DeepLearning?<br>Yes! It dose!<br>Many experiments have be made to testify that there many be many redundant data in your training dataset. Deep models could reach to similary accuracy with a few ‘IMPORTANT’ data points which could be seen as the ‘Support Vectors’.<br>So, the only question is how to determine which training data point is important and how to define the importance of a data points?</p>
+<h1 id="How-to-determine-which-training-data-points-is-more-IMPORTANT"><a href="#How-to-determine-which-training-data-points-is-more-IMPORTANT" class="headerlink" title="How to determine which training data points is more IMPORTANT?"></a>How to determine which training data points is more IMPORTANT?</h1><p><strong>In a word, the sample(has to be labeled right) which is hard to be classified by your model is more important. </strong>So we have to make sure how hard it is. There are three ways which from three papers:</p>
+<ul>
+<li><strong>An Empirical Study of Example Forgetting during Deep Neural Network Learning</strong><br><em>Toneva, Mariya and Sordoni, Alessandro and Combes, Remi Tachet des and Trischler, Adam and Bengio, Yoshua and Gordon, Geoffrey J, 2018</em></li>
+</ul>
+<p>This paper finds that the data points that are easily forgotten during the process of training is more likely to be important.  One sample to be forgotten during training means that the sample once be to right classified  is classified wrong in future training iteration.  One sample to that is unforgotten during training means that the once the sample is right classificed could never be false classified during the training iteration. This paper experiments that by removing the unforgotten data points could maintain the testing accuracy for a deeplearning model.</p>
+<ul>
+<li><strong>Dataset Culling: Towards Efficient Training Of Distillation-Based Domain Specific Models</strong><br><em>Yoshioka, Kentaro and Lee, Edward and Wong, Simon and Horowitz, Mark, 2019</em></li>
+</ul>
+<p>To determain which training sample is more importan, this paper designs a loss. </p>
+<blockquote>
+<p>To evaluate how difficult an image is to predict, we develop a confidence loss metric. This loss (shown below) uses the model’s output confidence levels to determine whether data samples are 1) difficult-to-predict and kept or 2) easy and culled away.</p>
+</blockquote>
+<p>Lconf = −x logx <em> Q + (1 − x) </em>expx/( expx + 1) + b</p>
+<blockquote>
+<p>Input x is the prediction confidence, b is a constant to set the<br>intercept to zero, and Q sets the weighting of low-confidence<br>predictions. </p>
+</blockquote>
+<ul>
+<li><strong>Are All Training Examples Created Equal? An Empirical Study</strong><br><em>Yoshioka, Kentaro and Lee, Edward and Wong, Simon and Horowitz, Mark, 2019</em></li>
+</ul>
+<p>This paper analysis the importance of a training sample by compute gradient of the sample during back propagation. The sample with  large gradients means that the sample is more important.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/01/face-as-1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/01/face-as-1/" itemprop="url">< Antispoofing > Data Augmentation in Face Antispoofing</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-01T10:12:19+08:00">
+                2019-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/01/face-as-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/01/face-as-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="How-dose-people-spoof-a-digital-device-with-face-recognition"><a href="#How-dose-people-spoof-a-digital-device-with-face-recognition" class="headerlink" title="How dose people spoof a digital device with face recognition"></a>How dose people spoof a digital device with face recognition</h1><p>To attack a image recognition system is easy. Even to change a single pixel could successfully let the recogniztion system lose efficacy.So people would use the loophole to simulate a set of conditions to spoof the face recogniztion system. In order to defense the spoofing, we should simulate all the possible attacking condition in the real life with limited training dataset.</p>
+<h1 id="Ways-to-simulate-the-spoofing-conditions-through-data-augmentation"><a href="#Ways-to-simulate-the-spoofing-conditions-through-data-augmentation" class="headerlink" title="Ways to simulate the spoofing conditions through data augmentation"></a>Ways to simulate the spoofing conditions through data augmentation</h1><p>The following data augmentation could simulate parts of the attacking condition.</p>
+<ul>
+<li>light condition<br>Light source location could be anywhere which could affect the deep nueral network</li>
+<li>image color</li>
+<li>face location</li>
+<li>image noise</li>
+<li>background proportion</li>
+</ul>
 
           
         
@@ -1800,7 +1036,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1838,7 +1074,7 @@
               <img class="site-author-image" itemprop="image" src="/images/head.png" alt="Billy">
             
               <p class="site-author-name" itemprop="name">Billy</p>
-              <p class="site-description motion-element" itemprop="description">WeChat -- zhengtianqi123</p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">

@@ -352,7 +352,8 @@
       
         
           
-          These are the tools(part) that I installed in my linux workspace. Hopefully it could help improve yo
+          These are the tools(part) that I installed in my linux workspace. Hopefully it could help improve your efficiency.
+System12345678910111213141516171819202122232425sudo apt-get install tmuxsudo apt-get install gitsudo apt-get install openssh-serversudo apt-get install python-pip python-dev build-essential                                                         sudo pip install tensorflow-gpugit clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vimvim +PluginInstall +qallpython
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -488,7 +489,7 @@
       
         
           
-          Some knowledge about DepthWiseConvAs we all know, people invent DepthWiseConv for more efficient com
+          Some knowledge about DepthWiseConvAs we all know, people invent DepthWiseConv for more efficient computation cost without accuracy loss. DepthwiseConv coupled with PointWiseConv could be equal to normal convlution. DepthWiseConv means that we assign a single kernel to each feature channel. PointWiseConv is a normal convolution kernel with kernel size 1 and stride 1. DepthWiseConv aims to extract the spatial feature of a feature map, while PointWiseConv aims to extrate the correlation of differen
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -646,7 +647,20 @@
       
         
           
-          Let　firstly simplify the quant process in TFOverview1S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_
+          Let　firstly simplify the quant process in TFOverview1S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)
+
+q_a1:Quanted activation value in layer 1
+S_a1, Z_a1: Estimated scale and zero point in layer 1
+
+q_w1:Quanted weight in layer 1
+
+S_w1, Z_w1: Statistical scale and zero point in layer 1
+
+q_a0:Quanted activation value in layer 0
+
+S_a0, Z_a0: Estimated scale and zero point in layer 0
+
+As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -804,7 +818,8 @@
       
         
           
-          Is Face Antispoofing only a binary classification task?Of course, we can consider face antispoofing 
+          Is Face Antispoofing only a binary classification task?Of course, we can consider face antispoofing task a binary classification task. We can train a classifier to seperate a human face image from liveness to fake. It may work well but it can not fully use all information in an face image. In order to push the limite of our trained data and our trained classifier, we have to cultivate other information that could help us to better discriminate a attack image.
+So what information could use from a
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -962,7 +977,7 @@
       
         
           
-          Dose DeepLearning has ‘Support Vectors’?As we all know, support vectors is a notation in SVM(Support
+          Dose DeepLearning has ‘Support Vectors’?As we all know, support vectors is a notation in SVM(Support Vector Machine). Support vectors means that the data points in the decision boundary(the Maximum Margin in SVM) are very important in a classification algorithm.  We can train a SVM only with the ‘Support Vectors’ that can achieve the same accuracy with models trained with more data.  So does the ‘Support Vectors’ exists in DeepLearning?Yes! It dose!Many experiments have be made to testify that t
           ...
           <!--noindex-->
           <div class="post-button text-center">

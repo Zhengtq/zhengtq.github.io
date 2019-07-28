@@ -352,7 +352,8 @@
       
         
           
-          How dose people spoof a digital device with face recognitionTo attack a image recognition system is 
+          How dose people spoof a digital device with face recognitionTo attack a image recognition system is easy. Even to change a single pixel could successfully let the recogniztion system lose efficacy.So people would use the loophole to simulate a set of conditions to spoof the face recogniztion system. In order to defense the spoofing, we should simulate all the possible attacking condition in the real life with limited training dataset.
+Ways to simulate the spoofing conditions through data augment
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -510,7 +511,7 @@
       
         
           
-          Align or not, Texture or shapeRelationship with Face Recognition(FR)The aim of Face Recognition is t
+          Align or not, Texture or shapeRelationship with Face Recognition(FR)The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example, FR should shorten the distance between the person in real life and the person’s picture in paper or tv or phone.However, Face Antispoofing(FA) just did the opposite thing. FA should shorten the person from the same medium. For example, FA should shroten the distance between the two different person 
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -668,7 +669,8 @@
       
         
           
-          Using data flow queue to read data(abandoned, not support in future tensorflow verion)If you put you
+          Using data flow queue to read data(abandoned, not support in future tensorflow verion)If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I suggest you to read by FIFO_queue to directly read image by its root.Firstly, you have to set up a FIFOQueue:
+1234input_queue = data_flow_ops.FIFOQueue(capacity=3000000,		                    dtypes=[tf.string, tf.int64],		                    shapes=[(1,), (1,)],		                    shared_name=None, na
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -826,7 +828,8 @@
       
         
           
-          What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell i
+          What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:  
+The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. So as you can see, we have to 
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -984,8 +987,9 @@
       
         
           
-          For data augmentation, what percentage of data set to be augmented could affect the model performanc
-          ...
+          For data augmentation, what percentage of data set to be augmented could affect the model performance?# 
+
+          
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/01/02/dl-question/#more" rel="contents">

@@ -354,7 +354,10 @@
           
           Blinking DEMO 
 
-The blue number on the right top of the video is the number of blinking since starti
+The blue number on the right top of the video is the number of blinking since starting detection.For more details, you can check this page.
+FaceAntispoofing,  RNN Smooth DEMO 
+
+The number behind the string “CNN” is the output of CNN model which is used to predict a face is whether fake or alive.The number behind the string “RNN” is the output of RNN model which aims to smoth the final result fed by CNN model based on sequence.The number behind the string “SE_NUM” is the number of
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -512,7 +515,8 @@ The blue number on the right top of the video is the number of blinking since st
       
         
           
-          Applicable conditionsIf you want to deal with thousands of cases in a same way, you can use use this
+          Applicable conditionsIf you want to deal with thousands of cases in a same way, you can use use this method to increase the processing speed.For example, when you want to load millions of images and process them independently, you can apply this method which could accelerate your processing speed hugely,
+Firstly, just write a bash file12345678910111213141516171819start_num=0thread_num=8  #How many thread do you want applyall_num=100000  #How many samples do you want to dealsstep_num=$[all_num/th
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -670,7 +674,8 @@ The blue number on the right top of the video is the number of blinking since st
       
         
           
-          Understanding GRUAs we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU 
+          Understanding GRUAs we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, so it could encode the information from very early time. Similarly to residual structure in CNN, GRU(or LSTM) could be seen RNN with residual block. That is to say that former hidden state is identically added to the newly computed hidden state(with a gate).For more details about GRU structure, you could check my former blog.
+#Forward Propagation
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -830,7 +835,20 @@ The blue number on the right top of the video is the number of blinking since st
           
           The optimizersLet’s simply list the optimizers that may or may not be used in your project.
 
-SGDOpti
+SGDOptimizer
+MomentumOptimizer
+NesterovOptimizer
+AdagradOptimizer
+AdadeltaOptimizer
+RMSPropOptimizer
+AdamOptimizer
+NadamOptimizer
+
+Four type of these optimizersWe can categorize these optimizers into Four types:
+
+Type1:  Base type(SGDOptimizer)
+Type2: Add Momentum to gradient(Base on the historical gradient)(MomentumOptimizer, AdamOptimizer, NadamOptimizer)
+Type3: Change LearningRate accordingly(Accordin
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -988,7 +1006,8 @@ SGDOpti
       
         
           
-          Let’s do it!If you use your face to pay a sum of money by ALIPAY, you may find that it requires you 
+          Let’s do it!If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check you are a real person. So as you see, facial motion detection is interesting because it is acutally used in many circumstances. You may want to figure out how to detect facial motion. In this artical, I will take motion blink as a example to demenstion how to do it. So Let’s do it.
+How to ‘make’ data if you do not haveOf course we can use thousands of blinking v
           ...
           <!--noindex-->
           <div class="post-button text-center">

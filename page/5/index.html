@@ -353,8 +353,13 @@
         
           
           File operationTo do some operations on a range of files, such as to rm file_1.txt to file_100.txt
-1r
-          ...
+1rm file_&#123;1..100&#125;.txt
+System stateTo check cpu usage12tophtop
+To check memory usage1free -lh
+To check system IO1sudo iotop -oP
+To list all running process1ps -aux
+
+          
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/12/11/LINUX-COMMOND/#more" rel="contents">
@@ -511,7 +516,11 @@
       
         
           
-          Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and 
+          Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations  
+Gradient of the variable in layer L(last layer)dWL = dLoss * aL  
+Gradient of the variable in layer L-1dW(L-1) = dLoss  WL  dF(L-1) * a(L-1)  
+Gradient of the variable in layer L-2 dW(L-2) = dLoss  WL  dF(L-1)  a(L-1)  W(L-1)  dF(L-2)  a(L-2)  
+SummarySo, as we can see, the gradient of any training variables only depends on the variable itself(W), the derivative of activation function
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -669,7 +678,9 @@
       
         
           
-          namedtupleIf you are too lazy to create a class but you still want to use a variable that can act as
+          namedtupleIf you are too lazy to create a class but you still want to use a variable that can act as a class object, then you should use namedtuple:
+12345678910from collections import namedtupleuser = namedtuple('u', [1, 2, 3])ztq = user(a='a', b='b',c='c')print(ztq.a, ztq.b, ztq.c)``` result:```console(1,2,3)
+decoratorIf you are too lazy to change a function from inner code but you still want to add some new features to a function, you should use decorator. For example, if you want to print “he
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -827,8 +838,10 @@
       
         
           
-          LISTIf you contain your elements in a list, then the complexity of checking a element in your contai
-          ...
+          LISTIf you contain your elements in a list, then the complexity of checking a element in your container is O(n).
+SETIf you contain your elements in a set, then the complexity of checking a element in your container is O(1). 
+
+          
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/12/04/py-check/#more" rel="contents">
@@ -985,7 +998,8 @@
       
         
           
-          MethodThis method augment image by disturbing the YUV field of a image and then transform back to RG
+          MethodThis method augment image by disturbing the YUV field of a image and then transform back to RGB field.
+123456789101112131415161718192021222324252627282930313233343536373839404142434445def all_yuv_tur(image_in, ratio=1.0):    def yuv_tur(image , case):        image = image / 255        image = tf.image.rgb_to_yuv(image)        yuv_channels = tf.split(image, 3, 2)        y = yuv_channels[0]        uv = tf.concat(yuv_channels[1:],2)         shape1 = uv.get_shape().as_list()            level=i
           ...
           <!--noindex-->
           <div class="post-button text-center">

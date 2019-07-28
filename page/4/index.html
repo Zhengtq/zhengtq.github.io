@@ -352,7 +352,7 @@
       
         
           
-          There is my implementation of the Large Margin Softmax Loss in TF.1234567891011121314151617181920212
+          There is my implementation of the Large Margin Softmax Loss in TF.123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081MARGIN = 4c_m_n = lambda m, n: math.factorial(n) / math.factorial(m) / math.factorial(n-m)c_map = []for i in range(MARGIN+1):	c_map.append(c_m_n(i, MARGIN))def find_k_multi(cos_t):        cos_t = tf.cast(cos_t, dtype = tf.float64)        i = tf.constant(0, dtype = tf.float64)     
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -510,7 +510,9 @@
       
         
           
-          How differenceFor multi-calss classication, if you want optimize only one category during training, 
+          How differenceFor multi-calss classication, if you want optimize only one category during training, you should use softmax cross entropy. Ohterwise, if you want to optimize more than one category, you should use sigmoid cross entropy.However,you can also use sigmoid cross entropy to optimize only one category. But this may lead to over confidence for the target. as the sigmoid cross entropy would optimize to target while supressing the none targets.
+The code below could demonstrate 
+123456789101
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -669,7 +671,7 @@
         
           
           This method could augment images by distrubing the RGB value of a image randomly. 
-12345678910111213
+12345678910111213141516171819202122232425  def all_color_channel_tur(image):        color_range = 30        def add_color_mask_test(image):            img_shape = image.get_shape().as_list()            img_shape = [img_shape[0], img_shape[1], 1]            ran_color_range_0 = tf.random_uniform([], minval=-color_range, maxval=color_range,dtype=tf.float32)            color_mask_0 = tf.ones(img_shape, dtype = tf.floa
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -828,7 +830,7 @@
         
           
           MethodThis method augment image by changing image through affine transformation.
-1234567891011121314
+123456789101112131415161718192021222324252627282930def transform_perspective(image):    def x_y_1():        x = tf.random_uniform([], minval=-0.3, maxval=-0.15)        y = tf.random_uniform([], minval=-0.3, maxval=-0.15)        return x, y         def x_y_2():        x = tf.random_uniform([], minval=0.15, maxval=0.3)        y = tf.random_uniform([], minval=0.15, maxval=0.3)        return x, y           def trans(ima
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -986,7 +988,16 @@
       
         
           
-          The evloution of the activation style in Residual BlocksThe activation style is different between di
+          The evloution of the activation style in Residual BlocksThe activation style is different between different resiudal structure.
+
+resnet_v1shortcut: activation after if there is conv operation on shortcutresidual : no activaion afteradd: activation after
+
+resnet_v2shorcut: no activation afterresidual: no acitvation afteradd: activation after
+
+mobilenet_v2shortcut: no acitvation afterresidual: no activation afteradd: no acitvation after
+
+
+The thought behind the activation style changing in Residua
           ...
           <!--noindex-->
           <div class="post-button text-center">

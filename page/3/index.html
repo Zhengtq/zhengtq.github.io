@@ -352,16 +352,17 @@
       
         
           
-          How dose people spoof a digital device with face recognitionTo attack a image recognition system is easy. Even to change a single pixel could successfully let the recogniztion system lose efficacy.So people would use the loophole to simulate a set of conditions to spoof the face recogniztion system. In order to defense the spoofing, we should simulate all the possible attacking condition in the real life with limited training dataset.
-Ways to simulate the spoofing conditions through data augment
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/02/01/face-as-1/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <h1 id="How-dose-people-spoof-a-digital-device-with-face-recognition"><a href="#How-dose-people-spoof-a-digital-device-with-face-recognition" class="headerlink" title="How dose people spoof a digital device with face recognition"></a>How dose people spoof a digital device with face recognition</h1><p>To attack a image recognition system is easy. Even to change a single pixel could successfully let the recogniztion system lose efficacy.So people would use the loophole to simulate a set of conditions to spoof the face recogniztion system. In order to defense the spoofing, we should simulate all the possible attacking condition in the real life with limited training dataset.</p>
+<h1 id="Ways-to-simulate-the-spoofing-conditions-through-data-augmentation"><a href="#Ways-to-simulate-the-spoofing-conditions-through-data-augmentation" class="headerlink" title="Ways to simulate the spoofing conditions through data augmentation"></a>Ways to simulate the spoofing conditions through data augmentation</h1><p>The following data augmentation could simulate parts of the attacking condition.</p>
+<ul>
+<li>light condition<br>Light source location could be anywhere which could affect the deep nueral network</li>
+<li>image color</li>
+<li>face location</li>
+<li>image noise</li>
+<li>background proportion</li>
+</ul>
+
+          
         
       
     </div>
@@ -511,15 +512,10 @@ Ways to simulate the spoofing conditions through data augment
       
         
           
-          Align or not, Texture or shapeRelationship with Face Recognition(FR)The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example, FR should shorten the distance between the person in real life and the person’s picture in paper or tv or phone.However, Face Antispoofing(FA) just did the opposite thing. FA should shorten the person from the same medium. For example, FA should shroten the distance between the two different person 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/01/30/face-as/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <h1 id="Align-or-not-Texture-or-shape"><a href="#Align-or-not-Texture-or-shape" class="headerlink" title="Align or not, Texture or shape"></a>Align or not, Texture or shape</h1><h2 id="Relationship-with-Face-Recognition-FR"><a href="#Relationship-with-Face-Recognition-FR" class="headerlink" title="Relationship with Face Recognition(FR)"></a>Relationship with Face Recognition(FR)</h2><p>The aim of Face Recognition is to shorten the distance of one person from different scene, even from different medium. For example, FR should shorten the distance between the person in real life and the person’s picture in paper or tv or phone.<br>However, Face Antispoofing(FA) just did the opposite thing. FA should shorten the person from the same medium. For example, FA should shroten the distance between the two different person from the same medium. And FA should widen the distance the people from different medium, even the two persons are the same.<br>So as we can see, to differentiate medium is the key in FA.</p>
+<h2 id="What-the-convlutional-neural-networks-are-learning"><a href="#What-the-convlutional-neural-networks-are-learning" class="headerlink" title="What the convlutional neural networks are learning"></a>What the convlutional neural networks are learning</h2><p>As we all know, FR should grab the feature from two persons’ faces and differentiate the two persons’s faces. The texture(skin) from different person is nearly same. So FR should differentiate two persons’ face by their faces’ shape. <strong>Sadly, convlutional neural networks are good at grabbing the feature of textrue of a image, and do very poorly at grabbing the feature of shape.</strong>So strictly aligment of the face is very import in FR. The aim of alignment in FR is to let the deep network to learn the difference of the face shape regardless of the texture.<br>On the opposite of FR, <strong>FA mainly learns the feature of texture of the medium regardless of the shape of ons’s face which could take the advantage of learning capcity of the convlutional neural networks</strong>. So alignment is not important in FA.</p>
+
+          
         
       
     </div>
@@ -669,16 +665,21 @@ Ways to simulate the spoofing conditions through data augment
       
         
           
-          Using data flow queue to read data(abandoned, not support in future tensorflow verion)If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I suggest you to read by FIFO_queue to directly read image by its root.Firstly, you have to set up a FIFOQueue:
-1234input_queue = data_flow_ops.FIFOQueue(capacity=3000000,		                    dtypes=[tf.string, tf.int64],		                    shapes=[(1,), (1,)],		                    shared_name=None, na
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/01/09/tf-read-data/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <h1 id="Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion"><a href="#Using-data-flow-queue-to-read-data-abandoned-not-support-in-future-tensorflow-verion" class="headerlink" title="Using data flow queue to read data(abandoned, not support in future tensorflow verion)"></a>Using data flow queue to read data(abandoned, not support in future tensorflow verion)</h1><p>If you put your data in HDD, I suggest you to read data by tf_record. However, if you put your data in SSD, I suggest you to read by FIFO_queue to directly read image by its root.<br>Firstly, you have to set up a FIFOQueue:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input_queue = data_flow_ops.FIFOQueue(capacity=3000000,</span><br><span class="line">		                    dtypes=[tf.string, tf.int64],</span><br><span class="line">		                    shapes=[(1,), (1,)],</span><br><span class="line">		                    shared_name=None, name=None)</span><br></pre></td></tr></table></figure>
+<p>The queue above contain two values. The first is image root, and the second is image label.<br>To load image roots and labels to the FIFOQqueue, to have to use the a enqueue_op.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enqueue_op = input_queue.enqueue_many([image_paths_placeholder, labels_placeholder], name=&apos;enqueue_op&apos;)</span><br></pre></td></tr></table></figure>
+<p>Next, you just should open up a session to feed your true image roots and labels to respective placeholder.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess.run(enqueue_op, &#123;image_paths_placeholder: image_paths_array, labels_placeholder: labels_array&#125;)</span><br></pre></td></tr></table></figure>
+<p>During training, we have to dequeue the FIFOQqueue and we should use multi-thread to accelerate the process. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">images_and_labels_list = []</span><br><span class="line">for _ in range(preprocess_threads):</span><br><span class="line">	filenames, label= input_queue.dequeue()</span><br><span class="line">	images = []</span><br><span class="line">               image_depths = []</span><br><span class="line">	for filename, single_label in zip(tf.unstack(filenames), tf.unstack(label)):</span><br><span class="line">	    file_contents = tf.read_file(filename)</span><br><span class="line">   		    image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">   		    image = tf.reshape(image, original_img_shape)</span><br><span class="line">	    images.append(image)</span><br><span class="line">	images_and_labels_list.append([images, label])</span><br></pre></td></tr></table></figure>
+<p>Finally, to create batches of examples, you should use “tf.train.batch_join”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">img_batch, img_depth_batch,label_batch = tf.train.batch_join(</span><br><span class="line">	images_and_labels_list, batch_size=batch_size, </span><br><span class="line">	shapes=[[to_height, to_width, channels], ()], enqueue_many=True,</span><br><span class="line">	capacity=4 * preprocess_threads * 100,</span><br><span class="line">	allow_smaller_final_batch=True)</span><br></pre></td></tr></table></figure>
+<h1 id="Using-tf-data-API"><a href="#Using-tf-data-API" class="headerlink" title="Using tf.data API"></a>Using tf.data API</h1><p>Tensorflow officially promote using tf.data api. Using tf.data api is reletively easy to coding.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   def _parse_data(line):</span><br><span class="line">       file_contents = tf.read_file(image_filepath)</span><br><span class="line">image = tf.image.decode_bmp(file_contents, channels=3)</span><br><span class="line">       image = tf.reshape(image, original_img_shape)</span><br><span class="line">       return image, single_label</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   dataset = tf.data.TextLineDataset([file_root])</span><br><span class="line"></span><br><span class="line">   dataset = dataset.map(map_func=_parse_data,  num_parallel_calls=4)</span><br><span class="line">   dataset = dataset.shuffle(buffer_size=batch_size * 3)</span><br><span class="line">   dataset = dataset.batch(batch_size)</span><br><span class="line">   dataset = dataset.repeat(epoc)</span><br><span class="line">   dataset = dataset.prefetch(2000)</span><br><span class="line">   data_iterator = dataset.make_one_shot_iterator()</span><br><span class="line"> </span><br><span class="line">   return data_iterator</span><br></pre></td></tr></table></figure>
+<p>To accelerate the reading process, <strong>do not foget to use dataset.prefetch and num_parallel_calls</strong>. </p>
+
+          
         
       
     </div>
@@ -828,16 +829,11 @@ Ways to simulate the spoofing conditions through data augment
       
         
           
-          What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:  
-The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. So as you can see, we have to 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/01/05/tf-rnn-gru/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/05/tf-rnn-gru/1.png" alt=""> </p>
+<p>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memery of h_now to h_prev for evry cell. </p>
+<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/05/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
+
+          
         
       
     </div>
@@ -987,16 +983,9 @@ The chart above shows how a two-cells gru network to process sequence on time t 
       
         
           
-          For data augmentation, what percentage of data set to be augmented could affect the model performance?# 
+            <h1 id="For-data-augmentation-what-percentage-of-data-set-to-be-augmented-could-affect-the-model-performance"><a href="#For-data-augmentation-what-percentage-of-data-set-to-be-augmented-could-affect-the-model-performance" class="headerlink" title="For data augmentation, what percentage of data set to be augmented could affect the model performance?"></a>For data augmentation, what percentage of data set to be augmented could affect the model performance?</h1><p># </p>
 
           
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/01/02/dl-question/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
         
       
     </div>

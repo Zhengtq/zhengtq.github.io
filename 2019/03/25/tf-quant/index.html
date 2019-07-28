@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Billy&#39;s Blog">
 <meta property="og:description" content="Let　firstly simplify the quant process in TFOverview1S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)  q_a1:Quanted activation value in layer 1 S_a1, Z_a1: Estimated scale and zero point in l">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-10T02:54:21.545Z">
+<meta property="og:updated_time" content="2019-07-28T08:58:46.316Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; Tensorflow &gt;How dose TensorFlow do Quant Aware Training?">
 <meta name="twitter:description" content="Let　firstly simplify the quant process in TFOverview1S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)  q_a1:Quanted activation value in layer 1 S_a1, Z_a1: Estimated scale and zero point in l">
@@ -370,7 +370,7 @@
 </li>
 <li>S_a0, Z_a0: <strong>Estimated</strong> scale and zero point in layer 0</li>
 </ul>
-<p>As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S_a0, Z_a0, q_a1, Z_a1.To get S_w1/Z_w1 is simple, we can get the Statistical maximum of the weights in each layer we want. The only tricky thing is how to get S_a1/Z_a1/S_a0/Z_a0, which have to be estimated from the training data.</p>
+<p>As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S_a0, Z_a0, q_a1, Z_a1.To get S_w1/Z_w1 is simple, we can get the Statistical maximum of the weights in each layer we want. The only tricky thing is how to get S_a1/Z_a1/S_a0/Z_a0, which have to be estimated from the training data.<br><a id="more"></a></p>
 <h3 id="Why-we-have-to-get-the-estimation-of-S-Z-after-activation-instead-of-before"><a href="#Why-we-have-to-get-the-estimation-of-S-Z-after-activation-instead-of-before" class="headerlink" title="Why we have to get the estimation of S/Z after activation instead of before?"></a>Why we have to get the estimation of S/Z after activation instead of before?</h3><p>Of course we can estimate the S/Z before actication. And then we activate(relu) the quantized value. However, there one one drawbacks:</p>
 <p>Estimate S/Z before activation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conv -&gt;  (before activation)estimate S/Z=[0-&gt;255] -&gt; truncation（relu）= [Z-&gt;255] (if relu6 : [Z-&gt;X])</span><br></pre></td></tr></table></figure></p>
 <p>Estimate S/Z after activation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conv -&gt;  (after activation)estimate S/Z=[-A-&gt;A] -&gt; truncation（relu）= [0-&gt;255](if relu6: [0-&gt;255])</span><br></pre></td></tr></table></figure></p>

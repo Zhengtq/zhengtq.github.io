@@ -351,21 +351,16 @@
 
       
         
-          
-            <h1 id="Blinking-DEMO"><a href="#Blinking-DEMO" class="headerlink" title="Blinking DEMO"></a>Blinking DEMO</h1><iframe src="//player.bilibili.com/player.html?aid=60687132&cid=105630299&page=4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+          <h1 id="Blinking-DEMO"><a href="#Blinking-DEMO" class="headerlink" title="Blinking DEMO"></a>Blinking DEMO</h1><iframe src="//player.bilibili.com/player.html?aid=60687132&cid=105630299&page=4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
-<p>The blue number on the right top of the video is the number of blinking since starting detection.<br>For more details, you can check this <a href="https://zhengtq.github.io/2019/04/19/motion-blink-rnn/" target="_blank" rel="noopener">page</a>.</p>
-<h1 id="FaceAntispoofing-RNN-Smooth-DEMO"><a href="#FaceAntispoofing-RNN-Smooth-DEMO" class="headerlink" title="FaceAntispoofing,  RNN Smooth DEMO"></a>FaceAntispoofing,  RNN Smooth DEMO</h1><iframe src="//player.bilibili.com/player.html?aid=60687132&cid=105630290&page=3" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-
-<p>The number behind the string “CNN” is the output of CNN model which is used to predict a face is whether fake or alive.<br>The number behind the string “RNN” is the output of RNN model which aims to smoth the final result fed by CNN model based on sequence.<br>The number behind the string “SE_NUM” is the number of sequence which is used by RNN model to smooth the final result.<br>For details of RNN, you can check this <a href="https://zhengtq.github.io/2019/01/05/tf-rnn-gru/" target="_blank" rel="noopener">page</a> .</p>
-<h1 id="Face-Antispoofing-RNN-online-Training-DEMO"><a href="#Face-Antispoofing-RNN-online-Training-DEMO" class="headerlink" title="Face Antispoofing,  RNN online Training DEMO"></a>Face Antispoofing,  RNN online Training DEMO</h1><iframe src="//player.bilibili.com/player.html?aid=60687132&cid=105630282&page=2" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-
-<p>When white string “DO” is displayed on the top of the video, it meams that the RNN model just do the inference work without any training.<br>When white string “TRAIN_LIVE” is displayed on the top of the video, it meams that RNN model are trained online based on liveness samples.<br>When white string “TRAIN_ATTACK” is displayed on the top of the video, it meams that RNN model are trained online based on spoofing samples.<br>The number behind the string “CNN” is the output of RNN model which is used to predict a face is whether fake or alive.<br>The number behind the string “LOSS” is the current loss while training model online.<br>For details of RNN online training, you can check this <a href="https://zhengtq.github.io/2019/05/15/gru-bp1/" target="_blank" rel="noopener">page</a>  .</p>
-<h1 id="RNN-based-lane-line-offset-detection-DEMO"><a href="#RNN-based-lane-line-offset-detection-DEMO" class="headerlink" title="RNN based lane line offset detection DEMO"></a>RNN based lane line offset detection DEMO</h1><iframe src="//player.bilibili.com/player.html?aid=60687132&cid=105630257&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-
-<p>The number on the bottom left of the video indicates the probability whether a car is about to changing a lane.</p>
-
-          
+<p>The blue number on the right top of the video is the number of blinking since starting detection.<br>For more details, you can check this <a href="https://zhengtq.github.io/2019/04/19/motion-blink-rnn/" target="_blank" rel="noopener">page</a>.<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/27/DEMO/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -517,7 +512,7 @@
           <h1 id="Applicable-conditions"><a href="#Applicable-conditions" class="headerlink" title="Applicable conditions"></a>Applicable conditions</h1><p>If you want to deal with thousands of cases in a same way, you can use use this method to increase the processing speed.<br>For example, when you want to load millions of images and process them independently, you can apply this method which could accelerate your processing speed hugely,</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/07/27/linux-multi-thread/#more" rel="contents">
+            <a class="btn" href="/2019/07/27/linux-multi-thread/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -670,15 +665,14 @@
 
       
         
-          
-            <h1 id="Understanding-GRU"><a href="#Understanding-GRU" class="headerlink" title="Understanding GRU"></a>Understanding GRU</h1><p>As we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, <strong>so it could encode the information from very early time. Similarly to residual structure in CNN, GRU(or LSTM) could be seen RNN with residual block. That is to say that former hidden state is identically added to the newly computed hidden state(with a gate)</strong>.<br>For more details about GRU structure, you could check my former <a href="https://zhengtq.github.io/2019/01/05/tf-rnn-gru/" target="_blank" rel="noopener">blog</a>.</p>
-<p>#Forward Propagation of GRU<br>In this section, I will implement my pure python version of GRU forward propagation same to the implementation in TensorFlow.Talk is cheap, show you the code:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, prev_s, W,Wb,C,Cb, V, Vb)</span>:</span></span><br><span class="line">    self.x_prev_s = np.concatenate((x, prev_s), axis = <span class="number">0</span>)</span><br><span class="line">    self.hidden_mum = len(prev_s)</span><br><span class="line">    self.mulw = mulGate.forward(W, Wb,self.x_prev_s)</span><br><span class="line">    self.mulwsig = sig_act.forward(self.mulw) </span><br><span class="line"></span><br><span class="line">    self.r = self.mulwsig[:len(self.mulwsig)/<span class="number">2</span>]</span><br><span class="line">    self.u = self.mulwsig[len(self.mulwsig)/<span class="number">2</span>:]</span><br><span class="line"></span><br><span class="line">    self.r_state = eltwise_mul.forward(self.r, prev_s)</span><br><span class="line">    self.x_r_state = np.concatenate((x, self.r_state), axis = <span class="number">0</span>)</span><br><span class="line">    self.x_r_state_mulc =mulGate.forward(C,Cb, self.x_r_state)</span><br><span class="line">    self.x_r_state_mulc_tan = tan_act.forward(self.x_r_state_mulc)</span><br><span class="line"></span><br><span class="line">    self.tmpadd1 = eltwise_mul.forward(self.u, prev_s)</span><br><span class="line">    self.u_fu = <span class="number">1</span> - self.u</span><br><span class="line">    self.tmpadd2 = eltwise_mul.forward(self.u_fu, self.x_r_state_mulc_tan)</span><br><span class="line">    self.s = addGate.forward(self.tmpadd1, self.tmpadd2)</span><br><span class="line">    self.mulv = mulGate.forward(V,Vb, self.s)</span><br></pre></td></tr></table></figure></p>
-<p>As you can see, we firstly concat ‘hpre’ and ‘x’ together, and then multiply with our first weigth ‘W’(Same to ‘hpre’ and ‘x’ seperatly multiply its weight and add together). <strong>Variable’r’ and ‘u’ are two gates. Gate ‘r’ controls how much hidden state infromation could be mixed with ‘x’. Gate ‘u’ controls how much hidden state information could be directly and identically flow to the next state</strong>.</p>
-<p>#Back Propagation of GRU<br> As we know, RNN use <strong>back propagation through time(PBTT)</strong> to compute gradients for each weights. PBTT means the gradients should flow through time(reversely) which also means you should comput the gradient of hidden state at each time step and then feed back to the RNN block to furture compute gradients of the inner variables. The bellow code snippet is the gradient flow inner the GRU structure at one time step:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, x, prev_s, W, Wb, C, Cb, V, Vb,diff_s, dmulv)</span>:</span></span><br><span class="line"></span><br><span class="line">    dV,dVb, dsv = mulGate.backward(V,Vb, self.s, dmulv)</span><br><span class="line">    ds = dsv + diff_s</span><br><span class="line">    dtmpadd1, dtmpadd2 = addGate.backward(self.tmpadd1, self.tmpadd2, ds)</span><br><span class="line">    du_fu, dx_r_state_mulc_tan = eltwise_mul.backward(self.u_fu, self.x_r_state_mulc_tan, dtmpadd2)</span><br><span class="line">    du1 = -du_fu</span><br><span class="line">    </span><br><span class="line">    du2, dprev_s0 = eltwise_mul.backward(self.u, prev_s, dtmpadd1)</span><br><span class="line">    du = du1 + du2</span><br><span class="line">    dx_r_state_mulc = tan_act.backward(self.x_r_state_mulc, dx_r_state_mulc_tan)</span><br><span class="line">    dC,dCb, dx_x_r_state = mulGate.backward(C,Cb, self.x_r_state, dx_r_state_mulc)</span><br><span class="line">    dx = dx_x_r_state[:len(x)]</span><br><span class="line">    dr_state = dx_x_r_state[len(x):]</span><br><span class="line">   </span><br><span class="line">    dr, dprev_s1 = eltwise_mul.backward(self.r, prev_s, dr_state)</span><br><span class="line">    dmulwsig = np.concatenate((dr, du), axis = <span class="number">0</span>)</span><br><span class="line">    dmulw = sig_act.backward(self.mulw, dmulwsig)</span><br><span class="line">    dW,dWb, dx_prev_s = mulGate.backward(W, Wb, self.x_prev_s, dmulw)</span><br><span class="line">    dprev_s = dx_prev_s[-self.hidden_mum:] + dprev_s1 + dprev_s0</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (dprev_s, dW,dWb, dC,dCb, dV,dVb)</span><br></pre></td></tr></table></figure>
-<p>Here I have admit that to write a back propagation algorithm is a fussy thing, for you should carefully compute the gradient flow through every operations without any error. There are some note for you. Firstly, while hidden state is used three times in the forward propagation(First branch: compute gate ‘r’ and gate ‘u’. Second branch: to mix information with input ‘x’. Third branch, identically add to the final hidden state), so you should add every gradient of hidden state computed from each branch<strong>(A way to prevent gradient vanishing)</strong>. Second thing to remember, feed your compute final gradient of hidden state to your last time step(or last layer of your model). </p>
-
-          
+          <h1 id="Understanding-GRU"><a href="#Understanding-GRU" class="headerlink" title="Understanding GRU"></a>Understanding GRU</h1><p>As we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, <strong>so it could encode the information from very early time. Similarly to residual structure in CNN, GRU(or LSTM) could be seen RNN with residual block. That is to say that former hidden state is identically added to the newly computed hidden state(with a gate)</strong>.<br>For more details about GRU structure, you could check my former <a href="https://zhengtq.github.io/2019/01/05/tf-rnn-gru/" target="_blank" rel="noopener">blog</a>.<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/15/gru-bp1/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -827,8 +821,7 @@
 
       
         
-          
-            <h1 id="The-optimizers"><a href="#The-optimizers" class="headerlink" title="The optimizers"></a>The optimizers</h1><p>Let’s simply list the optimizers that may or may not be used in your project.</p>
+          <h1 id="The-optimizers"><a href="#The-optimizers" class="headerlink" title="The optimizers"></a>The optimizers</h1><p>Let’s simply list the optimizers that may or may not be used in your project.</p>
 <ul>
 <li>SGDOptimizer</li>
 <li>MomentumOptimizer</li>
@@ -837,27 +830,14 @@
 <li>AdadeltaOptimizer</li>
 <li>RMSPropOptimizer</li>
 <li>AdamOptimizer</li>
-<li>NadamOptimizer</li>
-</ul>
-<h1 id="Four-type-of-these-optimizers"><a href="#Four-type-of-these-optimizers" class="headerlink" title="Four type of these optimizers"></a>Four type of these optimizers</h1><p>We can categorize these optimizers into Four types:</p>
-<ul>
-<li>Type1:  Base type(SGDOptimizer)</li>
-<li>Type2: Add Momentum to gradient(Base on the historical gradient)(MomentumOptimizer, AdamOptimizer, NadamOptimizer)</li>
-<li>Type3: Change LearningRate accordingly(According to the changing speed(second derivative of the gradient) of each variable)(AdagradOptimizer, Adadelta, RMSPropOptimizer, NadamOptimizer)</li>
-<li>Type4: Change direction of the gradient(Weight firstly update by the historical gradient, and then compute the new gradient)(NesterovOptimizer, NadamOptimizer)</li>
-</ul>
-<h1 id="Let-make-some-equations"><a href="#Let-make-some-equations" class="headerlink" title="Let make some equations"></a>Let make some equations</h1><ul>
-<li>SGDOptimizer = T1</li>
-<li>MomentumOptimizer = T1 + T2</li>
-<li>NesterovOptimizer = T1 + T4</li>
-<li>AdagradOptimizer = T1 + T3</li>
-<li>Adadelta = T1 + T3(Add window on the squared gradient)</li>
-<li>RMSPropOptimizer = T1 + T3(Add window on the squared gradient)</li>
-<li>AdamOptimizer = T1 + T3(Add window on the squared gradient  And add window on the gradient(momentum) itself)</li>
-<li>NadamOptimizer = T1 + T3 + T4</li>
-</ul>
-
-          
+<li>NadamOptimizer</li></ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/24/op-summary/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1006,14 +986,14 @@
 
       
         
-          
-            <h1 id="Let’s-do-it"><a href="#Let’s-do-it" class="headerlink" title="Let’s do it!"></a>Let’s do it!</h1><p>If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check you are a real person. So as you see, facial motion detection is interesting because it is acutally used in many circumstances. You may want to figure out how to detect facial motion. In this artical, I will take motion blink as a example to demenstion how to do it. So Let’s do it.</p>
-<h1 id="How-to-‘make’-data-if-you-do-not-have"><a href="#How-to-‘make’-data-if-you-do-not-have" class="headerlink" title="How to ‘make’ data if you do not have"></a>How to ‘make’ data if you do not have</h1><p>Of course we can use thousands of blinking video sequences to train a RNN classifier. But it may be difficult yet inefficient to collect blink video. So how to simulate blinking data by using single eye image.<br>As everyone know, a blink sequence contains opening eye, closing eye and opening eye again. We can modeling blink motion as a sequence of eye opening and eye closing. So even you have just 100 opening eye images and 100 closing eye images, you can creats millions of eye blinking sequence. Quite surprising!</p>
-<h1 id="Build-your-blinking-detection-system"><a href="#Build-your-blinking-detection-system" class="headerlink" title="Build your blinking detection system ?"></a>Build your blinking detection system ?</h1><p>Is seems is over. The last step is to use a RNN model to train a blink detection model by using the above fake training sequece. If you have read my former <a href="https://zhengtq.github.io/2019/01/05/tf-rnn-gru/" target="_blank" rel="noopener">post</a> , you may understand how GRU works in tensorflow. So we will start from here to demonstrate you how to detect blink based on GRU. Of course you can use conv-gru to simply use raw eye imaga sequence to get a end-to-end blink detection system.<br>However if you want to make the task simple, you can also firstly train a CNN binary classifier to classify if eye close or not. And then you can use the classifier as a feature extractor to extract feature of eye and then form a sequence as the input of your RNN network,</p>
-<h1 id="To-make-the-system-more-accurate"><a href="#To-make-the-system-more-accurate" class="headerlink" title="To make the system more accurate."></a>To make the system more accurate.</h1><p>In order to make your blink system more accurate, to make the input feature to RNN more robust is very important. So you have to make sure you have trained a good CNN classifier. You can use facial landmarks(from any open source code) to get the landmarks of the face image and extract the eye part of the face image. One thing to be mentioned, you can use landmark points of the eye as parts of the whole input feature(combined with the feature extracted from you CNN classifier) to make the feature more robust.<br>Next, you have to figure out to make simulate a good sequence to train your RNN model. You can create many “hard sequence”  and do not neglect any blinking circumstances. One thing to be remembered, the more diverse your training sequence is, the more accurate your blink system is.</p>
-<h1 id="Is-not-over"><a href="#Is-not-over" class="headerlink" title="Is not over."></a>Is not over.</h1><p>So now we have a simple eye blinking detection system. But there are many other questions should be answered. There first question is how many frame could be used to detection blink. The answer is quite simple: as many as you like. So in order to do this, you may train a RNN model based on variable length sequence(We have to define the max sequence length).  Another question is how do you design your actual system logic when you apply your model on real time video stream. And just leave the second question to you.</p>
-
-          
+          <h1 id="Let’s-do-it"><a href="#Let’s-do-it" class="headerlink" title="Let’s do it!"></a>Let’s do it!</h1><p>If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check you are a real person. So as you see, facial motion detection is interesting because it is acutally used in many circumstances. You may want to figure out how to detect facial motion. In this artical, I will take motion blink as a example to demenstion how to do it. So Let’s do it.<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/19/motion-blink-rnn/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

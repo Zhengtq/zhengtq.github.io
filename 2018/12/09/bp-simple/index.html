@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations   Gradient of the variable in layer L(last layer)dWL = dLoss * aL   Gradient of the varia">
+<meta name="description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations">
 <meta name="keywords" content="Deeplearning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; Deeplearning &gt; Break up backpropagation">
 <meta property="og:url" content="http://yoursite.com/2018/12/09/bp-simple/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations   Gradient of the variable in layer L(last layer)dWL = dLoss * aL   Gradient of the varia">
+<meta property="og:description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/09/bp-simple/4.png">
-<meta property="og:updated_time" content="2019-05-23T09:16:16.474Z">
+<meta property="og:updated_time" content="2019-07-28T08:56:56.161Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; Deeplearning &gt; Break up backpropagation">
-<meta name="twitter:description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations   Gradient of the variable in layer L(last layer)dWL = dLoss * aL   Gradient of the varia">
+<meta name="twitter:description" content="Let’s see a very simple handwriting formula derivation#DefineFirstly, let define some variables and operations">
 <meta name="twitter:image" content="http://yoursite.com/2018/12/09/bp-simple/1.png">
 
 
@@ -362,7 +362,7 @@
       
 
       
-        <h1 id="Let’s-see-a-very-simple-handwriting-formula-derivation"><a href="#Let’s-see-a-very-simple-handwriting-formula-derivation" class="headerlink" title="Let’s see a very simple handwriting formula derivation"></a>Let’s see a very simple handwriting formula derivation</h1><p>#Define<br>Firstly, let define some variables and operations<br> <img src="/2018/12/09/bp-simple/1.png" alt=""> </p>
+        <h1 id="Let’s-see-a-very-simple-handwriting-formula-derivation"><a href="#Let’s-see-a-very-simple-handwriting-formula-derivation" class="headerlink" title="Let’s see a very simple handwriting formula derivation"></a>Let’s see a very simple handwriting formula derivation</h1><p>#Define<br>Firstly, let define some variables and operations<br> <img src="/2018/12/09/bp-simple/1.png" alt=""><br><a id="more"></a></p>
 <h1 id="Gradient-of-the-variable-in-layer-L-last-layer"><a href="#Gradient-of-the-variable-in-layer-L-last-layer" class="headerlink" title="Gradient of the variable in layer L(last layer)"></a>Gradient of the variable in layer L(last layer)</h1><p>dWL = dLoss * aL<br> <img src="/2018/12/09/bp-simple/2.png" alt=""> </p>
 <h1 id="Gradient-of-the-variable-in-layer-L-1"><a href="#Gradient-of-the-variable-in-layer-L-1" class="headerlink" title="Gradient of the variable in layer L-1"></a>Gradient of the variable in layer L-1</h1><p>dW(L-1) = dLoss <em> WL </em> dF(L-1) * a(L-1)<br> <img src="/2018/12/09/bp-simple/3.png" alt=""> </p>
 <h1 id="Gradient-of-the-variable-in-layer-L-2"><a href="#Gradient-of-the-variable-in-layer-L-2" class="headerlink" title="Gradient of the variable in layer L-2"></a>Gradient of the variable in layer L-2</h1><p> dW(L-2) = dLoss <em> WL </em> dF(L-1) <em> a(L-1) </em> W(L-1) <em> dF(L-2) </em> a(L-2)<br> <img src="/2018/12/09/bp-simple/4.png" alt=""> </p>

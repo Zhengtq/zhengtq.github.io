@@ -407,6 +407,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/19/saferm/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/19/saferm/" itemprop="url">< Linux > A Safe Way to Use Deletion Command In Linux.</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-19T11:45:44+08:00">
+                2019-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/19/saferm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/19/saferm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="What-is-saferm"><a href="#What-is-saferm" class="headerlink" title="What is saferm?"></a>What is saferm?</h1><p>A safe deletion script to prevent you from wrongly delete important files in your linux system.</p>
+<h1 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works?"></a>How it works?</h1><p>Everytime when you delete a file, it actually move the file to a hidden folder named .saferm_xxx_yyy in the same location where you delete. xxx means the timastamp when you delete, yyy is a random number. This hidden folder will keep for serveral days(which is depended on your appointament) before it is trully deleted. So you can restore your deleted files within the keepping time of the file.</p>
+<h1 id="How-to-use-it"><a href="#How-to-use-it" class="headerlink" title="How to use it?"></a>How to use it?</h1><p>After you clone our project, there are two ways to use it</p>
+<h3 id="First-way-If-you-are-a-root-user"><a href="#First-way-If-you-are-a-root-user" class="headerlink" title="First way(If you are a root user)"></a>First way(If you are a root user)</h3><p>To put the two scripts in your /usr/bin/ folder, then to alias rm=’saferm’ to use it.</p>
+<h3 id="Second-way"><a href="#Second-way" class="headerlink" title="Second way"></a>Second way</h3><p>To put the two scripts in wherevery you want, then to add the path to your PATH system environment in your .bashrc.txt. Finally to alias rm=’saferm’ to use it.</p>
+<h3 id="The-useful-command"><a href="#The-useful-command" class="headerlink" title="The useful command"></a>The useful command</h3><p>To delete a file.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm xxx</span><br></pre></td></tr></table></figure></p>
+<p>The file xxx will keep in serveral days.</p>
+<p>To delete a file right now.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -now yyy</span><br></pre></td></tr></table></figure></p>
+<p>The file yyy will keep in a very short time(Which depends on your appointament).</p>
+<p>For safety concerns, to use <em> to delete is restricted.If you want to use ‘rm </em> ‘ to delete everything in your folder, you can use the following command.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -all *</span><br></pre></td></tr></table></figure></p>
+<h1 id="Personal-Customization"><a href="#Personal-Customization" class="headerlink" title="Personal Customization"></a>Personal Customization</h1><p>Firstly you can decide how long you want to the deleted file to be kept. You can edit the ‘saferm’ file, then modify the ‘KEEP_TIME_LONG’ variable to the time(second) you want to set.<br>If you want to delete the file right now, you can set the variable ‘KEEP_TIME_INSTANT’ in the script ‘saferm’ to determine the short time you want to keep.</p>
+<h1 id="Check-the-deletion-history"><a href="#Check-the-deletion-history" class="headerlink" title="Check the deletion history"></a>Check the deletion history</h1><p>A ‘.my_deletion.txt’ text will be established once you firstly use saferm. And the location of the text is in your home dir, so you can locate this text by ‘ls ~/.my_deletion.txt’.Everytime when you delete a file, a recored would be written in this text. And once that file is finally being deleted, the correponded history will be removed also.</p>
+<h1 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h1><p><a href="https://github.com/Zhengtq/saferm" target="_blank" rel="noopener">Github</a> </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/14/enas/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -857,171 +1021,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/24/op-summary/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/24/op-summary/" itemprop="url"><deeplarning> A simple way to distinguish different optimizers in DeepLearning</deeplarning></a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T16:58:01+08:00">
-                2019-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/24/op-summary/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/24/op-summary/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="The-optimizers"><a href="#The-optimizers" class="headerlink" title="The optimizers"></a>The optimizers</h1><p>Let’s simply list the optimizers that may or may not be used in your project.</p>
-<ul>
-<li>SGDOptimizer</li>
-<li>MomentumOptimizer</li>
-<li>NesterovOptimizer</li>
-<li>AdagradOptimizer</li>
-<li>AdadeltaOptimizer</li>
-<li>RMSPropOptimizer</li>
-<li>AdamOptimizer</li>
-<li>NadamOptimizer</li></ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/04/24/op-summary/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1074,7 +1073,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

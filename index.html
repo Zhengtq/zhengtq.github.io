@@ -509,22 +509,14 @@
 
       
         
-          
-            <h1 id="What-is-saferm"><a href="#What-is-saferm" class="headerlink" title="What is saferm?"></a>What is saferm?</h1><p>A safe deletion script to prevent you from wrongly delete important files in your linux system.</p>
-<h1 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works?"></a>How it works?</h1><p>Everytime when you delete a file, it actually move the file to a hidden folder named .saferm_xxx_yyy in the same location where you delete. xxx means the timastamp when you delete, yyy is a random number. This hidden folder will keep for serveral days(which is depended on your appointament) before it is trully deleted. So you can restore your deleted files within the keepping time of the file.</p>
-<h1 id="How-to-use-it"><a href="#How-to-use-it" class="headerlink" title="How to use it?"></a>How to use it?</h1><p>After you clone our project, there are two ways to use it</p>
-<h3 id="First-way-If-you-are-a-root-user"><a href="#First-way-If-you-are-a-root-user" class="headerlink" title="First way(If you are a root user)"></a>First way(If you are a root user)</h3><p>To put the two scripts in your /usr/bin/ folder, then to alias rm=’saferm’ to use it.</p>
-<h3 id="Second-way"><a href="#Second-way" class="headerlink" title="Second way"></a>Second way</h3><p>To put the two scripts in wherevery you want, then to add the path to your PATH system environment in your .bashrc.txt. Finally to alias rm=’saferm’ to use it.</p>
-<h3 id="The-useful-command"><a href="#The-useful-command" class="headerlink" title="The useful command"></a>The useful command</h3><p>To delete a file.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm xxx</span><br></pre></td></tr></table></figure></p>
-<p>The file xxx will keep in serveral days.</p>
-<p>To delete a file right now.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -now yyy</span><br></pre></td></tr></table></figure></p>
-<p>The file yyy will keep in a very short time(Which depends on your appointament).</p>
-<p>For safety concerns, to use <em> to delete is restricted.If you want to use ‘rm </em> ‘ to delete everything in your folder, you can use the following command.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -all *</span><br></pre></td></tr></table></figure></p>
-<h1 id="Personal-Customization"><a href="#Personal-Customization" class="headerlink" title="Personal Customization"></a>Personal Customization</h1><p>Firstly you can decide how long you want to the deleted file to be kept. You can edit the ‘saferm’ file, then modify the ‘KEEP_TIME_LONG’ variable to the time(second) you want to set.<br>If you want to delete the file right now, you can set the variable ‘KEEP_TIME_INSTANT’ in the script ‘saferm’ to determine the short time you want to keep.</p>
-<h1 id="Check-the-deletion-history"><a href="#Check-the-deletion-history" class="headerlink" title="Check the deletion history"></a>Check the deletion history</h1><p>A ‘.my_deletion.txt’ text will be established once you firstly use saferm. And the location of the text is in your home dir, so you can locate this text by ‘ls ~/.my_deletion.txt’.Everytime when you delete a file, a recored would be written in this text. And once that file is finally being deleted, the correponded history will be removed also.</p>
-<h1 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h1><p><a href="https://github.com/Zhengtq/saferm" target="_blank" rel="noopener">Github</a> </p>
-
-          
+          <h1 id="What-is-saferm"><a href="#What-is-saferm" class="headerlink" title="What is saferm?"></a>What is saferm?</h1><p>A safe deletion script to prevent you from wrongly delete important files in your linux system.<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/19/saferm/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

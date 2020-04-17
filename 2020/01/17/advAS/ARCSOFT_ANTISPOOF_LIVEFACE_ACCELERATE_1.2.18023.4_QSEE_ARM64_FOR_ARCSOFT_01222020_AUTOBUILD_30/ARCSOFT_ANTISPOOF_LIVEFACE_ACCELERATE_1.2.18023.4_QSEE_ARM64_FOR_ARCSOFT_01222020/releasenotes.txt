@@ -1,0 +1,38 @@
+////////////////////////////////////////////////////////////////////////
+//              Face Expression Recognition Library 	      	      //
+////////////////////////////////////////// /////////////////////////////
+
+Introduction:
+Face Expression Recognition Library provides the universal interfaces to recognition expression automatically.
+
+Publish date:
+01/22/2020
+
+Version:
+1.2.18023.4
+
+Supported platform:
+QSEE_ARM64
+ 
+Known issues:
+None.
+
+
+
+File List:
+|---doc
+|   |---ARCSOFT_LIVEFACE_DEVELOPER'S_GUIDE.pdf    Developer's guide
+|---inc
+|   |---arcsoft_antispoof_liveface.h              Head file
+|---lib
+|   |---qsee_arm64
+|   |   |---libarcsoft_antispoof_liveface.a       Library
+|---samplecode
+|   |---samplecode.c                              Sample codes
+|---releasenotes.txt
+
+Change logs:
+1.5.0.4
+inital face expression recognition version
+
+

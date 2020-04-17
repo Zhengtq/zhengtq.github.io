@@ -1,0 +1,69 @@
+0 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/neg 1.0
+0 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/neg 0.13
+0 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/4_17_menjin 0.2 
+0 /home/public/antispoofing/data/train_data_part/ALL_NEG_DATA_4_17_NEW_cropped 1.0
+0 /home/public/antispoofing/data/train_data_part/345_Indian_People-Human_Face_Image_Data_with_Multi-pose.jpg_cropped 1
+0 /home/public/antispoofing/data/train_data_part/gaze_capture_cropped 50
+0 /home/public/antispoofing/data/train_data_part/7_12_5_floor 1
+0 /home/public/antispoofing/data/train_data_part/complicate_live/liveness/guiwu_bmp 1
+0 /media/data5/public/antispoofing/shang_qi/20190721-0725/liveness 1
+0 /media/data5/public/antispoofing/public_release_data/MSU_MFSD/raw/liveness 1
+0 /media/data5/public/antispoofing/public_release_data/NUAA/NUAA/liveness 1
+0 /media/data5/public/antispoofing/public_release_data/Replay_Attack/raw/devel/real 1
+0 /media/data5/public/antispoofing/public_release_data/Replay_Attack/raw/test/real 1
+0 /media/data5/public/antispoofing/public_release_data/Replay_Attack/raw/train/real 1
+0 /media/data5/public/antispoofing/public_release_data/Siw/test_raw/liveness 1
+0 /media/data5/public/antispoofing/facial_action/liveness 10
+0 /media/data5/public/antispoofing/20190927_multi_camera_liveness/liveness 1
+0 /media/data5/public/antispoofing/20190409-20190414_chezai_liveness 1
+0 /media/data5/public/antispoofing/20191101-20191110_abnormal_light_liveness 1
+0 /media/data5/public/antispoofing/dtc_all_face_data_20191213 1
+0 /media/data5/public/antispoofing/20191210-20191220_outdoor_liveness 1
+
+
+
+1 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/phone 1 
+1 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/phone_Guo_Bao 0.1
+1 /media/data5/public/antispoofing/20191201-20191220_phone_dump 10
+
+
+2 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/tv-pc 1
+2 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/tv-pc-12-4  1
+2 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/12_21_ASCIA_screen 1
+2 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/tv_pc_Guo_Bao  0.2
+2 /media/data5/public/antispoofing/2019_computer_dump 1
+
+
+3 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/paper  1
+3 /home/public/antispoofing/data/train_data_part/free_sdk/free_sdk_9_25/paper 0.5
+3 /home/public/antispoofing/data/train_data_part/free_sdk/free_sdk_9_25/paper_cut 0.8
+3 /home/public/antispoofing/data/train_data_part/2018_12_28_DTC_dump_paper 0.3
+3 /media/data1/public/antispoofing/crop_train_after_640_resized320bmp/pos/paper_cut 20
+3 /media/data5/public/antispoofing/2019_1_15_rnn_dump/sbmp 30
+3 /media/data5/public/antispoofing/IDCARD/sbmp 3
+3 /media/data5/public/antispoofing/rgb_from_ir/pos/paper  1
+3 /media/data5/public/antispoofing/shang_qi/20190714-0715/paper 1
+3 /media/data5/public/antispoofing/shang_qi/20190721-0725/paper 1
+3 /media/data5/public/antispoofing/public_release_data/MSU_MFSD/raw/paper 1
+3 /media/data5/public/antispoofing/public_release_data/NUAA/NUAA/paper 1
+3 /media/data5/public/antispoofing/public_release_data/Replay_Attack/raw/devel/attack 1
+3 /media/data5/public/antispoofing/public_release_data/Replay_Attack/raw/test/attack 1
+3 /media/data5/public/antispoofing/public_release_data/Replay_Attack/raw/train/attack 1
+3 /media/data5/public/antispoofing/public_release_data/Siw/test_raw/paper 1
+3 /media/data5/public/antispoofing/20190820_multi_camera/pos 30
+3 /media/data5/public/antispoofing/20190917_mask/pos 1
+3 /media/data5/public/antispoofing/20190925_2D3DMask/pos 1
+3 /media/data5/public/antispoofing/20191008_paper_dump/paper 1
+3 /media/data5/public/antispoofing/20191010_web_3Dmask/pos/used 1
+3 /media/data5/public/antispoofing/20191011_web_3Dmask/pos/used_sel 1
+3 /media/data5/public/antispoofing/20191012_paper_dump/pos 1
+3 /media/data5/public/antispoofing/myself_paper_dump/20191015_paper_dump 1
+3 /media/data5/public/antispoofing/myself_paper_dump/20191023_oppo_3DMask 1
+3 /media/data5/public/antispoofing/201910_yayin_dump_freesdk/pos 1
+3 /media/data5/public/antispoofing/20191104_web_3Dmask 1
+3 /media/data5/public/antispoofing/myself_paper_dump/20191113_sumsang_dump/2DMask 10
+3 /media/data5/public/antispoofing/20191120-20191130_sar_phone_dump/pos 10
+3 /media/data5/public/antispoofing/20191212_web_crawl_2DMask  1
+3 /media/data5/public/antispoofing/20191217_web_crawl_sculpture_doll 1
+3 /media/data5/public/antispoofing/20191220-20200101_RGB_dump 1
+3 /media/data5/public/antispoofing/20191224_web_crawl_oldpicture 1

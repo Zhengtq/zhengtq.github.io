@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Deeplearning,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="模型加入先验知识的必要性端到端的深度神经网络是个黑盒子，虽然能够自动学习到一些可区分度好的特征，但是往往会拟合到一些非重要特征，导致模型会局部坍塌到一些不好的特征上面。常常一些人们想让模型去学习的特征模型反而没有学习到。为了解决这个问题，给模型加入人为设计的先验信息会让模型学习到一些关键的特征。下面就从几个方面来谈谈如何给模型加入先验信息。">
+<meta name="keywords" content="Deeplearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt; Deeplearning &gt; 给模型加入先验知识">
+<meta property="og:url" content="http://yoursite.com/2020/07/30/pri-knowledge-1/index.html">
+<meta property="og:site_name" content="Billy&#39;s Blog">
+<meta property="og:description" content="模型加入先验知识的必要性端到端的深度神经网络是个黑盒子，虽然能够自动学习到一些可区分度好的特征，但是往往会拟合到一些非重要特征，导致模型会局部坍塌到一些不好的特征上面。常常一些人们想让模型去学习的特征模型反而没有学习到。为了解决这个问题，给模型加入人为设计的先验信息会让模型学习到一些关键的特征。下面就从几个方面来谈谈如何给模型加入先验信息。">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/5.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/4.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/7.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/8.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/9.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/10.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/11.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/12.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/13.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/14.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/15.png">
+<meta property="og:updated_time" content="2020-08-18T07:25:07.269Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt; Deeplearning &gt; 给模型加入先验知识">
+<meta name="twitter:description" content="模型加入先验知识的必要性端到端的深度神经网络是个黑盒子，虽然能够自动学习到一些可区分度好的特征，但是往往会拟合到一些非重要特征，导致模型会局部坍塌到一些不好的特征上面。常常一些人们想让模型去学习的特征模型反而没有学习到。为了解决这个问题，给模型加入人为设计的先验信息会让模型学习到一些关键的特征。下面就从几个方面来谈谈如何给模型加入先验信息。">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/30/pri-knowledge-1/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/30/pri-knowledge-1/">
+
+
+
+
+
+  <title>< Deeplearning > 给模型加入先验知识 | Billy's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Billy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Make It Simple</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/30/pri-knowledge-1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">< Deeplearning > 给模型加入先验知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T08:29:34+08:00">
+                2020-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/30/pri-knowledge-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/30/pri-knowledge-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>p
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="模型加入先验知识的必要性"><a href="#模型加入先验知识的必要性" class="headerlink" title="模型加入先验知识的必要性"></a>模型加入先验知识的必要性</h1><p>端到端的深度神经网络是个黑盒子，虽然能够自动学习到一些可区分度好的特征，但是往往会拟合到一些<strong>非重要特征</strong>，导致模型会局部坍塌到一些不好的特征上面。常常一些人们想让模型去学习的特征模型反而没有学习到。为了解决这个问题，给模型加入人为设计的<strong>先验信息</strong>会让模型学习到一些关键的特征。下面就从几个方面来谈谈如何给模型加入先验信息。<br><a id="more"></a><br>为了方便展示，我这边用一个简单的分类案例来展示如何把先验知识加入到一个具体的task中。我们的task是在所有的鸟类中识别出一种萌萌的鹦鹉，这中鹦鹉叫鸮鹦鹉，它长成下面的样子：<br><img src="/2020/07/30/pri-knowledge-1/1.jpg" alt="萌萌哒"><br>这种鸟有个特点，就是它可能出现在任何地方，但就是不可能在天上，因为它是<strong>世界上唯一一种不会飞的鹦鹉</strong>(不是唯一一种不会飞的鸟)。<br>好，介绍完task的背景，咱们就可以分分钟搭建一个端到端的分类神经网络，可以选择的网络结构可以有很多，如resnet, mobilenet等等，loss往往是一个常用的分类Loss，如交叉熵，高级一点的用个focal loss等等。<br>确定好了最优的数据(扰动方式)，网络结构，优化器，学习率等等这些之后，往往模型的精度也就达到了一个上限。然后你测试模型发现，有些困难样本始终分不开，或者是一些简单的样本也容易分错。这个时候如果你还想提升网络的精度，可以通过<strong>给模型加入先验的方式来进一步提升模型的精度</strong>。</p>
+<h1 id="基于pretrain模型给模型加入先验"><a href="#基于pretrain模型给模型加入先验" class="headerlink" title="基于pretrain模型给模型加入先验"></a>基于pretrain模型给模型加入先验</h1><p>给模型加入先验，大家最容易想到的是把网络的weight替换成一个在另外一个任务上pretrain好的模型weight。经过的预训练的模型(如ImageNet预训练)往往已经具备的识别到一些基本的图片pattern的能力，如边缘，纹理，颜色等等，而识别这些信息的能力是识别一副图片的基础。如下图所示：<br><img src="/2020/07/30/pri-knowledge-1/5.png" alt=""><br>但这些先验信息都是一些比较general的信息，我们是否可以加入一些更加high level的先验信息呢。</p>
+<h1 id="基于输入给模型加入先验"><a href="#基于输入给模型加入先验" class="headerlink" title="基于输入给模型加入先验"></a>基于输入给模型加入先验</h1><p>假如你有这样的一个先验，你觉得鸮鹦鹉的头是一个区别其他它和鸟类的重要部分，也就是说相比于身体，它的头部更能区分它和其他鸟类。这时怎么让网络更加关注鸮鹦鹉的头部呢。这时你可以这样做，<strong>把整个鸮鹦鹉和它的头部作为一个网络的两路输入，在网咯的后端再把两路输入的信息融合</strong>。以达到既关注局域，又关注整体的目的。一个简单的示意图如下所示。<br><img src="/2020/07/30/pri-knowledge-1/2.png" alt=""> </p>
+<h1 id="基于模型重现给模型加入先验"><a href="#基于模型重现给模型加入先验" class="headerlink" title="基于模型重现给模型加入先验"></a>基于模型重现给模型加入先验</h1><p>接着上面的设定来，假如说你觉得给模型两路输入太麻烦，而且增加的计算量让你感觉很不爽。这时，你可以尝试<strong>让模型自己发现你设定的先验知识</strong>。假如说你的模型可以自己输出鸟类头部的位置，虽然这个鸟类头部的位置信息是你不需要的，但是输出这样的信息代表着你的网络能够locate鸟类头部的位置，也就给鸟类的头部更加多的attention，也就相当于给把鸟类头部这个先验信息给加上去了。当然直接模仿detection那样去回归出位置来这个任务太heavy了，你可以通过一个生成网络的支路来生成一个鸟类头部位置的Mask，一个简单的示意图如下：<br><img src="/2020/07/30/pri-knowledge-1/3.png" alt=""> </p>
+<h1 id="基于CAM图激活限制给模型加入先验"><a href="#基于CAM图激活限制给模型加入先验" class="headerlink" title="基于CAM图激活限制给模型加入先验"></a>基于CAM图激活限制给模型加入先验</h1><p>针对鸮鹦鹉的分类，我在上面的提到一个非常有意思的先验信息，那就是鸮鹦鹉是<strong>世界上唯一一种不会飞的鹦鹉</strong>，这个信息从侧面来说就是，鸮鹦鹉所有地方都可能出现，就是不可能出现在天空中(当然也不可能出现在水中)。也就是说不但鸮鹦鹉本身是一个分类的重点，鸮鹦鹉出现的背景也是分类的一个重要参考。假如说背景是天空，那么就一定不是鸮鹦鹉，同样的，假如说背景是海水，那么也一定不是鸮鹦鹉，假如说背景是北极，那么也一定不是鸮鹦鹉，等等。也就是说，你不能通过背景来判断一只未知的鸟是鸮鹦鹉，但是你能通过背景来判断一只未知的鸟肯定不是鸮鹦鹉(是其他的鸟类)。<br>所以假如说获取了一张输入图片的激活图(包含背景的)，那么这张激活图的鸟类身体部分肯定包含了鸮鹦鹉和其他鸟类的激活，但是鸟类身体外的背景部分只可能包含其他鸟类的激活。所以具体的做法是<strong>基于激活图，通过限制激活图的激活区域，加入目标先验</strong>。<br>激活图是基于分类网络的倒数第二层卷积层的输出的 feature_map 的线性加权，权重就是最后一层分类层的权重，由于分类层的权重编码了类别的信息，所以加权后的响应图就有了基于不同类别的区域相应。(具体的介绍可以看 <a href="https://zhuanlan.zhihu.com/p/51631163)，具体的激活图生成方式可以如下表示：" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/51631163)，具体的激活图生成方式可以如下表示：</a><br><img src="/2020/07/30/pri-knowledge-1/4.png" alt=""><br>说了这么多，下面就展示展示激活图的样子：<br><img src="/2020/07/30/pri-knowledge-1/7.png" alt=""><br><img src="/2020/07/30/pri-knowledge-1/8.png" alt=""><br>大家可以看到，上面一张是一只鸮鹦鹉的激活图，下面是一只在天空飞翔的大雁的激活图。因为鸮鹦鹉的Label是0，其他鸟类的Label是1，<strong>所以在激活图上，只要是负值的激活区域都是鸮鹦鹉的激活，也就是Label为0的激活，只要是正值的激活都是其他鸟类的激活，也就是Label为1的激活</strong>，为了方便展示，我把负值的激活用冷色调来显示，把正值的激活用暖色调来显示，所以就是变成了上面两幅激活图的样子。而右边的数字是具体的激活矩阵(把激活矩阵进行GAP就可以变成最终输出的Logits)。<br>到这里不知道大家有没有发现一个问题，就是无论对于鸮鹦鹉还是大雁的图片，<strong>它们的激活图除了分布在鸟类本身，也会有一部分分布在背景上。</strong>对于大雁我们好理解，因为大雁是飞在天空中的，而鸮鹦鹉是不可能在天空中的，所以天空的正激活是非常合理的，但是对于鸮鹦鹉来说，其在除了鸟类身体以外的负激活就不是太合理，因为，大雁或者是其他的鸟类，也可能在鸮鹦鹉的地面栖息环境中(但是鸮鹦鹉却不可能在天空中)。所以环境不能提供任何证据来证明这一次鸟类是一只鸮鹦鹉，所以鸮鹦鹉的负激活只是在鸟类的身体上是合理的。而其他鸟类的正激活却可以同时在鸟类身体上又可能在鸟类的背景上(如天空或者海洋)。<strong>所以我们需要这样建模这个问题，就是在除鸟类身体的背景上，不能出现鸮鹦鹉的激活，也就是说不能出现负激活(Label为0的激活）。</strong><br>所以下面的激活才是合理的：<br><img src="/2020/07/30/pri-knowledge-1/9.png" alt=""><br>从上面来看，在除鸟类身体外的背景部分是不存在负激活的，虽然上面的背景部分有一些正的激活(其他鸟类的激活)，但是从右边的激活矩阵来看，负激活的scale是占据绝对优势的，所以完全不会干扰对于鸮鹦鹉的判断。<br>所以问题来了，怎么从网络设计方面来达到这个目的呢？<br>其实可以从Loss设计方面来达到这个效果。我们假设每一个鸟都有个对应的mask，mask内是鸟类的身体部分，mask外是鸟类的背景部分。那么我们需要做的就是抑制mask外的背景部分激活矩阵的负值，把那一部分负值给抑制到0即可。鸟类的激活矩阵和mask的关系如下图(红色的曲线代表鸟的边界mask)：<br><img src="/2020/07/30/pri-knowledge-1/10.png" alt=""><br>我们的Loss设计可以用下面的公式表示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Loss_cam = -sum(where(bird_mask_outside&lt;0))</span><br></pre></td></tr></table></figure></p>
+<h1 id="基于辅助学习给模型加入先验知识"><a href="#基于辅助学习给模型加入先验知识" class="headerlink" title="基于辅助学习给模型加入先验知识"></a>基于辅助学习给模型加入先验知识</h1><p>到现在为止，咱们还只是把我们的鸟类分类的task当成一个二分类来处理，即鸮鹦鹉是一类，其他的鸟类是一类。但是我们知道，世界的鸟类可不仅仅是两类，除了鸮鹦鹉之外还有很多种类的鸟类。而不同鸟类的特征或许有很大的差别，比如鸵鸟的特征就是脖子很长，大雁的特征就是翅膀很大。<strong>假如只是把鸮鹦鹉当做一类，把其他的鸟类当做一类来学习的话，那么模型很可能不能学到可以利用的区分非鸮鹦鹉的特征，或者是会坍塌到一些区分度不强的特征上面，从而没有学到能够很好的区分不同其他鸟类的特征，而那些特征对去区别鸮鹦鹉和其他鸟类或许是重要的。</strong>所以我们有必要加入其他鸟类存在不同类别的先验知识。而这里，我主要介绍基于辅助学习的方式去学习类似的先验知识。首先我要解释一下什么是辅助学习，以及辅助学习和多任务学习的区别：<br><img src="/2020/07/30/pri-knowledge-1/11.png" alt=""><br>上图的左侧是多任务学习的例子，右侧是辅助学习的例子。左侧是个典型的face attribute的task，意思是输入一张人脸，通过多个branch来输出这一张人脸的年龄，性别，发型等等信息，各个branch的任务是独立的，同时又共享同一个backbone。右边是一个典型的辅助学习的task，意思是出入一张人脸，判断这一张人脸的性别，同时另外开一个(或几个)branch，通过这个branch来让网络学一些辅助信息，比如发型，皮肤等等，来帮助网络主任务(分男女)的判别。<br>好，回到我们的鸮鹦鹉分类的task，我们可能首先会想到下面的Pipeline:<br><img src="/2020/07/30/pri-knowledge-1/12.png" alt=""><br>这样虽然可以把不同类别的鸟类的特征都学到，但是却削弱了网络对于鸮鹦鹉和其他鸟类特征的分别。经过实验发现，这种网络架构不能很好的增加主任务的分类精度。<br>为了充分的学到鸮鹦鹉和其他鸟类特征的分别，同时又能带入不同种类鸟类类别的先验，我们引入辅助任务：<br><img src="/2020/07/30/pri-knowledge-1/13.png" alt=""><br>在上面的Pipeline中，辅助任务相比如主任务，把其他鸟类做更加细致的分类。这样网络就学到了区分不同其他鸟类的能力。但是从实验效果来看这个Pipeline的精度并不高。经过分析原因，发现在主任务和辅助任务里面都有鸮鹦鹉这一类，这样当回传梯度的时候，相当于把区分鸮鹦鹉和其他鸟类的特征回传了两次梯度，而回传两次梯度明显是没用的，而且会干扰辅助任务学习不同其他鸟类的特征。<br>所以我们可以把辅助任务的鸮鹦鹉类去除，于是便形成了下面的pipeline:<br><img src="/2020/07/30/pri-knowledge-1/14.png" alt=""><br>经过实验发现，这种pipeline是有利于主任务精度提升的，网络对于特征明显的其他鸟类的分类能力得到了一定程度的提升，同时对于困难类别的分类能力也有一定程度的提升。<br>这时候你会想，上面的pipeline好是好，但是我没有那么多的label啊。是的，上面的pipeline除了主任务的label标注，它还同时需要很多的辅助任务的label标注，而标注label是深度学习任务里面最让人头疼的问题(之一)。别怕，我下面介绍一个work，它基于meta-learning的方法，让你不再为给辅助任务标注label而烦恼，它的framework如下：<br><img src="/2020/07/30/pri-knowledge-1/15.png" alt=""><br>这个framework采用基于maxl的方案（<a href="https://github.com/lorenmt/maxl），辅助任务的数据和label不是由人为手工划分，而是由一个label" target="_blank" rel="noopener">https://github.com/lorenmt/maxl），辅助任务的数据和label不是由人为手工划分，而是由一个label</a> generator来产生，label generator的优化目标是让主网络在主任务的task上的loss降低，主网络的目标是在主任务和辅助任务上的loss同时降低。<br>但是这个framework有个缺点，就是训练时间会上升一个数量级，同时label generator会比较难优化。感兴趣的同学可以自己尝试。但是不得不说，这篇文章有两个结论倒是很有意思：</p>
+<blockquote>
+<ol>
+<li>假设 primary 和 auxiliary task 是在同一个 domain，那么 primary task 的 performance 会提高当且仅当 auxiliary task 的 complexity 高于 primary task。</li>
+<li>假设 primary 和 auxiliary task 是在同一个 domain，那么 primary task 的最终 performance 只依赖于 complexity 最高的 auxiliary task。</li>
+</ol>
+</blockquote>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>给神经网络的黑盒子里面加入一些人为设定的先验知识，这样往往能给你的task带来一定程度的提升，不过具体的task需要加入什么样的先验知识，需要如何加入先验知识还需要自己探索。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Deeplearning/" rel="tag"># Deeplearning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/20/advnoise/" rel="next" title="< Deeplearning > TF实操Game of Noise">
+                <i class="fa fa-chevron-left"></i> < Deeplearning > TF实操Game of Noise
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/head.png" alt="Billy">
+            
+              <p class="site-author-name" itemprop="name">Billy</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Zhengtq" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ztqstd@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://zhengtq.github.io/2019/05/27/DEMO/" target="_blank" title="DEMO">
+                      
+                        <i class="fa fa-fw fa-angle-right"></i>DEMO</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/zjutzz" title="ChrisZZ" target="_blank">ChrisZZ</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模型加入先验知识的必要性"><span class="nav-number">1.</span> <span class="nav-text">模型加入先验知识的必要性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于pretrain模型给模型加入先验"><span class="nav-number">2.</span> <span class="nav-text">基于pretrain模型给模型加入先验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于输入给模型加入先验"><span class="nav-number">3.</span> <span class="nav-text">基于输入给模型加入先验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于模型重现给模型加入先验"><span class="nav-number">4.</span> <span class="nav-text">基于模型重现给模型加入先验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于CAM图激活限制给模型加入先验"><span class="nav-number">5.</span> <span class="nav-text">基于CAM图激活限制给模型加入先验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于辅助学习给模型加入先验知识"><span class="nav-number">6.</span> <span class="nav-text">基于辅助学习给模型加入先验知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">7.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Billy</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      p
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      p
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'BGzxkVpRtr5PoQUppRDqiC1V-gzGzoHsz',
+        appKey: 'K9tU9mVpjknHh8SNOWrqXqDV',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -6,7 +6,6 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-cn,en,default">
-
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -408,7 +407,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/30/pri-knowledge-1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/27/tf2-x-best-practice/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -427,7 +426,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/07/30/pri-knowledge-1/" itemprop="url">< Deeplearning > 给模型加入先验知识</a></h1>
+                <a class="post-title-link" href="/2021/01/27/tf2-x-best-practice/" itemprop="url">< Tensorflow >Tensorflow2.4 最佳实践</a></h1>
         
 
         <div class="post-meta">
@@ -439,8 +438,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T08:29:34+08:00">
-                2020-07-30
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-27T08:38:00+08:00">
+                2021-01-27
               </time>
             
 
@@ -462,8 +461,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
+                  <a href="/categories/Tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">Tensorflow</span>
                   </a>
                 </span>
 
@@ -480,8 +479,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/07/30/pri-knowledge-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/30/pri-knowledge-1/" itemprop="commentCount"></span>
+                <a href="/2021/01/27/tf2-x-best-practice/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/01/27/tf2-x-best-practice/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -510,14 +509,86 @@
 
       
         
-          <h1 id="模型加入先验知识的必要性"><a href="#模型加入先验知识的必要性" class="headerlink" title="模型加入先验知识的必要性"></a>模型加入先验知识的必要性</h1><p>端到端的深度神经网络是个黑盒子，虽然能够自动学习到一些可区分度好的特征，但是往往会拟合到一些<strong>非重要特征</strong>，导致模型会局部坍塌到一些不好的特征上面。常常一些人们想让模型去学习的特征模型反而没有学习到。为了解决这个问题，给模型加入人为设计的<strong>先验信息</strong>会让模型学习到一些关键的特征。下面就从几个方面来谈谈如何给模型加入先验信息。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/30/pri-knowledge-1/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p>最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）．</p>
+<p>跑了一个官方给的cifar的例子，效果还行．于是就打算在自己的数据上跑跑看效果，在这个过程中，发现官方给你例子还远远达不到训练速度最优化的程度．于是就把官方例子就改了一下，最终达到了一个满意的训练速度，本篇就是记录一下tf2.4下的训练性能调优全过程．最终调优后的代码会共享出来．</p>
+<h1 id="单卡到多卡"><a href="#单卡到多卡" class="headerlink" title="单卡到多卡"></a>单卡到多卡</h1><p>官方给的vit(Vision Transformer)的例子是基于单卡的，但是现在训练大型网络已经离不开多卡，于是把官方例子改成多卡训练的版本（这里主要说明一下单机多卡的设置）．</p>
+<p><strong>首先根据你手上卡的数量来建立一个strategy的对象</strong>．</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">physical_devices = tf.config.list_physical_devices(<span class="string">'GPU'</span>)          </span><br><span class="line"><span class="keyword">for</span> ind, item <span class="keyword">in</span> enumerate(physical_devices):                      </span><br><span class="line">    tf.config.experimental.set_memory_growth(item, <span class="keyword">True</span>)           </span><br><span class="line">                                                                   </span><br><span class="line">TRAIN_GPUS = [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]                                          </span><br><span class="line">devices = [<span class="string">"/gpu:&#123;&#125;"</span>.format(i) <span class="keyword">for</span> i <span class="keyword">in</span> TRAIN_GPUS]             </span><br><span class="line">strategy = tf.distribute.MirroredStrategy(devices)</span><br></pre></td></tr></table></figure>
+<p>这里tf.config.experimental.set_memory_growth的作用是限制显存的使用．</p>
+<p><strong>然后我们要把数据做一个副本化的包装：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">train_dist_dataset = strategy.experimental_distribute_dataset(train_dataset)   </span><br><span class="line">test_dist_dataset = strategy.experimental_distribute_dataset(test_daset)</span><br></pre></td></tr></table></figure>
+<p><strong>然后我们需要对train_step和test_step做一个封装：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> strategy.scope()</span><br><span class="line">       <span class="function"><span class="keyword">def</span> <span class="title">distributed_train_step</span><span class="params">(dataset_inputs)</span>:</span>                           </span><br><span class="line">           per_replica_losses = strategy.run(train_step, args=(dataset_inputs,))                           </span><br><span class="line">           <span class="keyword">return</span> strategy.reduce(tf.distribute.ReduceOp.SUM, per_replica_losses, axis=<span class="keyword">None</span>)               </span><br><span class="line">       <span class="function"><span class="keyword">def</span> <span class="title">distributed_test_step</span><span class="params">(dataset_inputs)</span>:</span>                           </span><br><span class="line">           <span class="keyword">return</span> strategy.run(test_step, args=(dataset_inputs,))</span><br></pre></td></tr></table></figure>
+<p><strong>最后在train_step，test_step，和计算loss和accuracy加上strategy的scope</strong>（这里只是拿train_step和test_step举例）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> strategy.scope():                                                       </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">train_step</span><span class="params">(inputs)</span>:</span>                                                  </span><br><span class="line">        images, labels = inputs                                              </span><br><span class="line">        <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:                                      </span><br><span class="line">            predictions = model(images, training=<span class="keyword">True</span>)                       </span><br><span class="line">            loss = compute_loss(labels, predictions)                         </span><br><span class="line">                                                                             </span><br><span class="line">        gradients = tape.gradient(loss, model.trainable_variables)           </span><br><span class="line">        optimizer.apply_gradients(zip(gradients, model.trainable_variables)) </span><br><span class="line">        compute_acc(labels, predictions, train_accuracy)                     </span><br><span class="line">        <span class="keyword">return</span> loss                                                          </span><br><span class="line">                                                                             </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_step</span><span class="params">(inputs)</span>:</span>                                                   </span><br><span class="line">        images, labels = inputs                                              </span><br><span class="line">        predictions = model(images, training=<span class="keyword">False</span>)                          </span><br><span class="line">        compute_acc(labels, predictions, test_accuracy)</span><br></pre></td></tr></table></figure>
+<p>经过了上述的步骤，成功的在tf2.4下，把单卡训练转换到了单机多卡训练．</p>
+<h1 id="eager-mode-到-static-graph-mode"><a href="#eager-mode-到-static-graph-mode" class="headerlink" title="eager mode 到 static graph mode"></a>eager mode 到 static graph mode</h1><p>由于tf2.x模式的执行方式是急切执行（eager mode），eager mode的好处在在于方便debug，但是如果拿来训练就不太好了，因为eager mode会托慢速度．所以我们需要在调试好网络之后把执行模式切换为静态图的模式．而这个步骤非常简单，<strong>加上一个tf.function的修饰符就好</strong>．</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> strategy.scope():                                                   </span><br><span class="line"><span class="meta">    @tf.function                                                         </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">distributed_train_step</span><span class="params">(dataset_inputs)</span>:</span>                           </span><br><span class="line">        per_replica_losses = strategy.run(train_step, args=(dataset_inputs,))         </span><br><span class="line">        <span class="keyword">return</span> strategy.reduce(tf.distribute.ReduceOp.SUM, per_replica_losses, axis=<span class="keyword">None</span>)             </span><br><span class="line"><span class="meta">    @tf.function                                                         </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">distributed_test_step</span><span class="params">(dataset_inputs)</span>:</span>                           </span><br><span class="line">        <span class="keyword">return</span> strategy.run(test_step, args=(dataset_inputs,))</span><br></pre></td></tr></table></figure>
+<h1 id="调整tf-data数据流顺序"><a href="#调整tf-data数据流顺序" class="headerlink" title="调整tf.data数据流顺序"></a>调整tf.data数据流顺序</h1><p>tf.data的数据处理顺序非常重要，改变顺序可能会极度的托慢训练速度．</p>
+<p>这里，我的数据处理流程如下：</p>
+<ol>
+<li>读取所有图片的路径和对应的label．</li>
+<li>把图片路径给parse成图片．</li>
+</ol>
+<p>流程其实很简单，但这里要涉及到几点：</p>
+<ol>
+<li>如何shuffle.</li>
+<li>哪里设定epoch</li>
+<li>哪里设定batch</li>
+<li>哪里设定预取prefetch．</li>
+</ol>
+<p>先来上code，再解释：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  image_roots, labels = generate_fileroots_labels(file_root)                   </span><br><span class="line">  dataset = tf.data.Dataset.from_tensor_slices((image_roots, labels))           </span><br><span class="line">  dataset = dataset.repeat(<span class="number">100</span>).shuffle(buffer_size=<span class="number">2000</span>) </span><br><span class="line"><span class="comment">#  dataset = dataset.map(_parse_data, num_parallel_calls=tf.data.experimental.AUTOTUNE) </span></span><br><span class="line">  dataset = dataset.map(_parse_data, num_parallel_calls=<span class="number">16</span>)                     </span><br><span class="line">  dataset = dataset.batch(batch_size)                                           </span><br><span class="line">  dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)</span><br></pre></td></tr></table></figure>
+<p>首先，repeat表示需要把数据重复多少次，也就是设定的epoc，shuffle代表在多少的buffer中打乱数据．<strong>这两者需要放到map前面</strong>，因为在map前，数据流处理的都是图片路径和label的轻量化数据，这对于repeat和shuffle是有利的．</p>
+<p>而batch和prefetch就需要放到map的后面．<strong>这里需要注意，要先设定batch，再prefetch（不然会慢）</strong>．</p>
+<h1 id="大杀器－－tf-profiler"><a href="#大杀器－－tf-profiler" class="headerlink" title="大杀器－－tf.profiler"></a>大杀器－－tf.profiler</h1><p>当我们觉得已经把加速做到极致了之后，我们需要用tensorflow自带的性能检测工具tf.profiler来检查一些性能还有那些可以榨取的空间．</p>
+<p>用tf.profiler之前，你需要先按照官方的教程<a href="https://github.com/tensorflow/profiler" target="_blank" rel="noopener">安装</a>．这里有个小坑，因为tf.profiler需要依赖libcupti这个库，而libcupti这个库不在cuda的主库目录里，而是在extras/CUPTI/lib64里面，这个需要注意．</p>
+<p>然后在你的训练代码中，需要添加如下的code：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> t_step, x <span class="keyword">in</span> enumerate(train_dist_dataset):</span><br><span class="line">    <span class="keyword">if</span> t_step == <span class="number">500</span>:</span><br><span class="line">          tf.profiler.experimental.start(<span class="string">'/tmp/'</span> + datetime.datetime.now().strftime(<span class="string">"%Y%m%d-%H%M%S"</span>))</span><br><span class="line">    <span class="keyword">if</span> t_step == <span class="number">600</span>:</span><br><span class="line">          tf.profiler.experimental.stop()</span><br><span class="line">    <span class="keyword">with</span> tf.profiler.experimental.Trace(<span class="string">'Train'</span>, step_num=t_step, _r=<span class="number">1</span>):</span><br><span class="line">        step_loss = distributed_train_step(x)</span><br></pre></td></tr></table></figure>
+<p>这个代码段的意思是，在训练的第200步到第300步需要记录你的训练profile．</p>
+<p>这里说明两点：</p>
+<p>第一，<strong>我们不需要要整个训练过程都记录profile</strong>，因为记录profile仅仅是为了调优，只需要记录某些步的profile就可以提供你来调优即可．</p>
+<p>第二，<strong>不从第０步就开始记录是因为我们需要先让训练达到稳定之后记录才会比较准确</strong>（示例中是从500步到600步开始记录profile）．</p>
+<p>好了，我们看一下，都记录了一些什么东西：</p>
+<p><img src="/2021/01/27/tf2-x-best-practice/before.png" alt=""></p>
+<p>这里我们可以看到耗时主要在3个方面：</p>
+<ol>
+<li><strong>Kernel Launch Time</strong>  </li>
+<li><strong>Host Compute Time</strong></li>
+<li><strong>Device Compute Time</strong></li>
+</ol>
+<p>我们来一个一个解决，首先来解决kernel lanuch time，这个在右边的建议(Recommendation for Next Step)有说明：</p>
+<blockquote>
+<ul>
+<li>14.3 % of the total step time sampled is spent on ‘Kernel Launch’. It could be due to CPU contention with tf.data. In this case, you may try to set the environment variable TF_GPU_THREAD_MODE=gpu_private.</li>
+</ul>
+</blockquote>
+<p>也就是说可以通过设定TF_GPU_THREAD_MODE=gpu_private来解决．也就是说要在之前训练程序的前面加上下面一句命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> TF_GPU_THREAD_MODE=gpu_private</span><br></pre></td></tr></table></figure>
+<p>然而我这样执行之后发现作用好像不是很大，知道怎么解决的同学可以交流．</p>
+<p>我们现在来解决第二个主要耗时的点，也就是Host Compute Time耗时过高．</p>
+<p>我们知道，tensorflow的多卡策略是ps-worker的方式，这个ps可以认为是host，主要是负责更新参数和处理数据流，按理说这部分的耗时不应该很高才对．于是我往下看具体的host的耗时的页面：</p>
+<p><img src="/2021/01/27/tf2-x-best-practice/before1.png" alt=""></p>
+<p>我们看到，host的耗时，很大的程度和２个op有关：</p>
+<ol>
+<li>stridedSlide</li>
+<li>cast</li>
+</ol>
+<p>其中stridedSlide占了绝对的大头，经过查阅资料发现，stridedSlide耗时比较高主要和tf.distribute.MirroredStrategy这个对象有关．</p>
+<p>因为我在我的工程里面用到了tf.data.Dataset.from_tensor_slices这个对象，这个对象用到了stridedSlide这个操作，而tf.distribute.MirroredStrategy对stridedSlide的操作支持的不好．</p>
+<p>网上的建议是把tf.distribute.MirroredStrategy换成tf.distribute.experimental.MultiWorkerMirroredStrategy．</p>
+<p>也就是如下实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TRAIN_GPUS = [0,1,2,3]</span></span><br><span class="line"><span class="comment">#  devices = ["/gpu:&#123;&#125;".format(i) for i in TRAIN_GPUS]</span></span><br><span class="line"><span class="comment">#  strategy = tf.distribute.MirroredStrategy(devices)</span></span><br><span class="line">tf.config.set_visible_devices(physical_devices[<span class="number">0</span>:<span class="number">8</span>], <span class="string">'GPU'</span>) </span><br><span class="line">strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()</span><br></pre></td></tr></table></figure>
+<p>更换了之后，果然<strong>Host Compute Time</strong> 得到了下降．</p>
+<p>关于cast这个操作，是因为我在dataset的parse_function里面用到了tf.cast的操作，我把这个操作放到了网络里面，这部分的耗时也消除了（其实是分给worker了）．</p>
+<p>关于<strong>Device Compute Time</strong>这一部分，我发现这个部分主要的耗时用到了矩阵操作Einsum上，这一部分的操作也是MultiHeadAttention的主要操作，于是也就没有修改这个部分．</p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当然，说了这么多，不如大家来下面一行代码来的方便…..</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import torch as tf</span><br></pre></td></tr></table></figure>
+<p>不过话说回来，tensorflow和pytorch不是二选一的问题，而是大家最好都会用，这样才能更好在深度学习里探(lian)索(dan)．</p>
+<p>最后把示例代码放到<a href="https://github.com/Zhengtq/tensorflow2.x-best-practice" target="_blank" rel="noopener">这里</a>，大家自行取用．</p>
+
+          
         
       
     </div>
@@ -564,7 +635,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/advnoise/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/28/ncnn-lesson-start/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -583,7 +654,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/03/20/advnoise/" itemprop="url">< Deeplearning > TF实操Game of Noise</a></h1>
+                <a class="post-title-link" href="/2020/12/28/ncnn-lesson-start/" itemprop="url">< NCNN-Lession-Start >　Start</a></h1>
         
 
         <div class="post-meta">
@@ -595,8 +666,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-20T16:05:23+08:00">
-                2020-03-20
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-28T13:54:05+08:00">
+                2020-12-28
               </time>
             
 
@@ -636,8 +707,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/03/20/advnoise/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/20/advnoise/" itemprop="commentCount"></span>
+                <a href="/2020/12/28/ncnn-lesson-start/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/28/ncnn-lesson-start/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -666,14 +737,81 @@
 
       
         
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><a href="https://arxiv.org/abs/2001.06057" target="_blank" rel="noopener">Game of Noise</a> 来自于2020年1月份的一篇arxiv文章.文章的主要思想是通过给CNN网络(以分类模型举例)的输入图加入噪声来使得模型更加的鲁棒.与之前手动加入噪声不同的是,该文章采用对抗网络的思想,通过一个噪声生成器来生成噪声,并尽量使你的分类模型(判别模型)做出错误的分类..而你的分类模型的目的是尽量能够不被加入的图片噪声干扰,依然能做做出正确的输出.最终经过数轮的迭代训练,最终达到使得你的分类模型能够抵抗各类噪声干扰的目的.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/03/20/advnoise/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="一"><a href="#一" class="headerlink" title="一"></a>一</h2><p>这个tutorial是笔者在自己学习ncnn的过程的一个记录．等于把自己的理解写了出来，如果有差错，还请大家指正．</p>
+<p>这个tutorial还没有写完，后面会随着学习的深入，会不定期的更新．</p>
+<h2 id="二"><a href="#二" class="headerlink" title="二"></a>二</h2><p>这个tutorial的每一节，会分为4个section来讲述，分别是：</p>
+<blockquote>
+<ul>
+<li><strong>开始</strong></li>
+<li><strong>作用</strong></li>
+<li><strong>实现</strong></li>
+<li><strong>代码示例</strong></li>
+</ul>
+</blockquote>
+<p><strong>开始</strong>：每一节的开始，说一下当前学习计划．</p>
+<p><strong>作用</strong>：说一下本节要讲的内容的作用．</p>
+<p><strong>实现</strong>：说一下这一节的内容ncnn是如何实现的．</p>
+<p><strong>代码示例</strong>：把这一节的内容中ncnn相关的代码拿出来，写了个例子．</p>
+<h2 id="三"><a href="#三" class="headerlink" title="三"></a>三</h2><p>每一节，为了方便展示，我都会用一些图表来展示，如：</p>
+<p><img src="/2020/12/28/ncnn-lesson-start/lession-5.png" alt="lession-5"></p>
+<p><img src="/2020/12/28/ncnn-lesson-start/Mat.png" alt="Mat"></p>
+<p><img src="/2020/12/28/ncnn-lesson-start/tree.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">head</th>
+<th>pad_x</th>
+<th>(head_use)elemsize</th>
+<th style="text-align:center">elemsize</th>
+<th>elemsize</th>
+<th>elemsize</th>
+<th>pad_y</th>
+<th>pad_y…</th>
+<th>(x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">(x)</td>
+<td>(x)</td>
+<td>(channel2)elemsize</td>
+<td style="text-align:center">elemsize</td>
+<td>elemsize</td>
+<td>elemsize</td>
+<td>pad_y</td>
+<td>pad_y…</td>
+<td>(x)</td>
+</tr>
+<tr>
+<td style="text-align:left">(x)</td>
+<td>(x)</td>
+<td>(channel3)elemsize</td>
+<td style="text-align:center">elemsize</td>
+<td>elemsize</td>
+<td>elemsize</td>
+<td>pad_y</td>
+<td>pad_y…</td>
+<td>(x)</td>
+</tr>
+<tr>
+<td style="text-align:left">(x)</td>
+<td>(x)</td>
+<td>(channel4)elemsize</td>
+<td style="text-align:center">elemsize</td>
+<td>elemsize</td>
+<td>elemsize</td>
+<td>pad_y</td>
+<td>pad_y…</td>
+<td>pad_z…</td>
+</tr>
+</tbody>
+</table>
+<h2 id="四"><a href="#四" class="headerlink" title="四"></a>四</h2><p>在每一节的最后，我都会附上对应的示例代码．在使用每一节的示例代码时候，需要自己clone下来，然后自己编译．一个常用的过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:Zhengtq/ncnn_breakdown.git</span><br><span class="line"><span class="built_in">cd</span> ncnn_breakdown &amp;&amp; <span class="built_in">cd</span> lesson &amp;&amp; <span class="built_in">cd</span> lesson_1</span><br><span class="line">mkdir build &amp;&amp; <span class="built_in">cd</span> build</span><br><span class="line">cmake ..</span><br><span class="line">make -j8</span><br><span class="line">./examples/lession_1</span><br></pre></td></tr></table></figure>
+<h2 id="五"><a href="#五" class="headerlink" title="五"></a>五</h2><p>Have Fun !</p>
+
+          
         
       
     </div>
@@ -720,7 +858,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/17/advAS/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/21/ncnn-lesson-9/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -739,7 +877,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/17/advAS/" itemprop="url">< Antispoofing >　如何科学的攻破活体识别系统</a></h1>
+                <a class="post-title-link" href="/2020/12/21/ncnn-lesson-9/" itemprop="url">< NCNN-Lession-9 >　Load Image</a></h1>
         
 
         <div class="post-meta">
@@ -751,8 +889,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-17T14:53:39+08:00">
-                2020-01-17
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-21T11:10:11+08:00">
+                2020-12-21
               </time>
             
 
@@ -792,8 +930,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/01/17/advAS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/17/advAS/" itemprop="commentCount"></span>
+                <a href="/2020/12/21/ncnn-lesson-9/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/21/ncnn-lesson-9/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -822,14 +960,72 @@
 
       
         
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>故事(事故)起源于我老大最近跟我说的一个脑洞，他说他最近看了<a href="https://arxiv.org/abs/1908.08705" target="_blank" rel="noopener">Advhat</a> 的相关介绍，说能不能在活体识别上面尝试一下Advhat, 仿照Advhat做一个特殊贴纸，贴到一张假脸的某个部位，然后就用这样的一张贴了特殊纸张的假脸攻破活体识别系统．我当时觉得应该不太可能，毕竟活体任务和人脸识别任务不同，活体识别任务学的就是真人和非真人介质的不同，无论生成什么样的纸张，毕竟逃离不了纸张透过摄像头的后的独特介质信息，况且即使生成了特殊的贴纸，然后再打印出来，然后再通过摄像头去识别，这样这张生成的’数字’贴纸就经过了两次失真，应该是没啥效果的．我就把我的观点和老大一说，老大说还是让我尝试一下．于是我就做个实验验证一下，没想到我被实验结果深深的打脸．．．<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/01/17/advAS/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的．</p>
+<p>我们再插一个小红旗：</p>
+<p><img src="/2020/12/21/ncnn-lesson-9/lesson-9.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>通常我们读取读片的时候会用到Opencv的Mat类，大家应该发现了，Opencv中的Mat类和ncnn中的Mat类的名字其实是一样的．为了区分方便，我们把Opencv中的Mat类记错cv::Mat，我们把ncnn中的Mat类记做ncnn::Mat.</p>
+<p>本节的作用就是用Opencv读取图片，然后把cv::Mat转化为ncnn::Mat．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>由于Opencv读一幅彩色图片的格式是bgr的格式，我们今天只考虑bgr的cv::Mat转化到ncnn:Mat．暂时不考虑其他格式的转化．</p>
+<p>我们首先考虑一下Opencv::Mat的图片数据存放方式．</p>
+<p>Opencv::Mat的索引方式是这样的：</p>
+<blockquote>
+<ul>
+<li>先索引列h</li>
+<li>再索引宽w</li>
+<li>再索引通道c</li>
+</ul>
+</blockquote>
+<p>可以用下面的表格来看一下Opencv的数据存放方式:</p>
+<table>
+<thead>
+<tr>
+<th>b</th>
+<th>g</th>
+<th>r</th>
+<th>b</th>
+<th>g</th>
+<th>r</th>
+<th>…</th>
+<th>pad?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>g</td>
+<td>r</td>
+<td>b</td>
+<td>g</td>
+<td>r</td>
+<td>…</td>
+<td>pad?</td>
+</tr>
+</tbody>
+</table>
+<p>对上面的表格做一个说明：</p>
+<blockquote>
+<p>元素分布是按照bgrbgrbgr….的顺序排列的．</p>
+<p>每一行代表一个行（一个w）数据．</p>
+<p>pad?代表是否需要pad操作．Opencv默认内存是连续的，也就是没有pad操作．</p>
+<p>上面是用表格的形式展示的，在内存上，上面的所有行是连在一起的．</p>
+</blockquote>
+<p>我们先考虑Opencv内存是连续的情况．</p>
+<p>由于我们之前学过，ncnn::Mat中有ncnn::channel的函数，它可以返回一个对应channel的新的ncnn::Mat对象．所以我们可以针对bgr这三个通道各自建立一个channel对象，并每隔3个元素分别读入即可．</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">from_rgb</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>* rgb, <span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> stride, Mat&amp; m,</span></span></span><br><span class="line"><span class="function"><span class="params">                    Allocator* allocator)</span> </span>&#123;</span><br><span class="line">    m.create(w, h, <span class="number">3</span>, <span class="number">4u</span>, allocator);</span><br><span class="line">    <span class="keyword">if</span> (m.empty()) <span class="keyword">return</span> <span class="number">-100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span>* ptr0 = m.channel(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">float</span>* ptr1 = m.channel(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">float</span>* ptr2 = m.channel(<span class="number">2</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> remain = w * h;</span><br><span class="line">    <span class="keyword">for</span> (; remain &gt; <span class="number">0</span>; remain--) &#123;</span><br><span class="line">            *ptr0 = rgb[<span class="number">0</span>];</span><br><span class="line">            *ptr1 = rgb[<span class="number">1</span>];</span><br><span class="line">            *ptr2 = rgb[<span class="number">2</span>];</span><br><span class="line">            rgb += <span class="number">3</span>;</span><br><span class="line">            ptr0++;</span><br><span class="line">            ptr1++;</span><br><span class="line">            ptr2++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们考虑cv::Mat中每一行的内存需要pad，也就是内存不连续的情况．</p>
+<p>这个时候我们需要知道Ｍat的stride，也就是加上pad之后一行有多少个元素．所以pad的个数就是：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> wgap = stride - w * <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>在求得wgap之后，每一行读完之后，指针需要移动wgap的数目．</p>
+<p>所以，具体的实现方式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">from_rgb</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>* rgb, <span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> stride, Mat&amp; m,</span></span></span><br><span class="line"><span class="function"><span class="params">                    Allocator* allocator)</span> </span>&#123;</span><br><span class="line">    m.create(w, h, <span class="number">3</span>, <span class="number">4u</span>, allocator);</span><br><span class="line">    <span class="keyword">if</span> (m.empty()) <span class="keyword">return</span> <span class="number">-100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> wgap = stride - w * <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span>* ptr0 = m.channel(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">float</span>* ptr1 = m.channel(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">float</span>* ptr2 = m.channel(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; h; y++) &#123;</span><br><span class="line">        <span class="keyword">int</span> remain = w;</span><br><span class="line">        <span class="keyword">for</span> (; remain &gt; <span class="number">0</span>; remain--) &#123;</span><br><span class="line">            *ptr0 = rgb[<span class="number">0</span>];</span><br><span class="line">            *ptr1 = rgb[<span class="number">1</span>];</span><br><span class="line">            *ptr2 = rgb[<span class="number">2</span>];</span><br><span class="line">            rgb += <span class="number">3</span>;</span><br><span class="line">            ptr0++;</span><br><span class="line">            ptr1++;</span><br><span class="line">            ptr2++;</span><br><span class="line">        &#125;</span><br><span class="line">        rgb += wgap;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们把上述两种情况都考虑在一起，它的实现方式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">from_rgb</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>* rgb, <span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> stride, Mat&amp; m,</span></span></span><br><span class="line"><span class="function"><span class="params">                    Allocator* allocator)</span> </span>&#123;</span><br><span class="line">    m.create(w, h, <span class="number">3</span>, <span class="number">4u</span>, allocator);</span><br><span class="line">    <span class="keyword">if</span> (m.empty()) <span class="keyword">return</span> <span class="number">-100</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> wgap = stride - w * <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">if</span> (wgap == <span class="number">0</span>) &#123;</span><br><span class="line">        w = w * h;</span><br><span class="line">        h = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span>* ptr0 = m.channel(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">float</span>* ptr1 = m.channel(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">float</span>* ptr2 = m.channel(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; h; y++) &#123;</span><br><span class="line">        <span class="keyword">int</span> remain = w;</span><br><span class="line">        <span class="keyword">for</span> (; remain &gt; <span class="number">0</span>; remain--) &#123;</span><br><span class="line">            *ptr0 = rgb[<span class="number">0</span>];</span><br><span class="line">            *ptr1 = rgb[<span class="number">1</span>];</span><br><span class="line">            *ptr2 = rgb[<span class="number">2</span>];</span><br><span class="line">            rgb += <span class="number">3</span>;</span><br><span class="line">            ptr0++;</span><br><span class="line">            ptr1++;</span><br><span class="line">            ptr2++;</span><br><span class="line">        &#125;</span><br><span class="line">        rgb += wgap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_9" target="_blank" rel="noopener">这里</a>．</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/21/ncnn-lesson-9/tree.png" alt=""></p>
+
+          
         
       
     </div>
@@ -876,7 +1072,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/19/saferm/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/21/ncnn-lesson-10/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -895,7 +1091,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/19/saferm/" itemprop="url">< Linux > A Safe Way to Use Deletion Command In Linux.</a></h1>
+                <a class="post-title-link" href="/2020/12/21/ncnn-lesson-10/" itemprop="url">< NCNN-Lession-10 >　Forward Net</a></h1>
         
 
         <div class="post-meta">
@@ -907,8 +1103,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-19T11:45:44+08:00">
-                2019-10-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-21T11:10:11+08:00">
+                2020-12-21
               </time>
             
 
@@ -930,8 +1126,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
                   </a>
                 </span>
 
@@ -948,8 +1144,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/10/19/saferm/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/19/saferm/" itemprop="commentCount"></span>
+                <a href="/2020/12/21/ncnn-lesson-10/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/21/ncnn-lesson-10/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -978,14 +1174,35 @@
 
       
         
-          <h1 id="What-is-saferm"><a href="#What-is-saferm" class="headerlink" title="What is saferm?"></a>What is saferm?</h1><p>A safe deletion script to prevent you from wrongly delete important files in your linux system.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/10/19/saferm/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们学一下ncnn怎么进行网络前向的，学习了之后，会发现ncnn的网络前向流程的设计是多么的优雅，废话不多说，先插一个小红旗压压惊：</p>
+<p><img src="/2020/12/21/ncnn-lesson-10/lesson-10.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>网络的前向运算流程在一个神经网络前向框架里面中是处于核心地位的．我们把输入图片送到ncnn的第一个blob，然后通过调用每一个层的前向forward运算函数，来计算每一个层的输出结果，最终得到你想要的结果．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>ncnn为了更好的实现forward网络前向，定义了一个新的类：Extractor．这个类的主要作用是提供输入数据的接口和输出数据的接口，同时它还保存着每一个网络层计算的结果．我们先来看看这个类的概况图：</p>
+<p><img src="/2020/12/21/ncnn-lesson-10/Extractor.png" alt=""></p>
+<p>这里对Extractor的友元函数Net::create_extractor()做一个说明．</p>
+<p>它其实首先是Net类的一个成员函数，它的作用是用一个Net类的对象，调用自己的成员函数，去创建一个Extractor类的对象．</p>
+<p>由于它也是Extractor的友元函数，所以它可以访问Extractor的所有成员变量和成员函数，所以它也就可以调用Extractor类的构造函数，所以它就可以实现用一个Net类的对象，调用Extractor的成员函数，去创建一个Extractor类的对象．</p>
+<p>我们现在来看一下它是怎么把输入图片（已经转化为ncnn::Mat）通过input函数，给放到对应的blob里面的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> Extractor::input(<span class="keyword">const</span> <span class="keyword">char</span>* blob_name, <span class="keyword">const</span> Mat&amp; in) &#123;                  </span><br><span class="line">    <span class="keyword">int</span> blob_index = net-&gt;find_blob_index_by_name(blob_name);                 </span><br><span class="line">    <span class="keyword">if</span> (blob_index == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;                                          </span><br><span class="line">                                                                              </span><br><span class="line">    <span class="keyword">return</span> input(blob_index, in);                                             </span><br><span class="line">&#125;                                                                                                                                             </span><br><span class="line"><span class="keyword">int</span> Extractor::input(<span class="keyword">int</span> blob_index, <span class="keyword">const</span> Mat&amp; in) &#123;                         </span><br><span class="line">    <span class="keyword">if</span> (blob_index &lt; <span class="number">0</span> || blob_index &gt;= (<span class="keyword">int</span>)blob_mats.size()) <span class="keyword">return</span> <span class="number">-1</span>;     </span><br><span class="line">    blob_mats[blob_index] = in;                                               </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;                                                                 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，它其实是先通过输入blob_name去找对应的blob_index，然后把blob_index作为blob_mats的id给blob_mats赋值．</p>
+<p>我们再来看它是如何得到我们想要的输出的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> Extractor::extract(<span class="keyword">const</span> <span class="keyword">char</span>* blob_name, Mat&amp; feat) &#123;                        </span><br><span class="line">    <span class="keyword">int</span> blob_index = net-&gt;find_blob_index_by_name(blob_name);                     </span><br><span class="line">    <span class="keyword">if</span> (blob_index == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;                                              </span><br><span class="line">                                                                                  </span><br><span class="line">    <span class="keyword">return</span> extract(blob_index, feat);                                             </span><br><span class="line">&#125;                                                                                 </span><br><span class="line">                                                                                  </span><br><span class="line"><span class="keyword">int</span> Extractor::extract(<span class="keyword">int</span> blob_index, Mat&amp; feat) &#123;                               </span><br><span class="line">    <span class="keyword">if</span> (blob_index &lt; <span class="number">0</span> || blob_index &gt;= (<span class="keyword">int</span>)blob_mats.size()) <span class="keyword">return</span> <span class="number">-1</span>;         </span><br><span class="line">                                                                                  </span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;                                                                  </span><br><span class="line">    <span class="keyword">if</span> (blob_mats[blob_index].dims == <span class="number">0</span>) &#123;                                        </span><br><span class="line">        <span class="keyword">int</span> layer_index = net-&gt;blobs[blob_index].producer;                        </span><br><span class="line">        ret = net-&gt;forward_layer(layer_index, blob_mats, opt);                    </span><br><span class="line">    &#125;                                                                             </span><br><span class="line">                                                                                  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span>;                                                                    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先它也是通过blob_name去得到我们想要的输出的blob的id（blob_index）．然后检查这个blob_index对应的blob_mat[blob_index]是否是有值的，如果有值则直接返回对应的值．</p>
+<p>如果这个blob_mats[blob_index]没有值，则再基于这个blob_index去通过net-&gt;blobs这个变量去找它对应的输入层的id（layer_index）．</p>
+<p>然后再调用net的forward函数去计算该层的输出top_blob．</p>
+<p>forward函数是Net类的成员函数，它的作用是检查某一个层id所对应的bottom_blobs是否有值（之前已经被运算出来）．</p>
+<p>如果这个bottom_blob有值（已经被运算出来），那么它就用该层的bottom_blobs去<strong>调用对应Layer子类的forward函数</strong>来运算得到这个top_blobs．</p>
+<p>如果这个bottom_blob没有值，则递归上述过程，直到某一层的bottom_blobs是有值的（不可能无限递归，至少input_blobs肯定有值），是不是很优雅．</p>
+<p>我们来看一下它的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//参数是当前层的layer_id和所有的blob_mats, 其中blob_mats的输入层已经填入数据,其他层可能没有填入数据               </span></span><br><span class="line"><span class="keyword">int</span> Net::forward_layer(<span class="keyword">int</span> layer_index, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Mat&gt;&amp; blob_mats, <span class="keyword">const</span> Option&amp; opt) <span class="keyword">const</span> &#123;               </span><br><span class="line">    <span class="keyword">const</span> Layer* layer = layers[layer_index];                                                                 </span><br><span class="line">                                                                                                                                 </span><br><span class="line">    <span class="keyword">if</span> (layer-&gt;one_blob_only) &#123;                                                                               </span><br><span class="line">        <span class="comment">//由于是one_blob_only,所有只会取第一个值                                                              </span></span><br><span class="line">        <span class="keyword">int</span> bottom_blob_index = layer-&gt;bottoms[<span class="number">0</span>];                                                            </span><br><span class="line">        <span class="keyword">int</span> top_blob_index = layer-&gt;tops[<span class="number">0</span>];                                                                  </span><br><span class="line">                                                                                                              </span><br><span class="line">        <span class="keyword">if</span> (blob_mats[bottom_blob_index].dims == <span class="number">0</span>) &#123;                                                         </span><br><span class="line">            <span class="keyword">int</span> ret = forward_layer(blobs[bottom_blob_index].producer, blob_mats, opt);                       </span><br><span class="line">            <span class="keyword">if</span> (ret != <span class="number">0</span>) <span class="keyword">return</span> ret;                                                                         </span><br><span class="line">        &#125;                                                                                                     </span><br><span class="line">        <span class="comment">//这个时候经过了递归之后bottom_blob肯定是有值的                                                                                                  </span></span><br><span class="line">        Mat bottom_blob = blob_mats[bottom_blob_index];                                                       </span><br><span class="line">        Mat top_blob;                                                                                         </span><br><span class="line">        <span class="keyword">int</span> ret = layer-&gt;forward(bottom_blob, top_blob, opt);                                                 </span><br><span class="line">        <span class="keyword">if</span> (ret != <span class="number">0</span>) <span class="keyword">return</span> ret;                                                                             </span><br><span class="line">        blob_mats[top_blob_index] = top_blob;                                                                 </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;                                                                                                  </span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Mat&gt; bottom_blobs(layer-&gt;bottoms.size());                                                 </span><br><span class="line">                                                                                                              </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; layer-&gt;bottoms.size(); i++) &#123;                                                  </span><br><span class="line">            <span class="keyword">int</span> bottom_blob_index = layer-&gt;bottoms[i];                                                        </span><br><span class="line">            <span class="keyword">if</span> (blob_mats[bottom_blob_index].dims == <span class="number">0</span>) &#123;                                                     </span><br><span class="line">                <span class="keyword">int</span> ret = forward_layer(blobs[bottom_blob_index].producer, blob_mats, opt);                   </span><br><span class="line">                <span class="keyword">if</span> (ret != <span class="number">0</span>) <span class="keyword">return</span> ret;                                                                     </span><br><span class="line">            &#125;                                                                                                 </span><br><span class="line">            bottom_blobs[i] = blob_mats[bottom_blob_index];                                                   </span><br><span class="line">        &#125;                                                                                                     </span><br><span class="line">                                                                                                              </span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Mat&gt; top_blobs(layer-&gt;tops.size());</span><br><span class="line">        <span class="comment">//调用对应Layer子类的forward函数</span></span><br><span class="line">        <span class="keyword">int</span> ret = layer-&gt;forward(bottom_blobs, top_blobs, opt);                                                                                            </span><br><span class="line">        <span class="keyword">if</span> (ret != <span class="number">0</span>) <span class="keyword">return</span> ret;                                                                             </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; layer-&gt;tops.size(); i++) &#123;                                                     </span><br><span class="line">            <span class="keyword">int</span> top_blob_index = layer-&gt;tops[i];                                                              </span><br><span class="line">            blob_mats[top_blob_index] = top_blobs[i];                                                         </span><br><span class="line">        &#125;                                                                                                     </span><br><span class="line">    &#125;                                                                                                         </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;                                                                                                 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于每一个Layer子类的成员函数前向forward．我们这里先用统一用Ｍat::clone这个接口来实现，也就是说每一个Layer子类的forward函数的作用都是对它的输入blob的复制操作．至于具体的每一类的实现，我们后面能再详细的学习．这里用convolution的forward函数来举个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">`<span class="keyword">int</span> Convolution::forward(<span class="keyword">const</span> Mat&amp; bottom_blob, Mat&amp; top_blob, <span class="keyword">const</span> Option&amp; opt) <span class="keyword">const</span> &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"CONV FORWARD"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    top_blob = bottom_blob.clone(opt.blob_allocator);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_10" target="_blank" rel="noopener">这里</a>．</p>
+<p>代码结构下如：</p>
+<p><img src="/2020/12/21/ncnn-lesson-10/tree.png" alt=""></p>
+
+          
         
       
     </div>
@@ -1023,7 +1240,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1071,7 +1288,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1082,7 +1299,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1093,7 +1310,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1166,7 +1383,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

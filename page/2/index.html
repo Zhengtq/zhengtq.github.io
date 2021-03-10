@@ -249,7 +249,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/27/linux-multi-thread/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/18/ncnn-lesson-8/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -268,7 +268,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/07/27/linux-multi-thread/" itemprop="url">< Linux > A simple way to run program with mult-thread</a></h1>
+                <a class="post-title-link" href="/2020/12/18/ncnn-lesson-8/" itemprop="url">< NCNN-Lession-8 >　读取网络的权重信息</a></h1>
         
 
         <div class="post-meta">
@@ -280,8 +280,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-27T16:33:08+08:00">
-                2019-07-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-18T10:19:11+08:00">
+                2020-12-18
               </time>
             
 
@@ -303,8 +303,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
                   </a>
                 </span>
 
@@ -321,8 +321,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/07/27/linux-multi-thread/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/27/linux-multi-thread/" itemprop="commentCount"></span>
+                <a href="/2020/12/18/ncnn-lesson-8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/18/ncnn-lesson-8/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -351,14 +351,39 @@
 
       
         
-          <h1 id="Applicable-conditions"><a href="#Applicable-conditions" class="headerlink" title="Applicable conditions"></a>Applicable conditions</h1><p>If you want to deal with thousands of cases in a same way, you can use use this method to increase the processing speed.<br>For example, when you want to load millions of images and process them independently, you can apply this method which could accelerate your processing speed hugely,</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/27/linux-multi-thread/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：</p>
+<p><img src="/2020/12/18/ncnn-lesson-8/lesson-8.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>作用当然是给含有权重的层把权重（与层的参数区分开）给load到对应的内存中．</p>
+<p>包含有权重的层最常用也就两种：</p>
+<blockquote>
+<p>卷积层</p>
+<p>bn层</p>
+</blockquote>
+<p>我们今天就以卷积层为例子，来说一下ncnn中Load 权重的实现．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>实现Load 权重的功能其实很简单，因为我们在第一节就学习了数据读取类DataReader，我们读取网络proto的时候是就是用的这个类，在读取权重的时候，也是使用的这个类．我们重新把DataReader的框架图放到下面来再看一下:</p>
+<p> <img src="/2020/12/18/ncnn-lesson-8/ncnn-lession-1/datareader.png" alt=""></p>
+<p>我们在读取proto信息的时候，主要是用了scan这个成员函数，因为proto信息中结构化的信息比较多．</p>
+<p>在我们读取网络权重的时候，主要需要用到read这个函数，因为权重是以二进制的方式存储的，我们在知道elemsize和权重个数的情况下，就可以方便的通过read这个成员函数读取．</p>
+<p>ncnn中用ModelBinFromDataReader这个类来实现权重的读取，它其实是对于DataReader这个类的一种包装，它的框架图如下：</p>
+<p><img src="/2020/12/18/ncnn-lesson-8/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lesson-8/ModelBinFromDataReader.png" alt=""></p>
+<p>成员变量就不用多说，我们看一下它的成员函数的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Mat ModelBinFromDataReader::load(<span class="keyword">int</span> w, <span class="keyword">int</span> type) <span class="keyword">const</span> &#123;                                               </span><br><span class="line">    <span class="keyword">if</span> (type == <span class="number">0</span>) &#123;                                                                                    </span><br><span class="line">        <span class="keyword">size_t</span>  nread;                                                                                  </span><br><span class="line">                                                                                                        </span><br><span class="line">        <span class="keyword">union</span> &#123;                                                                                         </span><br><span class="line">            <span class="class"><span class="keyword">struct</span> &#123;</span>                                                                                    </span><br><span class="line">                <span class="keyword">unsigned</span> <span class="keyword">char</span> f0;                                                                       </span><br><span class="line">                <span class="keyword">unsigned</span> <span class="keyword">char</span> f1;                                                                       </span><br><span class="line">                <span class="keyword">unsigned</span> <span class="keyword">char</span> f2;                                                                       </span><br><span class="line">                <span class="keyword">unsigned</span> <span class="keyword">char</span> f3;                                                                       </span><br><span class="line">            &#125;;                                                                                          </span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> tag;                                                                           </span><br><span class="line">                                                                                                        </span><br><span class="line">        &#125; flag_struct;                                                                                  </span><br><span class="line">                                                                                                        </span><br><span class="line">        nread = dr.read(&amp;flag_struct, <span class="keyword">sizeof</span>(flag_struct));                                             </span><br><span class="line">                                                                            </span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> flag = flag_struct.f0 + flag_struct.f1 + flag_struct.f2 + flag_struct.f3;          </span><br><span class="line">        <span class="function">Mat <span class="title">m</span><span class="params">(w)</span></span>;                                                                                       </span><br><span class="line">        <span class="keyword">if</span> (m.empty()) <span class="keyword">return</span> m;                                                                        </span><br><span class="line">        <span class="keyword">if</span> (flag != <span class="number">0</span>) &#123;                                                                                </span><br><span class="line">            <span class="keyword">return</span> m;                                                                                   </span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (flag_struct.f0 == <span class="number">0</span>) &#123;                                                               </span><br><span class="line">            nread = dr.read(m, w * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));                                                      </span><br><span class="line">        &#125;                                                                                               </span><br><span class="line">        <span class="keyword">return</span> m;                                                                                       </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == <span class="number">1</span>) &#123;                                                                             </span><br><span class="line">        Mat m(w);                                                                                       </span><br><span class="line">        <span class="keyword">if</span> (m.empty()) <span class="keyword">return</span> m;                                                                        </span><br><span class="line">        <span class="keyword">size_t</span> nread = dr.read(m, w * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));                                                   </span><br><span class="line">        <span class="keyword">return</span> m;                                                                                       </span><br><span class="line">    &#125;                                                                                                   </span><br><span class="line">    <span class="keyword">return</span> Mat();                                                                                       </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>load这个函数，它有两个参数：</p>
+<blockquote>
+<p>w  它表示需要读取的元素个数</p>
+<p>type 是否去要按照不同的精度读取</p>
+</blockquote>
+<p>这里，对type做一下说明，当type为０的时候，需要读取数据的头部４个字节，然后由头部四个字节的数据来决定按照什么精度读取．这里我对代码做了简化，按照默认的float精度(4字节)的去读．</p>
+<p>当type为1的时候，则不读取头部的四个字节，直接按照默认的float精度(4字节)去读．</p>
+<p>有了ModelBinFromDataReader这个类，我们就可以在需要load权重的类里面实现一个load_model的函数去调用ModelBinFromDataReader这个类的对象．</p>
+<p>在不需要load权重的类里面就不用实现load_model的函数，只需要继承来自Layer父类的load_model函数就行．</p>
+<p>最终在net这个类里面，也实现一个load_model的函数，在这个函数里，按顺序遍历每一个层的load_model成员函数即可．</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_8" target="_blank" rel="noopener">这里</a>．</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/18/ncnn-lesson-8/tree.png" alt=""></p>
+
+          
         
       
     </div>
@@ -405,7 +430,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/gru-bp1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/15/ncnn-lesson-7/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -424,7 +449,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/15/gru-bp1/" itemprop="url">< Deeplarning > Understand Backpropagation of RNN/GRU and Implement It in Pure Python---1</a></h1>
+                <a class="post-title-link" href="/2020/12/15/ncnn-lesson-7/" itemprop="url">< NCNN-Lession-7 >　Mat类的实现</a></h1>
         
 
         <div class="post-meta">
@@ -436,8 +461,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-15T16:08:56+08:00">
-                2019-05-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-15T18:50:14+08:00">
+                2020-12-15
               </time>
             
 
@@ -477,8 +502,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/05/15/gru-bp1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/gru-bp1/" itemprop="commentCount"></span>
+                <a href="/2020/12/15/ncnn-lesson-7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/15/ncnn-lesson-7/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -507,179 +532,114 @@
 
       
         
-          <h1 id="Understanding-GRU"><a href="#Understanding-GRU" class="headerlink" title="Understanding GRU"></a>Understanding GRU</h1><p>As we know, RNN has the disadvantage of gradient vanishing(gradient exploding).GRU is invented in order to prevent gradient vanishing, <strong>so it could encode the information from very early time. Similarly to residual structure in CNN, GRU(or LSTM) could be seen RNN with residual block. That is to say that former hidden state is identically added to the newly computed hidden state(with a gate)</strong>.<br>For more details about GRU structure, you could check my former <a href="https://zhengtq.github.io/2019/01/05/tf-rnn-gru/" target="_blank" rel="noopener">blog</a>.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/15/gru-bp1/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/24/op-summary/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/24/op-summary/" itemprop="url"><deeplarning> A simple way to distinguish different optimizers in DeepLearning</deeplarning></a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T16:58:01+08:00">
-                2019-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/24/op-summary/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/24/op-summary/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="The-optimizers"><a href="#The-optimizers" class="headerlink" title="The optimizers"></a>The optimizers</h1><p>Let’s simply list the optimizers that may or may not be used in your project.</p>
+            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：</p>
+<p><img src="/2020/12/15/ncnn-lesson-7/lesson-7.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>Mat类的作用其实存放神经网络需要处理的数据，这些数据一般包含一下几种(不限于)：</p>
+<blockquote>
 <ul>
-<li>SGDOptimizer</li>
-<li>MomentumOptimizer</li>
-<li>NesterovOptimizer</li>
-<li>AdagradOptimizer</li>
-<li>AdadeltaOptimizer</li>
-<li>RMSPropOptimizer</li>
-<li>AdamOptimizer</li>
-<li>NadamOptimizer</li></ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/04/24/op-summary/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+<li>输入图片</li>
+<li>模型的weight和bias</li>
+<li>模型处理的top_blob和bottom_blob</li>
+</ul>
+</blockquote>
+<p>Mat好处在于如下(不限于)：</p>
+<blockquote>
+<ul>
+<li>方便的构建数据，如根据长宽高构建不同维度的数据．</li>
+<li>方便的索引数据，如按照channel索引数据．</li>
+<li>可以很方便的获取数据信息，如维度，长，宽等等．</li>
+<li>可以很方便的拷贝数据，如clone方法</li>
+</ul>
+</blockquote>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>首先不废话，先上个Mat的概况图：</p>
+<p><img src="/2020/12/15/ncnn-lesson-7/Mat.png" alt=""></p>
+<p>上图中，右半部分是Mat类所包含的必要的成员变量，左半部分是Mat所包含的必要的成员函数．</p>
+<p>成员函数很简单，名字和类型都在上图中有写到，这里就不再做过多的说明．下面我们着重说一下Mat类的成员函数．</p>
+<p>我们从开辟内存的函数Ｍat::create来说起．我看先来看一下它的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="keyword">void</span> Mat::create(<span class="keyword">int</span> _w, <span class="keyword">int</span> _h, <span class="keyword">int</span> _c, <span class="keyword">size_t</span> _elemsize, <span class="keyword">int</span> _elempack,          </span><br><span class="line">                        Allocator* _allocator) &#123;                                                           </span><br><span class="line">    <span class="keyword">if</span> (dims == <span class="number">3</span> &amp;&amp; w == _w &amp;&amp; h == _h &amp;&amp; c == _c &amp;&amp; elemsize == _elemsize &amp;&amp;            </span><br><span class="line">        elempack == _elempack &amp;&amp; allocator == _allocator)                                 </span><br><span class="line">        <span class="keyword">return</span>;                                                                           </span><br><span class="line">                                                                                          </span><br><span class="line">    release();                                                                            </span><br><span class="line">    elemsize = _elemsize;                                                                 </span><br><span class="line">    elempack = _elempack;                                                                 </span><br><span class="line">    allocator = _allocator;                                                               </span><br><span class="line">                                                                                          </span><br><span class="line">    dims = <span class="number">3</span>;                                                                             </span><br><span class="line">    w = _w;                                                                               </span><br><span class="line">    h = _h;                                                                               </span><br><span class="line">    c = _c;                                                                           <span class="comment">//pad_y</span></span><br><span class="line">    cstep = alignSize((<span class="keyword">size_t</span>)w * h * elemsize, <span class="number">16</span>) / elemsize;                           </span><br><span class="line">                                                                                          </span><br><span class="line">    <span class="keyword">if</span> (total() &gt; <span class="number">0</span>) &#123;    </span><br><span class="line">        <span class="comment">//pad_z</span></span><br><span class="line">        <span class="keyword">size_t</span> totalsize = alignSize(total() * elemsize, <span class="number">4</span>);                              </span><br><span class="line">        <span class="comment">//pad_x</span></span><br><span class="line">        data = fastMalloc(totalsize + (<span class="keyword">int</span>)<span class="keyword">sizeof</span>(*refcount));                                                       </span><br><span class="line">        refcount = (<span class="keyword">int</span>*)(((<span class="keyword">unsigned</span> <span class="keyword">char</span>*)data) + totalsize);                            </span><br><span class="line">        *refcount = <span class="number">1</span>;                                                                    </span><br><span class="line">    &#125;                                                                               </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述函数针对一个三维的数组开辟空间，三个维度分别为长h，宽w和通道数c(channel)．</p>
+<p>其中cstep使用了AlignSize()函数，它的含义是计算出一个大于步长数字且该数可以刚好被对齐数(16)整除，这个数字其实就是每一个channel所包含的字节空间数．</p>
+<p>计算这个数字的目的是为了进行另外一个维度的对齐，也就是空间尺寸上的对齐．我们在上一节中讲到，alllocator中的alignPtr函数做到了首地址上的对齐．</p>
+<p>由于每一个元素的字节数是elemsize，所以一共需要申请的空间如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> tmp_size = c*  cstep * elemsize</span><br><span class="line"><span class="keyword">size_t</span> totalsize = alignSize(tmp_size, <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+<p>关于具体的空间分配情况，我做了一个如下的表格来说明，假如说我们申请了一个(2x2x4)的Mat,具体的空间分配方式如下所示</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">head</th>
+<th>pad_x</th>
+<th>(head_use)elemsize</th>
+<th style="text-align:center">elemsize</th>
+<th>elemsize</th>
+<th>elemsize</th>
+<th>pad_y</th>
+<th>pad_y…</th>
+<th>(x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">(x)</td>
+<td>(x)</td>
+<td>(channel2)elemsize</td>
+<td style="text-align:center">elemsize</td>
+<td>elemsize</td>
+<td>elemsize</td>
+<td>pad_y</td>
+<td>pad_y…</td>
+<td>(x)</td>
+</tr>
+<tr>
+<td style="text-align:left">(x)</td>
+<td>(x)</td>
+<td>(channel3)elemsize</td>
+<td style="text-align:center">elemsize</td>
+<td>elemsize</td>
+<td>elemsize</td>
+<td>pad_y</td>
+<td>pad_y…</td>
+<td>(x)</td>
+</tr>
+<tr>
+<td style="text-align:left">(x)</td>
+<td>(x)</td>
+<td>(channel4)elemsize</td>
+<td style="text-align:center">elemsize</td>
+<td>elemsize</td>
+<td>elemsize</td>
+<td>pad_y</td>
+<td>pad_y…</td>
+<td>pad_z…</td>
+</tr>
+</tbody>
+</table>
+<p>下面对上面的表格做一个说明：</p>
+<blockquote>
+<ul>
+<li><p>其中head代表总的申请空间的地址．</p>
+</li>
+<li><p>pad_x是为了让使用的空间的首地址能够对齐来进行的把head指针向前推移的操作，</p>
+</li>
+<li><p>elemsize是每一个元素占用的空间．</p>
+</li>
+<li><p>pad_y是为了使得申请的cstep得到空间上的对齐而额外pad的空间，pay_z是为了使的申请的total_size对对齐而额外pad的空间．</p>
+</li>
+<li>(x)没有任何意义，请跳过</li>
+<li>上个分为4行表示主要是因为我们的channel共有４个，每一行代表一个channel，在实际的内存中，这四行其实是连续的．</li>
+</ul>
+</blockquote>
+<p>下面我们说一下channel这个函数，这个函数其实是构造了一个Mat对象，只不过把Mat对象的数据指针给移动到了对应的位置上:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">inline Mat Mat::channel(int _c) &#123;                                                         </span><br><span class="line">    return Mat(w, h, (unsigned char*)data + cstep * _c * elemsize, elemsize, elempack, allocator);     </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其他的函数都是大同小异，大家可以看今天的示例代码．</p>
+<p>最后还要说一下，Mat类中定义了一个重载类型转化符，当Mat类被某个指针强制转化的时候，其实是返回了它的成员函数data的指针被强制转化的结果：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;         </span><br><span class="line"><span class="keyword">inline</span> Mat::<span class="keyword">operator</span> T*() &#123;   </span><br><span class="line">    <span class="keyword">return</span> (T*)data;          </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有的同学可能注意到Mat这个类还有两个的参数没有说，那就是elempack和refcount，我们这一节暂时不讲．</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_7" target="_blank" rel="noopener">这里</a>．</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/15/ncnn-lesson-7/tree.png" alt=""></p>
+
+          
         
       
     </div>
@@ -726,7 +686,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/motion-blink-rnn/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/11/ncnn-lesson6/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -745,7 +705,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/19/motion-blink-rnn/" itemprop="url">< Deeplearning > Use CNN and RNN to detect blink in a video</a></h1>
+                <a class="post-title-link" href="/2020/12/11/ncnn-lesson6/" itemprop="url">< NCNN-Lession-6 >　内存管理，allocator的实现</a></h1>
         
 
         <div class="post-meta">
@@ -757,8 +717,185 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T16:04:59+08:00">
-                2019-04-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-11T16:52:03+08:00">
+                2020-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning开始/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning开始</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/12/11/ncnn-lesson6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/11/ncnn-lesson6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator．</p>
+<p>我们再插一个小红旗（压压惊）：</p>
+<p><img src="/2020/12/11/ncnn-lesson6/lesson-6.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存．</p>
+<p>其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐．</p>
+<p>好，下面我们就来看看allocator的实现．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>假如说我们不按照主动对齐的方式来实现一个内存分配函数(尽管编译器可能会为我们做内存对齐的事情)，我们可以用如下来实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span>* <span class="title">fastMalloc</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;                                                    </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span>* adata = (<span class="keyword">unsigned</span> <span class="keyword">char</span>*)<span class="built_in">malloc</span>(size);       </span><br><span class="line">    <span class="keyword">return</span> adata;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，如果我们要自定义内存对齐的话（自定义对齐内存的位数），我们就需要换一种方式来实现．</p>
+<p>首先，一段内存n位对齐可以这样理解：这个内存的首地址可以被n整除．那么为什么要内存的首地址被n整除呢？因为CPU就是按照这样来存取内存里面的数据．具体n为多少合适，这个和cpu支持多少位有关．</p>
+<p>所以，假如说我们申请的内存首地址不能被n整除，我们需要向前移动这段内存的首地址，直到能够被n整除．所以首先，我们需要申请一段移动n之后还能够有足够大小的内存：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MALLOC_ALIGN 16 </span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>* udata = (<span class="keyword">unsigned</span> <span class="keyword">char</span>*)<span class="built_in">malloc</span>(size + <span class="keyword">sizeof</span>(<span class="keyword">void</span>*) + MALLOC_ALIGN);</span><br></pre></td></tr></table></figure>
+<p>这里的MALLOC_ALIGN就是对齐的位数n．</p>
+<p>小伙伴可能不理解，都加上了MALLOC_ALIGN了，为什么还要加上sizeof(void*)？这是因为在移动首地址之后，就我们就把本来申请的内存的首地址给丢了，这样在释放的时候就会出现问题，所以我们要在一个地方记录这次这次申请的内存的首地址，如何记住呢，我们往下看．</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>** tmpdata = (<span class="keyword">unsigned</span> <span class="keyword">char</span>**)udata + <span class="number">1</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>** adata = alignPtr(tmpdata, MALLOC_ALIGN);</span><br><span class="line">adata[<span class="number">-1</span>] = udata;</span><br><span class="line"><span class="comment">//内存释放方式</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>* udata = ((<span class="keyword">unsigned</span> <span class="keyword">char</span>**)ptr)[<span class="number">-1</span>];</span><br><span class="line"><span class="built_in">free</span>(udata);</span><br></pre></td></tr></table></figure>
+<p>我们可以从tmpdata开始移动内存，因为现在tmpdata就是udata移动了一个地址长度(8Byte)的地址．而我们可以把刚开始申请的内存首地址放到移动后的首地址的前一个buffer里面．这样我们就记住了刚开始申请的内存的首地址．</p>
+<p>下面就要看这个移动内存首地址的操作是怎么实现的了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Tp&gt;                                           </span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> _<span class="function">Tp* <span class="title">alignPtr</span><span class="params">(_Tp* ptr, <span class="keyword">int</span> n = (<span class="keyword">int</span>)<span class="keyword">sizeof</span>(_Tp))</span> </span>&#123;     </span><br><span class="line">    <span class="keyword">return</span> (_Tp*)(((<span class="keyword">size_t</span>)ptr + n - <span class="number">1</span>) &amp; -n);                        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，</p>
+<p>(size_t)ptr + n - 1的目的是使得你的内存指针向前移动足够用的距离来对齐n位(被n整除)，然后和-n进行逻辑与的操作．</p>
+<p>由于当n是2的y次幂的时候，-n的二进制表示是前面x位是1后面y位0(如n=16的时候的-n的二进制就是111110000)，所以一个数与-n进行与的操作就是这个数的后面的y位被截断了．所以这样的数必对2的y次幂整除，所以也就达到了n为对齐的目的．</p>
+<p>其实上述手动n位内存对齐的方法有个替代操作，就是当你的系统是unix的时候，假如你的代码符合POSIX的C标准，你可以通过如下方式来自动对齐内存：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">posix_memalign(&amp;ptr, MALLOC_ALIGN, size);</span><br><span class="line"><span class="comment">//内存释放方式</span></span><br><span class="line"><span class="built_in">free</span>(ptr);</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序放到了<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_6" target="_blank" rel="noopener">这里</a>，</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/11/ncnn-lesson6/tree.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/10/ncnn-lession-5/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/12/10/ncnn-lession-5/" itemprop="url">< NCNN-Lession-5 >　create_layer的实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-10T19:01:33+08:00">
+                2020-12-10
               </time>
             
 
@@ -798,8 +935,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/04/19/motion-blink-rnn/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/19/motion-blink-rnn/" itemprop="commentCount"></span>
+                <a href="/2020/12/10/ncnn-lession-5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/10/ncnn-lession-5/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -828,14 +965,44 @@
 
       
         
-          <h1 id="Let’s-do-it"><a href="#Let’s-do-it" class="headerlink" title="Let’s do it!"></a>Let’s do it!</h1><p>If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check you are a real person. So as you see, facial motion detection is interesting because it is acutally used in many circumstances. You may want to figure out how to detect facial motion. In this artical, I will take motion blink as a example to demenstion how to do it. So Let’s do it.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/04/19/motion-blink-rnn/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <p>##　开始</p>
+<p>在第三节我们实现了读取网络proto的基本流程，但是有一个功能没有实现，就是我们在实例化Layer的时候，其实是实例化了父类的Layer，并没有实例化子类的Layer，这样后面就没法调用子类Layer的方法．在上一节，我们实现了squeezenet中用到的所有子类Layer，所以在这一节，我们就实现如何对在读取网络proto的时候，智能的实例化不同的子类Layer.</p>
+<p>我们继续插上新的小红旗：</p>
+<p><img src="/2020/12/10/ncnn-lession-5/lession-5.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>其实父类Layer的目的，就是为了能够利用C++中的多态和重载机制，然后智能化的实例化不同的子类Layer．</p>
+<p>在上一节中，我们实现的子类Layer，有些自己的方法，又会继承父类Layer的方法．这样就可以优雅的用同一个接口去调用不同子类Layer的不同功能．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>由于在load_proto中，代表该Layer属于哪个子类的标识只有layer_type这个char*的标识，所以为了自动的把layer_type和开辟各个子空间的函数应起来．</p>
+<p>第一步，<strong>我们需要一个layer_type和返回对应子类指针的函数(给子类开辟空间)的结构体</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义返回Layer*的函数指针的别名，layer_creator_func，</span></span><br><span class="line"><span class="comment">//用于开辟各个子类的空间</span></span><br><span class="line"><span class="keyword">typedef</span> Layer* (*layer_creator_func)();  </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">layer_registry_entry</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* name;   <span class="comment">//layer_type</span></span><br><span class="line">    layer_creator_func creator; <span class="comment">//函数指针，返回Layer*,</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>第二步，<strong>我们需要实现给每一个子类开辟空间的函数</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"layer/input.h"</span></span></span><br><span class="line"><span class="keyword">namespace</span> ncnn&#123;</span><br><span class="line">	<span class="function">Layer* <span class="title">Input_final_layer_creator</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;<span class="keyword">return</span> <span class="keyword">new</span> Input();&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"layer/convolution.h"</span></span></span><br><span class="line"><span class="keyword">namespace</span> ncnn&#123;</span><br><span class="line">	<span class="function">Layer* <span class="title">Convolution_final_layer_creator</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;<span class="keyword">return</span> <span class="keyword">new</span> Convolution();&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"layer/relu.h"</span></span></span><br><span class="line"><span class="keyword">namespace</span> ncnn&#123;</span><br><span class="line">	<span class="function">Layer* <span class="title">Relu_final_layer_creator</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;<span class="keyword">return</span> <span class="keyword">new</span> Relu();&#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>不过上面挨个需要定义每一个Layer子类的开辟空间的函数，较为繁琐，我们发现每一个Layer子类的开辟空间的函数都较为类似，唯一不同的是Layer名字的变化．<strong>所以我们可以定义一个宏来做这些重复的操作</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEFINE_LAYER_CREATOR(name) \</span></span><br><span class="line">    ncnn::Layer* name##_final_layer_creator() &#123; <span class="keyword">return</span> <span class="keyword">new</span> name; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"layer/input.h"</span></span></span><br><span class="line"><span class="keyword">namespace</span> ncnn &#123;</span><br><span class="line">DEFINE_LAYER_CREATOR(Input)</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"layer/convolution.h"</span></span></span><br><span class="line"><span class="keyword">namespace</span> ncnn &#123;</span><br><span class="line">DEFINE_LAYER_CREATOR(Convolution)</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"layer/relu.h"</span></span></span><br><span class="line"><span class="keyword">namespace</span> ncnn &#123;</span><br><span class="line">DEFINE_LAYER_CREATOR(ReLU)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三步，接下来，<strong>我们实现一个类似于＂字典＂的功能，该＂字典＂的目的是使得从proto读入的layer_type和每一个Layer子类的开辟空间的函数对应</strong>．</p>
+<p>由于我们上面定义了layer_registry_entry这样一个结构体，这个结构体本质上的目的就是使得layer_type的char*变量和给Layer子类的开辟空间的函数对应．于是，我们基于layer_registry_entry来构造一个数组，它包含了所有用到的对应关系：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> layer_registry_entry layer_registry[] = &#123;  </span><br><span class="line">    &#123;<span class="string">"ReLU"</span>, ReLU_final_layer_creator&#125;,           </span><br><span class="line">    &#123;<span class="string">"Input"</span>, Input_final_layer_creator&#125;,         </span><br><span class="line">    &#123;<span class="string">"Pooling"</span>, Pooling_final_layer_creator&#125;,     </span><br><span class="line">    &#123;<span class="string">"Convolution"</span>, Convolution_final_layer_creator&#125;,   </span><br><span class="line">    &#123;<span class="string">"Split"</span>, Split_final_layer_creator&#125;,         </span><br><span class="line">    &#123;<span class="string">"Concat"</span>, Concat_final_layer_creator&#125;,       </span><br><span class="line">    &#123;<span class="string">"Dropout"</span>, Dropout_final_layer_creator&#125;,    </span><br><span class="line">    &#123;<span class="string">"Softmax"</span>, Softmax_final_layer_creator&#125;,     </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>第四步，有了这样的一个数组，<strong>我们只需要当layer_type传进来的时候，找到对应的结构体就好了，于是我们先确定应该输出上述数组的哪个元素，即layer_type对应的layer_registry_entry的数组id</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//确定一共有多少个layer                                        </span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> layer_registry_entry_count =     </span><br><span class="line">   <span class="keyword">sizeof</span>(layer_registry) / <span class="keyword">sizeof</span>(layer_registry_entry);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">layer_to_index</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* type)</span> </span>&#123;             </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; layer_registry_entry_count; i++) &#123;           </span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(type, layer_registry[i].name) == <span class="number">0</span>) <span class="keyword">return</span> i;     </span><br><span class="line">    &#125;                                                    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;                                                       </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第五步，找到了数组id，我们就可以构建我们的函数了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基于id在数组里面找constructor                                                    </span></span><br><span class="line"><span class="function">Layer* <span class="title">create_layer</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;                                                   </span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt;= layer_registry_entry_count) <span class="keyword">return</span> <span class="number">0</span>;                </span><br><span class="line">                                                                                   </span><br><span class="line">    layer_creator_func layer_creator = <span class="number">0</span>;                                          </span><br><span class="line">    &#123; layer_creator = layer_registry[index].creator; &#125;                             </span><br><span class="line">                                                                                   </span><br><span class="line">    <span class="keyword">if</span> (!layer_creator) <span class="keyword">return</span> <span class="number">0</span>;                                                  </span><br><span class="line">                                                                                   </span><br><span class="line">    Layer* layer = layer_creator();                                                </span><br><span class="line">    layer-&gt;typeindex = index;                                                      </span><br><span class="line">    <span class="keyword">return</span> layer;                                                                  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们最后总结一些create_layer的流程：</p>
+<blockquote>
+<ol>
+<li>构建返回Layer*的函数指针的别名：layer_creator_func</li>
+<li>构建layer_type和layer_creator_func对应的结构体：layer_registry_entry</li>
+<li>实现给每一个子类开辟空间的函数</li>
+<li>基于layer_registry_entry来构造一个数组，它包含了所有layer_type和create函数用到的对应关系</li>
+<li>基于layer_type找到该layer_type在layer_registry_entry中的id</li>
+<li>基于上述id，找到layer_type对应开辟空间的函数．</li>
+<li>开辟子类空间，返回子类指针．</li>
+</ol>
+</blockquote>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序放到了<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_5" target="_blank" rel="noopener">这里</a>．</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/10/ncnn-lession-5/tree.png" alt=""></p>
+
+          
         
       
     </div>
@@ -882,7 +1049,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/linux-install-config/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/10/ncnn-lession-4/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -901,7 +1068,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/19/linux-install-config/" itemprop="url">< Linux > As a AI-practitioner, what I install in my linux system</a></h1>
+                <a class="post-title-link" href="/2020/12/10/ncnn-lession-4/" itemprop="url">< NCNN-Lession-４ >　创建layer子类</a></h1>
         
 
         <div class="post-meta">
@@ -913,8 +1080,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T13:26:26+08:00">
-                2019-04-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-10T13:54:22+08:00">
+                2020-12-10
               </time>
             
 
@@ -936,8 +1103,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
                   </a>
                 </span>
 
@@ -954,8 +1121,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/04/19/linux-install-config/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/19/linux-install-config/" itemprop="commentCount"></span>
+                <a href="/2020/12/10/ncnn-lession-4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/10/ncnn-lession-4/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -984,14 +1151,41 @@
 
       
         
-          <p>These are the tools(part) that I installed in my linux workspace. Hopefully it could help improve your efficiency.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/04/19/linux-install-config/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．</p>
+<p><img src="/2020/12/10/ncnn-lession-4/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lession-4/lesson_4.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>我们把之前第二节讲的父类Layer记做Layer(Father)，把今天这一节讲的子类Layer记做Layer(Child)．</p>
+<p>Layer(Child)的作用主要是用来针对不同的op来提供一些不同的forward前向操作，同时Layer(Child)拥有自己的参数parameter和权重weight，它们也继承了来自父类的一些特性，比如name, type, one_blob_only等等．</p>
+<p>我们今天就先实现一下squeezenet中的Layer(Child)．我们不打算把Layer(Child)的所有成员都实现，今天仅仅实现他们的一些与网络proto有关的东西，比如成员变量等等．</p>
+<p>##　实现</p>
+<p>在squeezenet中，所有的layer op如有：</p>
+<blockquote>
+<ul>
+<li>input</li>
+<li>Convolution</li>
+<li>Relu</li>
+<li>Pooling</li>
+<li>Split</li>
+<li>Concat</li>
+<li>Dropout</li>
+<li>Softmax</li>
+</ul>
+</blockquote>
+<p>大家可能对dropout有疑问，这里因为官方的ncnn的proto中包含了这个op，于是这里也把这个op加了上去．</p>
+<p>先来看一下Layer(Child)都包含些什么成员：</p>
+<p><img src="/2020/12/10/ncnn-lession-4/layer_child.png" alt="layer_child"></p>
+<p>由于我们本节主要实现的是Layer(Child)的参数部分，暂时先不实现权重部分和前向部分，所以Layer(Child)的成员函数只有一个，那就是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">load_param</span><span class="params">(<span class="keyword">const</span> ParamDict&amp; pd)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这里要说明一下，Layer(Child)中重写Layer(Father)的load_param函数前面的virtual可加可不加，因为只要Layer(Father)加了virtual的关键字，Layer(Child)默认也会加的．</p>
+<p>所以我们需要在Layer(Father)中也实现一个load_param的虚函数．</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> Layer::load_param(<span class="keyword">const</span> ParamDict&amp;) &#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br></pre></td></tr></table></figure>
+<p>关于不同的Layer(Child)的参数params，由于每一个不同的层，有不同的参数，具体需要什么参数与该Layer前向的时候需要用到什么有关，这里就不多说了．</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>这节其实没什么好说的，其实就是简单的实现了几个层．测试程序在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_4" target="_blank" rel="noopener">这里</a>．</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/10/ncnn-lession-4/tree.png" alt=""></p>
+<p>这里增加了一个文件夹layer，里面存放着Layer(Child)子类的实现．</p>
+
+          
         
       
     </div>
@@ -1029,7 +1223,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1077,7 +1271,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1088,7 +1282,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1099,7 +1293,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1172,7 +1366,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

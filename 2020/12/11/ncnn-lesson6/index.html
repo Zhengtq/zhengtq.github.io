@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Deeplearning,NCNN,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：  作用allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存． 其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐． 好，下面我们就来看看alloca">
+<meta name="keywords" content="Deeplearning,NCNN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt; NCNN-Lession-6 &gt;　内存管理，allocator的实现">
+<meta property="og:url" content="http://yoursite.com/2020/12/11/ncnn-lesson6/index.html">
+<meta property="og:site_name" content="Billy&#39;s Blog">
+<meta property="og:description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：  作用allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存． 其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐． 好，下面我们就来看看alloca">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://yoursite.com/2020/12/11/ncnn-lesson6/lesson-6.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/11/ncnn-lesson6/tree.png">
+<meta property="og:updated_time" content="2020-12-29T08:02:22.137Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt; NCNN-Lession-6 &gt;　内存管理，allocator的实现">
+<meta name="twitter:description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：  作用allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存． 其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐． 好，下面我们就来看看alloca">
+<meta name="twitter:image" content="http://yoursite.com/2020/12/11/ncnn-lesson6/lesson-6.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/12/11/ncnn-lesson6/">
+
+
+
+
+
+  <title>< NCNN-Lession-6 >　内存管理，allocator的实现 | Billy's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Billy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Make It Simple</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/11/ncnn-lesson6/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Billy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Billy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">< NCNN-Lession-6 >　内存管理，allocator的实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-11T16:52:03+08:00">
+                2020-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning开始/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning开始</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/12/11/ncnn-lesson6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/12/11/ncnn-lesson6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>p
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator．</p>
+<p>我们再插一个小红旗（压压惊）：</p>
+<p><img src="/2020/12/11/ncnn-lesson6/lesson-6.png" alt=""></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存．</p>
+<p>其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐．</p>
+<p>好，下面我们就来看看allocator的实现．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>假如说我们不按照主动对齐的方式来实现一个内存分配函数(尽管编译器可能会为我们做内存对齐的事情)，我们可以用如下来实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span>* <span class="title">fastMalloc</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;                                                    </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span>* adata = (<span class="keyword">unsigned</span> <span class="keyword">char</span>*)<span class="built_in">malloc</span>(size);       </span><br><span class="line">    <span class="keyword">return</span> adata;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，如果我们要自定义内存对齐的话（自定义对齐内存的位数），我们就需要换一种方式来实现．</p>
+<p>首先，一段内存n位对齐可以这样理解：这个内存的首地址可以被n整除．那么为什么要内存的首地址被n整除呢？因为CPU就是按照这样来存取内存里面的数据．具体n为多少合适，这个和cpu支持多少位有关．</p>
+<p>所以，假如说我们申请的内存首地址不能被n整除，我们需要向前移动这段内存的首地址，直到能够被n整除．所以首先，我们需要申请一段移动n之后还能够有足够大小的内存：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MALLOC_ALIGN 16 </span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>* udata = (<span class="keyword">unsigned</span> <span class="keyword">char</span>*)<span class="built_in">malloc</span>(size + <span class="keyword">sizeof</span>(<span class="keyword">void</span>*) + MALLOC_ALIGN);</span><br></pre></td></tr></table></figure>
+<p>这里的MALLOC_ALIGN就是对齐的位数n．</p>
+<p>小伙伴可能不理解，都加上了MALLOC_ALIGN了，为什么还要加上sizeof(void*)？这是因为在移动首地址之后，就我们就把本来申请的内存的首地址给丢了，这样在释放的时候就会出现问题，所以我们要在一个地方记录这次这次申请的内存的首地址，如何记住呢，我们往下看．</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>** tmpdata = (<span class="keyword">unsigned</span> <span class="keyword">char</span>**)udata + <span class="number">1</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>** adata = alignPtr(tmpdata, MALLOC_ALIGN);</span><br><span class="line">adata[<span class="number">-1</span>] = udata;</span><br><span class="line"><span class="comment">//内存释放方式</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span>* udata = ((<span class="keyword">unsigned</span> <span class="keyword">char</span>**)ptr)[<span class="number">-1</span>];</span><br><span class="line"><span class="built_in">free</span>(udata);</span><br></pre></td></tr></table></figure>
+<p>我们可以从tmpdata开始移动内存，因为现在tmpdata就是udata移动了一个地址长度(8Byte)的地址．而我们可以把刚开始申请的内存首地址放到移动后的首地址的前一个buffer里面．这样我们就记住了刚开始申请的内存的首地址．</p>
+<p>下面就要看这个移动内存首地址的操作是怎么实现的了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Tp&gt;                                           </span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> _<span class="function">Tp* <span class="title">alignPtr</span><span class="params">(_Tp* ptr, <span class="keyword">int</span> n = (<span class="keyword">int</span>)<span class="keyword">sizeof</span>(_Tp))</span> </span>&#123;     </span><br><span class="line">    <span class="keyword">return</span> (_Tp*)(((<span class="keyword">size_t</span>)ptr + n - <span class="number">1</span>) &amp; -n);                        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，</p>
+<p>(size_t)ptr + n - 1的目的是使得你的内存指针向前移动足够用的距离来对齐n位(被n整除)，然后和-n进行逻辑与的操作．</p>
+<p>由于当n是2的y次幂的时候，-n的二进制表示是前面x位是1后面y位0(如n=16的时候的-n的二进制就是111110000)，所以一个数与-n进行与的操作就是这个数的后面的y位被截断了．所以这样的数必对2的y次幂整除，所以也就达到了n为对齐的目的．</p>
+<p>其实上述手动n位内存对齐的方法有个替代操作，就是当你的系统是unix的时候，假如你的代码符合POSIX的C标准，你可以通过如下方式来自动对齐内存：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">posix_memalign(&amp;ptr, MALLOC_ALIGN, size);</span><br><span class="line"><span class="comment">//内存释放方式</span></span><br><span class="line"><span class="built_in">free</span>(ptr);</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>测试程序放到了<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_6" target="_blank" rel="noopener">这里</a>，</p>
+<p>代码结构如下：</p>
+<p><img src="/2020/12/11/ncnn-lesson6/tree.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Deeplearning/" rel="tag"># Deeplearning</a>
+          
+            <a href="/tags/NCNN/" rel="tag"># NCNN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/10/ncnn-lession-5/" rel="next" title="< NCNN-Lession-5 >　create_layer的实现">
+                <i class="fa fa-chevron-left"></i> < NCNN-Lession-5 >　create_layer的实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/15/ncnn-lesson-7/" rel="prev" title="< NCNN-Lession-7 >　Mat类的实现">
+                < NCNN-Lession-7 >　Mat类的实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/head.png" alt="Billy">
+            
+              <p class="site-author-name" itemprop="name">Billy</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Zhengtq" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ztqstd@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://zhengtq.github.io/2019/05/27/DEMO/" target="_blank" title="DEMO">
+                      
+                        <i class="fa fa-fw fa-angle-right"></i>DEMO</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/zjutzz" title="ChrisZZ" target="_blank">ChrisZZ</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始"><span class="nav-number">1.</span> <span class="nav-text">开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用"><span class="nav-number">2.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">4.</span> <span class="nav-text">代码示例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Billy</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      p
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      p
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'BGzxkVpRtr5PoQUppRDqiC1V-gzGzoHsz',
+        appKey: 'K9tU9mVpjknHh8SNOWrqXqDV',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

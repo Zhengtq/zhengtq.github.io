@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：   今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。 作用当我们要把训练好的网络部署到移动端的时候，网络结构的表达就非常重要．因为部署框架需要把你的网络结构读取它的自己的数据结构中． 我们上一节讲的Net/Layer/Blob就是ncnn自己的网络数据结构，所">
+<meta name="description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-3 &gt;　读取网络的proto信息">
 <meta property="og:url" content="http://yoursite.com/2020/12/09/ncnn-lession-3/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：   今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。 作用当我们要把训练好的网络部署到移动端的时候，网络结构的表达就非常重要．因为部署框架需要把你的网络结构读取它的自己的数据结构中． 我们上一节讲的Net/Layer/Blob就是ncnn自己的网络数据结构，所">
+<meta property="og:description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/09/ncnn-lession-3/lession_3.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/09/ncnn-lession-3/proto.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/09/ncnn-lession-3/tree.png">
-<meta property="og:updated_time" content="2020-12-29T01:37:41.467Z">
+<meta property="og:updated_time" content="2021-03-11T02:37:08.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-3 &gt;　读取网络的proto信息">
-<meta name="twitter:description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：   今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。 作用当我们要把训练好的网络部署到移动端的时候，网络结构的表达就非常重要．因为部署框架需要把你的网络结构读取它的自己的数据结构中． 我们上一节讲的Net/Layer/Blob就是ncnn自己的网络数据结构，所">
+<meta name="twitter:description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/09/ncnn-lession-3/lession_3.png">
 
 
@@ -361,8 +361,7 @@
       
 
       
-        <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：<br> <img src="/2020/12/09/ncnn-lession-3/lession_3.png" alt=""> </p>
-<p>今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。</p>
+        <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：<br> <img src="/2020/12/09/ncnn-lession-3/lession_3.png" alt=""><br><a id="more"></a><br>今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。</p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>当我们要把训练好的网络部署到移动端的时候，网络结构的表达就非常重要．因为部署框架需要把你的网络结构读取它的自己的数据结构中．</p>
 <p>我们上一节讲的Net/Layer/Blob就是ncnn自己的网络数据结构，所以我们要把自己的模型的网络结构load到ncnn的Net/Layer/Blob中．</p>
 <p>我们先用一个例子来看一下ncnn读取的是怎样的网络结构（把它称为proto）：<br> <img src="/2020/12/09/ncnn-lession-3/proto.png" alt="proto"> </p>

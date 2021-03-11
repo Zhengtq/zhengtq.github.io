@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="开始这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：  作用Mat类的作用其实存放神经网络需要处理的数据，这些数据一般包含一下几种(不限于)：   输入图片 模型的weight和bias 模型处理">
+<meta name="description" content="开始这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-7 &gt;　Mat类的实现">
 <meta property="og:url" content="http://yoursite.com/2020/12/15/ncnn-lesson-7/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：  作用Mat类的作用其实存放神经网络需要处理的数据，这些数据一般包含一下几种(不限于)：   输入图片 模型的weight和bias 模型处理">
+<meta property="og:description" content="开始这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/ncnn-lesson-7/lesson-7.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/ncnn-lesson-7/Mat.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/ncnn-lesson-7/tree.png">
-<meta property="og:updated_time" content="2020-12-29T08:15:53.448Z">
+<meta property="og:updated_time" content="2021-03-11T02:37:59.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-7 &gt;　Mat类的实现">
-<meta name="twitter:description" content="开始这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：  作用Mat类的作用其实存放神经网络需要处理的数据，这些数据一般包含一下几种(不限于)：   输入图片 模型的weight和bias 模型处理">
+<meta name="twitter:description" content="开始这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/15/ncnn-lesson-7/lesson-7.png">
 
 
@@ -362,7 +362,7 @@
 
       
         <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>这一节我们终于要学习Mat类．大家可以看到，这个类的名字”Mat”其实和Opencv中常用的Mat类是一样的名字，但二者不是同一个东西，一个是ncnn的Mat类，一个是Opencv的Mat类，大家要注意．好，废话不多说，我们再插上一个小红旗（压压惊）：</p>
-<p><img src="/2020/12/15/ncnn-lesson-7/lesson-7.png" alt=""></p>
+<p><img src="/2020/12/15/ncnn-lesson-7/lesson-7.png" alt=""><br><a id="more"></a></p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>Mat类的作用其实存放神经网络需要处理的数据，这些数据一般包含一下几种(不限于)：</p>
 <blockquote>
 <ul>

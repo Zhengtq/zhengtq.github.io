@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="开始由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的． 我们再插一个小红旗：  作用通常我们读取读片的时候会用到Opencv的Mat类，大家应该发现了，Opencv中的Mat类和ncnn中的Mat类的名字其实是一样的．为了区分方便，我们把Opencv中的Mat类记错cv::Mat，我们把ncnn中的Mat类记做ncnn::Mat. 本节的作用就是用Opencv读取图">
+<meta name="description" content="开始由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的． 我们再插一个小红旗：">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-9 &gt;　Load Image">
 <meta property="og:url" content="http://yoursite.com/2020/12/21/ncnn-lesson-9/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的． 我们再插一个小红旗：  作用通常我们读取读片的时候会用到Opencv的Mat类，大家应该发现了，Opencv中的Mat类和ncnn中的Mat类的名字其实是一样的．为了区分方便，我们把Opencv中的Mat类记错cv::Mat，我们把ncnn中的Mat类记做ncnn::Mat. 本节的作用就是用Opencv读取图">
+<meta property="og:description" content="开始由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的． 我们再插一个小红旗：">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/21/ncnn-lesson-9/lesson-9.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/21/ncnn-lesson-9/tree.png">
-<meta property="og:updated_time" content="2020-12-29T08:32:48.930Z">
+<meta property="og:updated_time" content="2021-03-11T02:38:13.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-9 &gt;　Load Image">
-<meta name="twitter:description" content="开始由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的． 我们再插一个小红旗：  作用通常我们读取读片的时候会用到Opencv的Mat类，大家应该发现了，Opencv中的Mat类和ncnn中的Mat类的名字其实是一样的．为了区分方便，我们把Opencv中的Mat类记错cv::Mat，我们把ncnn中的Mat类记做ncnn::Mat. 本节的作用就是用Opencv读取图">
+<meta name="twitter:description" content="开始由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的． 我们再插一个小红旗：">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/21/ncnn-lesson-9/lesson-9.png">
 
 
@@ -362,7 +362,7 @@
       
         <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>由于马上学习网络forward的部分，这一节先学习一下ncnn如何读取外部图片的．</p>
 <p>我们再插一个小红旗：</p>
-<p><img src="/2020/12/21/ncnn-lesson-9/lesson-9.png" alt=""></p>
+<p><img src="/2020/12/21/ncnn-lesson-9/lesson-9.png" alt=""><br><a id="more"></a></p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>通常我们读取读片的时候会用到Opencv的Mat类，大家应该发现了，Opencv中的Mat类和ncnn中的Mat类的名字其实是一样的．为了区分方便，我们把Opencv中的Mat类记错cv::Mat，我们把ncnn中的Mat类记做ncnn::Mat.</p>
 <p>本节的作用就是用Opencv读取图片，然后把cv::Mat转化为ncnn::Mat．</p>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>由于Opencv读一幅彩色图片的格式是bgr的格式，我们今天只考虑bgr的cv::Mat转化到ncnn:Mat．暂时不考虑其他格式的转化．</p>

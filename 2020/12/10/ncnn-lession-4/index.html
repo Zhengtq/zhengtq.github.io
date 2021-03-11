@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="开始今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．  作用我们把之前第二节讲的父类Layer记做Layer(Father)，把今天这一节讲的子类Layer记做Layer(Child)． Layer(Child)的作用主要是用来针对不同的op来提供一些不同的forward前向操作，同时Layer(C">
+<meta name="description" content="开始今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-４ &gt;　创建layer子类">
 <meta property="og:url" content="http://yoursite.com/2020/12/10/ncnn-lession-4/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．  作用我们把之前第二节讲的父类Layer记做Layer(Father)，把今天这一节讲的子类Layer记做Layer(Child)． Layer(Child)的作用主要是用来针对不同的op来提供一些不同的forward前向操作，同时Layer(C">
+<meta property="og:description" content="开始今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/10/ncnn-lession-4/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lession-4/lesson_4.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/10/ncnn-lession-4/layer_child.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/10/ncnn-lession-4/tree.png">
-<meta property="og:updated_time" content="2020-12-29T06:13:42.127Z">
+<meta property="og:updated_time" content="2021-03-11T02:37:16.667Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-４ &gt;　创建layer子类">
-<meta name="twitter:description" content="开始今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．  作用我们把之前第二节讲的父类Layer记做Layer(Father)，把今天这一节讲的子类Layer记做Layer(Child)． Layer(Child)的作用主要是用来针对不同的op来提供一些不同的forward前向操作，同时Layer(C">
+<meta name="twitter:description" content="开始今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/10/ncnn-lession-4/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lession-4/lesson_4.png">
 
 
@@ -362,7 +362,7 @@
 
       
         <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始下一节，那就是我们要开始创建Layer子类，因为有了Layer子类，我们才可以针对不同的op进行不同的操作．所以我们再次插上一个小红旗．</p>
-<p><img src="/2020/12/10/ncnn-lession-4/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lession-4/lesson_4.png" alt=""></p>
+<p><img src="/2020/12/10/ncnn-lession-4/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lession-4/lesson_4.png" alt=""><br><a id="more"></a></p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>我们把之前第二节讲的父类Layer记做Layer(Father)，把今天这一节讲的子类Layer记做Layer(Child)．</p>
 <p>Layer(Child)的作用主要是用来针对不同的op来提供一些不同的forward前向操作，同时Layer(Child)拥有自己的参数parameter和权重weight，它们也继承了来自父类的一些特性，比如name, type, one_blob_only等等．</p>
 <p>我们今天就先实现一下squeezenet中的Layer(Child)．我们不打算把Layer(Child)的所有成员都实现，今天仅仅实现他们的一些与网络proto有关的东西，比如成员变量等等．</p>

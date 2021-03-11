@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：  作用allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存． 其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐． 好，下面我们就来看看alloca">
+<meta name="description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-6 &gt;　内存管理，allocator的实现">
 <meta property="og:url" content="http://yoursite.com/2020/12/11/ncnn-lesson6/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：  作用allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存． 其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐． 好，下面我们就来看看alloca">
+<meta property="og:description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/11/ncnn-lesson6/lesson-6.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/11/ncnn-lesson6/tree.png">
-<meta property="og:updated_time" content="2020-12-29T08:02:22.137Z">
+<meta property="og:updated_time" content="2021-03-11T02:37:45.555Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-6 &gt;　内存管理，allocator的实现">
-<meta name="twitter:description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：  作用allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存． 其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐． 好，下面我们就来看看alloca">
+<meta name="twitter:description" content="开始由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator． 我们再插一个小红旗（压压惊）：">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/11/ncnn-lesson6/lesson-6.png">
 
 
@@ -362,7 +362,7 @@
       
         <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>由于在下一节我们要学习最重要的Mat类的实现，所以我们这节要为下节做一下准备．我们这一节学习实现Mat类的一个关键，那就是内存分配方面的实现：allocator．</p>
 <p>我们再插一个小红旗（压压惊）：</p>
-<p><img src="/2020/12/11/ncnn-lesson6/lesson-6.png" alt=""></p>
+<p><img src="/2020/12/11/ncnn-lesson6/lesson-6.png" alt=""><br><a id="more"></a></p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>allocator的作用主要是给后面需要用到的mat类中的数据空间分配内存．</p>
 <p>其次，出于平台移植安全性和性能的原因，需要对分配的内存进行人工指定字节的内存对齐．</p>
 <p>好，下面我们就来看看allocator的实现．</p>

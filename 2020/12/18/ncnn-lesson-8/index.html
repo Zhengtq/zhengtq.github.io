@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="开始今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：  作用作用当然是给含有权重的层把权重（与层的参数区分开）给load到对应的内存中． 包含有权重的层最常用也就两种：  卷积层 bn层  我们今天就以卷积层为例子，来说一下ncnn中Load 权重的实现． 实现实现Load 权重的功能其实很简单，因为我们在第一节就学习了数据读取类DataReader，我们读取网络proto的时候是">
+<meta name="description" content="开始今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-8 &gt;　读取网络的权重信息">
 <meta property="og:url" content="http://yoursite.com/2020/12/18/ncnn-lesson-8/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：  作用作用当然是给含有权重的层把权重（与层的参数区分开）给load到对应的内存中． 包含有权重的层最常用也就两种：  卷积层 bn层  我们今天就以卷积层为例子，来说一下ncnn中Load 权重的实现． 实现实现Load 权重的功能其实很简单，因为我们在第一节就学习了数据读取类DataReader，我们读取网络proto的时候是">
+<meta property="og:description" content="开始今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/18/ncnn-lesson-8/lesson-8.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/18/ncnn-lesson-8/ncnn-lession-1/datareader.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/18/ncnn-lesson-8/media/data1/project/github_page/zhengtq_blog/source/_posts/ncnn-lesson-8/ModelBinFromDataReader.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/18/ncnn-lesson-8/tree.png">
-<meta property="og:updated_time" content="2020-12-29T08:24:04.482Z">
+<meta property="og:updated_time" content="2021-03-11T02:38:07.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-8 &gt;　读取网络的权重信息">
-<meta name="twitter:description" content="开始今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：  作用作用当然是给含有权重的层把权重（与层的参数区分开）给load到对应的内存中． 包含有权重的层最常用也就两种：  卷积层 bn层  我们今天就以卷积层为例子，来说一下ncnn中Load 权重的实现． 实现实现Load 权重的功能其实很简单，因为我们在第一节就学习了数据读取类DataReader，我们读取网络proto的时候是">
+<meta name="twitter:description" content="开始今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/18/ncnn-lesson-8/lesson-8.png">
 
 
@@ -363,7 +363,7 @@
 
       
         <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们要学些ncnn怎么load权重信息，咱们再插一个小红旗：</p>
-<p><img src="/2020/12/18/ncnn-lesson-8/lesson-8.png" alt=""></p>
+<p><img src="/2020/12/18/ncnn-lesson-8/lesson-8.png" alt=""><br><a id="more"></a></p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>作用当然是给含有权重的层把权重（与层的参数区分开）给load到对应的内存中．</p>
 <p>包含有权重的层最常用也就两种：</p>
 <blockquote>

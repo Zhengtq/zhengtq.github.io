@@ -79,23 +79,23 @@
 
 
 
-<meta name="description" content="开始从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习． 初步的大计划程如下：   漏斗显示我们计划还未开始． 由于今天开始DataReader的讲解，所以我们会把第一个漏斗变成一个小红旗：   后面的计划可能所有变化，以尽量合理为准．我们今天就开始第一课，那就是DataReader类的学习． 作用DataReader的作用主要有两个：">
+<meta name="description" content="开始从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习． 初步的大计划程如下：">
 <meta name="keywords" content="Deeplearning,NCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; NCNN-Lession-1 &gt;　数据读取类DataReader">
 <meta property="og:url" content="http://yoursite.com/2020/12/08/ncnn-lession-1/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习． 初步的大计划程如下：   漏斗显示我们计划还未开始． 由于今天开始DataReader的讲解，所以我们会把第一个漏斗变成一个小红旗：   后面的计划可能所有变化，以尽量合理为准．我们今天就开始第一课，那就是DataReader类的学习． 作用DataReader的作用主要有两个：">
+<meta property="og:description" content="开始从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习． 初步的大计划程如下：">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/08/ncnn-lession-1/lession_before.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/08/ncnn-lession-1/lession_1.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/08/ncnn-lession-1/proto_info.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/08/ncnn-lession-1/datareader.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/08/ncnn-lession-1/tree.png">
-<meta property="og:updated_time" content="2020-12-29T00:49:03.782Z">
+<meta property="og:updated_time" content="2021-03-11T02:36:55.387Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-1 &gt;　数据读取类DataReader">
-<meta name="twitter:description" content="开始从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习． 初步的大计划程如下：   漏斗显示我们计划还未开始． 由于今天开始DataReader的讲解，所以我们会把第一个漏斗变成一个小红旗：   后面的计划可能所有变化，以尽量合理为准．我们今天就开始第一课，那就是DataReader类的学习． 作用DataReader的作用主要有两个：">
+<meta name="twitter:description" content="开始从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习． 初步的大计划程如下：">
 <meta name="twitter:image" content="http://yoursite.com/2020/12/08/ncnn-lession-1/lession_before.png">
 
 
@@ -365,6 +365,7 @@
       
         <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习．</p>
 <p>初步的大计划程如下：<br> <img src="/2020/12/08/ncnn-lession-1/lession_before.png" alt=""> </p>
+<a id="more"></a>
 <p>漏斗显示我们计划还未开始．</p>
 <p>由于今天开始DataReader的讲解，所以我们会把第一个漏斗变成一个小红旗：<br> <img src="/2020/12/08/ncnn-lession-1/lession_1.png" alt=""> </p>
 <p>后面的计划可能所有变化，以尽量合理为准．我们今天就开始第一课，那就是DataReader类的学习．</p>

@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2020/12/10/ncnn-lession-5/lession-5.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/10/ncnn-lession-5/tree.png">
-<meta property="og:updated_time" content="2020-12-29T07:52:55.317Z">
+<meta property="og:updated_time" content="2021-03-11T02:37:25.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; NCNN-Lession-5 &gt;　create_layer的实现">
 <meta name="twitter:description" content="##　开始 在第三节我们实现了读取网络proto的基本流程，但是有一个功能没有实现，就是我们在实例化Layer的时候，其实是实例化了父类的Layer，并没有实例化子类的Layer，这样后面就没法调用子类Layer的方法．在上一节，我们实现了squeezenet中用到的所有子类Layer，所以在这一节，我们就实现如何对在读取网络proto的时候，智能的实例化不同的子类Layer. 我们继续插上新的小">
@@ -363,7 +363,7 @@
         <p>##　开始</p>
 <p>在第三节我们实现了读取网络proto的基本流程，但是有一个功能没有实现，就是我们在实例化Layer的时候，其实是实例化了父类的Layer，并没有实例化子类的Layer，这样后面就没法调用子类Layer的方法．在上一节，我们实现了squeezenet中用到的所有子类Layer，所以在这一节，我们就实现如何对在读取网络proto的时候，智能的实例化不同的子类Layer.</p>
 <p>我们继续插上新的小红旗：</p>
-<p><img src="/2020/12/10/ncnn-lession-5/lession-5.png" alt=""></p>
+<p><img src="/2020/12/10/ncnn-lession-5/lession-5.png" alt=""><br><a id="more"></a></p>
 <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>其实父类Layer的目的，就是为了能够利用C++中的多态和重载机制，然后智能化的实例化不同的子类Layer．</p>
 <p>在上一节中，我们实现的子类Layer，有些自己的方法，又会继承父类Layer的方法．这样就可以优雅的用同一个接口去调用不同子类Layer的不同功能．</p>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>由于在load_proto中，代表该Layer属于哪个子类的标识只有layer_type这个char*的标识，所以为了自动的把layer_type和开辟各个子空间的函数应起来．</p>

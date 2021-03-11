@@ -351,99 +351,14 @@
 
       
         
-          
-            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：<br> <img src="/2020/12/09/ncnn-lession-3/lession_3.png" alt=""> </p>
-<p>今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>当我们要把训练好的网络部署到移动端的时候，网络结构的表达就非常重要．因为部署框架需要把你的网络结构读取它的自己的数据结构中．</p>
-<p>我们上一节讲的Net/Layer/Blob就是ncnn自己的网络数据结构，所以我们要把自己的模型的网络结构load到ncnn的Net/Layer/Blob中．</p>
-<p>我们先用一个例子来看一下ncnn读取的是怎样的网络结构（把它称为proto）：<br> <img src="/2020/12/09/ncnn-lession-3/proto.png" alt="proto"> </p>
-<p>这是一个经典的squeezenet的网络结构(非全部)，我们可以看到，第一行只有一个数字，它没有任何意义，只是一个标记，<strong>然后第二行有两个数字，分别代表layer的总数和blob的总数</strong>。从第三行开始的每一行代表一个网络的layer op操作和对应的layer信息。我们以卷积层为例子，来说明每一列代表什么含义：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">layer_type</th>
-<th style="text-align:right">layer_name</th>
-<th style="text-align:center">bottom_count</th>
-<th>top_bount</th>
-<th>bottom_name</th>
-<th>top_name</th>
-<th>参数1</th>
-<th>参数2</th>
-<th>…</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Convolution</td>
-<td style="text-align:right">data</td>
-<td style="text-align:center">1</td>
-<td>1</td>
-<td>data</td>
-<td>conv1</td>
-<td>0=227</td>
-<td>1=225</td>
-<td>…</td>
-</tr>
-<tr>
-<td style="text-align:left">Relu</td>
-<td style="text-align:right">relu_conv1</td>
-<td style="text-align:center">1</td>
-<td>1</td>
-<td>data1</td>
-<td>conv1_relu_conv1</td>
-<td>0=0.00000</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>其中</p>
-<blockquote>
-<ul>
-<li><strong>layer_type</strong>:这个layer op是哪种op</li>
-<li><strong>layer_name</strong>: 这个layer op的名字</li>
-<li><strong>bottom_count</strong>: 输入blob的个数</li>
-<li><strong>top_bount</strong>: 输出blob的个数</li>
-<li><strong>bottom_name</strong>:输入blob的名字</li>
-<li><strong>top_name</strong>:输出blob的名字</li>
-<li><strong>参数</strong>: 该layer op的参数</li>
-</ul>
-</blockquote>
-<p>这样的一个proto可以完备的表达一个网络的数据流向， 所以我们可以用它来描述自己的网络结构．我们现在先不讲知道这个proto是怎样来的，今天主要要研究一下ncnn是怎样把这个proto给读到自己的数据结构中．</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>要把网络的proto读到ncnn自己定义的Net/Layer/Blob中，就要用到我们之前第一课中学习到的datareader类，因为网络proto中都是一些固定格式的信息，所以我们主要用到datareader类中的scan函数，这个其实就是fscan的一种包装，它比较适合读一些结构化的数据。</p>
-<p>我们可以把proto中的信息分成3类：</p>
-<blockquote>
-<ol>
-<li><p>字符串如layer_type, layer_name, blob_name</p>
-</li>
-<li><p>数字如layer_num, blob_num</p>
-</li>
-<li><p>带有”=”的参数信息</p>
-</li>
-</ol>
-</blockquote>
-<p>我们要通过不同的format格式去读取上述三种信息，对应的方式如下：</p>
-<h6 id="对于字符串的话，我们需要用如下的方法去读："><a href="#对于字符串的话，我们需要用如下的方法去读：" class="headerlink" title="对于字符串的话，我们需要用如下的方法去读："></a>对于字符串的话，我们需要用如下的方法去读：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FILE* fp;</span><br><span class="line"><span class="function">DataReaderFromStdio <span class="title">dr</span><span class="params">(fp)</span></span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">256</span>];</span><br><span class="line">dr.scan(<span class="string">"%255"</span>, buf); <span class="comment">// fscan(fp, "%255", buf)</span></span><br></pre></td></tr></table></figure>
-<p>注意，我们规定读取字符串的最大长度为256，如果你的字符的长度大于256，则会出现错误．同时，由于函数fscanf遇到空格对停止读取操作，所以不必担心256过长．</p>
-<h6 id="对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示："><a href="#对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示：" class="headerlink" title="对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示："></a>对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FILE* fp;</span><br><span class="line"><span class="function">DataReaderFromStdio <span class="title">dr</span><span class="params">(fp)</span></span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">char</span> vstr[<span class="number">16</span>];</span><br><span class="line">dr.scan(<span class="string">"%15s"</span>, vstr);</span><br><span class="line"><span class="keyword">bool</span> is_float = vstr_is_float(vstr);</span><br><span class="line"><span class="keyword">if</span>(is_float)</span><br><span class="line">    <span class="keyword">float</span> now_param = vstr_to_float(vstr);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">int</span> now_param = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">sscanf</span>(vstr, <span class="string">"%d"</span>, &amp;now_param);</span><br></pre></td></tr></table></figure>
-<p>如上所示，我们需要先判断读取的字符串是不是float，如果是float，我们需要先将其转化为float，如果不是float，我们直接调用sscanf去读取字符串的数字．</p>
-<h6 id="对于带有”-”的参数信息，我们需要用如下的方式去读："><a href="#对于带有”-”的参数信息，我们需要用如下的方式去读：" class="headerlink" title="对于带有”=”的参数信息，我们需要用如下的方式去读："></a>对于带有”=”的参数信息，我们需要用如下的方式去读：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FILE* fp;</span><br><span class="line"><span class="function">DataReaderFromStdio <span class="title">dr</span><span class="params">(fp)</span></span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">int</span> id = <span class="number">0</span>;</span><br><span class="line">dr.scan(<span class="string">"%d="</span>, id); <span class="comment">//fscan(fp, "%d=", id)</span></span><br></pre></td></tr></table></figure>
-<h2 id="给layer和blob分配id"><a href="#给layer和blob分配id" class="headerlink" title="给layer和blob分配id"></a>给layer和blob分配id</h2><p>由于后面在前向推理的时候，我们要通过id去找对应的layer和blob，所以给layer和blob分配id就是一件非常重要的事情．</p>
-<p>对于layer的id是非常自然的，因为在你的proto中，从第三行开始的每一行都是一个layer op的操作，所以我们就根据行数，给每一个layer<strong>顺序的</strong>分配自己的id.</p>
-<p>给blob分配id的思想类似，在前面我们介绍过，每一层layer信息中，有一个参数代表着这个layer的top个数，我们可以根据layer的id和top的个数给blob分配id信息．</p>
-<p>layer类还有两个重要的参数，那就是layer-&gt;tops和layer-&gt;bottoms，前者是layer的top blob的id的集合，后者是layer的bottom blob的id集合．</p>
-<p>我们在赋值layer-&gt;tops的时候可以直接用blob的id．我们在赋值layer-&gt;bottoms的时候，就需要从之前的blob中去找对应的名字的blob的id，<strong>这也就是我们需要blob的name的原因</strong>．</p>
-<p>具体的代码可以如下所示：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> blob_index = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; layer_count; i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> layer_id = i;<span class="comment">//layer_id</span></span><br><span class="line">   	<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; bottom_count; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> bottom_index = find_blob_index_by_name(bottom_name);</span><br><span class="line">        layer-&gt;bottoms[j] = bottom_index;    <span class="comment">//layer-&gt;bottoms</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; top_count; j++)</span><br><span class="line">    &#123;</span><br><span class="line">       　Blob&amp; blob = blobs[blob_index];  <span class="comment">// 获取这时候的blob_id  </span></span><br><span class="line">     	<span class="keyword">int</span> now_blob_index = blob_index;<span class="comment">//blob id</span></span><br><span class="line">        layer-&gt;tops[j] = blob_index;  <span class="comment">//layer-&gt;tops</span></span><br><span class="line">        blob_index++;  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>有一个小trick需要说一下：</strong></p>
-<p>由于我们需要频繁的调用如下的函数接口：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dr.scan(format, buf);</span><br></pre></td></tr></table></figure>
-<p>我们可以通过宏函数来调用这个函数，这样就会比较简单明了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define SCAN_VALUE(fmt, v) dr.scan(fmt, &amp;v);</span><br></pre></td></tr></table></figure>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p><a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_3" target="_blank" rel="noopener">关于这一节的测试程序在这里</a>，代码结构如下：</p>
-<p><img src="/2020/12/09/ncnn-lession-3/tree.png" alt=""></p>
-<p>大家可以看到，我们这里多了一个paramdict的实现，这是由于在读取数字的时候，涉及到判断是否是float，和char转float等等操作，会比较繁琐，所以ncnn把这部分的实现放到了paramdict这个类去实现．</p>
-
-          
+          <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：<br> <img src="/2020/12/09/ncnn-lession-3/lession_3.png" alt=""><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/12/09/ncnn-lession-3/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -592,50 +507,14 @@
 
       
         
-          
-            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第二课,也就是Net/Layer/Blob的讲解.<br> <img src="/2020/12/09/ncnn-lession-2/lession_2.png" alt=""> </p>
-<p>Net/Layer/Blob这三个类是组成网络的基础.我们今天就学习和实现一下它们的基础功能.</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>我们来分别说明它们三个类的作用.</p>
-<p>Net类是共外部调用的一个类,它提供了两个重要的外部调用接口:</p>
-<ul>
-<li>load_param()</li>
-<li>load_model()</li>
-</ul>
-<p>这两个接口可以调用用户自己网络的结构和权重信息,不过这个不是我们今天的重点.</p>
-<p>Layer这个类包含了网络层的信息,比如层的名字(name), 类型(type)信息等等.</p>
-<p>同时它是一个父类,它的子类包含了具体的网络层实现,比如convolution, relu等等. </p>
-<p>Blob这个类比较简单,它主要包含了网络每一个blob的名字(name),产生该blob的层id(producer),使用该blob的层的id(consumers).</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>关于Net的实现,我们先看图<br> <img src="/2020/12/09/ncnn-lession-2/net.png" alt=""> </p>
-<p> 我们今天主要讲它包含的两个变量:</p>
-<ul>
-<li>layers</li>
-<li>blobs</li>
-</ul>
-<p>layers是一个包含了所有layer*的vector数组，它存放了所有layer的信．blobs是一个包含了所有blob的数组，它存放了所有blob的信息，关于blob我们下面会讲到．</p>
-<p> 关于layer的实现，我们先看图<br> <img src="/2020/12/09/ncnn-lession-2/layer_father.png" alt=""> </p>
-<p>它包含了4个重要的变量</p>
-<ul>
-<li>type</li>
-<li>name</li>
-<li>bottoms</li>
-<li>tops</li>
-</ul>
-<p>这四个变量分别是layer的类型(type)，名字(name)，输入blob的id(bottoms)， 输出blob的id(tops)．</p>
-<p>之所以要在Layer后面加上Father， 是因为它是具体子Layer实现类的父类，而这些具体的Layer实现类我们后面再做介绍．</p>
-<p> 关于blob的实现，我们先看图<br> <img src="/2020/12/09/ncnn-lession-2/blob.png" alt=""> </p>
-<p>它包含了3个重要变量</p>
-<ul>
-<li>name</li>
-<li>producer</li>
-<li>consumers</li>
-</ul>
-<p>name当然是该blob的名字．</p>
-<p>producer是一个int类型的变量，它存放着产生该blob的layer_id．</p>
-<p>consumers 是一个vector容器，里面存放着需要该blob作为输入的层的id，也就是字面意思的需要“消费”该blob的layer_id，因为可能不止一个层需要用到该blob作为输入，所以这个layer_id可能有多个，它需要一个容器来保存．</p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>关于Net/Layer/Blob的测试程序在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_2" target="_blank" rel="noopener">这里</a> ．代码结构如下：<br> <img src="/2020/12/09/ncnn-lession-2/tree.png" alt=""> </p>
-<p>代码中主要把Net/Layer/Blob的构造函数测试了一下．</p>
-
-          
+          <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第二课,也就是Net/Layer/Blob的讲解.<br> <img src="/2020/12/09/ncnn-lession-2/lession_2.png" alt=""><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/12/09/ncnn-lession-2/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -784,39 +663,15 @@
 
       
         
-          
-            <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习．</p>
+          <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>从本篇开始，我们来拆解NCNN的代码，共同学习一下NCNN的相关知识．如果有错误，希望大佬指正，大家共同学习．</p>
 <p>初步的大计划程如下：<br> <img src="/2020/12/08/ncnn-lession-1/lession_before.png" alt=""> </p>
-<p>漏斗显示我们计划还未开始．</p>
-<p>由于今天开始DataReader的讲解，所以我们会把第一个漏斗变成一个小红旗：<br> <img src="/2020/12/08/ncnn-lession-1/lession_1.png" alt=""> </p>
-<p>后面的计划可能所有变化，以尽量合理为准．我们今天就开始第一课，那就是DataReader类的学习．</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>DataReader的作用主要有两个：</p>
-<ul>
-<li>读取深度模型的proto信息</li>
-<li>读取深度模型的权重信息</li>
-</ul>
-<p>模型的proto信息如下，主要是写了一些模型结构的信息，下面是官方的squeezenet的网络proto：<br> <img src="/2020/12/08/ncnn-lession-1/proto_info.png" alt=""> </p>
-<p> 模型的权重信息则写到了一个二进制文件中．</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>先来一张图来看一下类DataReader的实现方式：<br> <img src="/2020/12/08/ncnn-lession-1/datareader.png" alt=""> </p>
-<p>DataReaderFromStdio是DataReader的子类，我们主要用它来实现DataReader类的主要功能．</p>
-<p>它包含一个成员变量：</p>
-<ul>
-<li>fp</li>
-</ul>
-<p>它其实是一个FILE的指针，也就是保存了当前读取的数据流的状态．</p>
-<p>它包含两个成员函数：</p>
-<ul>
-<li>scan</li>
-<li>read</li>
-</ul>
-<p>这两个成员函数分别是对fscan和fread的一个包装．</p>
-<p>函数scan是按照format格式读取信息的，所以它非常适合读取模型的proto信息．</p>
-<p>函数read是安装buffer长度读取信息的，所以它非常适合读取读取模型的权重信息．</p>
-<p>具体的实现方式如下:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//scan的读取方式是按照format去读取</span></span><br><span class="line"><span class="keyword">int</span> DataReaderFromStdio::scan(<span class="keyword">const</span> <span class="keyword">char</span>* format, <span class="keyword">void</span>* p) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fscanf</span>(fp, format, p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//read的读取方式是按照size去读取</span></span><br><span class="line"><span class="keyword">size_t</span> DataReaderFromStdio::read(<span class="keyword">void</span>* buf, <span class="keyword">size_t</span> size) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> fread(buf, <span class="number">1</span>, size, fp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>关于DataReader的测试代码在<a href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_1" target="_blank" rel="noopener">这里</a> ，代码结构如下：<br> <img src="/2020/12/08/ncnn-lession-1/tree.png" alt=""> </p>
-<p>代码中分别对scan和read做了测试．主要是学习一些基于format和基于buf_size去读取文件的差别．</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/12/08/ncnn-lession-1/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

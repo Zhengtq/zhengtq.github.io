@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="开始最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）． 跑了一个官方给的ci">
+<meta name="description" content="开始最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）．">
 <meta name="keywords" content="Tensorflow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; Tensorflow &gt;Tensorflow2.4 最佳实践">
 <meta property="og:url" content="http://yoursite.com/2021/01/27/tf2-x-best-practice/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="开始最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）． 跑了一个官方给的ci">
+<meta property="og:description" content="开始最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）．">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2021/01/27/tf2-x-best-practice/before.png">
 <meta property="og:image" content="http://yoursite.com/2021/01/27/tf2-x-best-practice/before1.png">
-<meta property="og:updated_time" content="2021-01-27T07:59:32.508Z">
+<meta property="og:updated_time" content="2021-03-11T02:42:09.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; Tensorflow &gt;Tensorflow2.4 最佳实践">
-<meta name="twitter:description" content="开始最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）． 跑了一个官方给的ci">
+<meta name="twitter:description" content="开始最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）．">
 <meta name="twitter:image" content="http://yoursite.com/2021/01/27/tf2-x-best-practice/before.png">
 
 
@@ -361,6 +361,7 @@
 
       
         <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p>最近想尝试一下用Transformer做图片分类的效果，于是就在网上找找有没有比较好的例子．发现keras官方有个例子，于是就clone下来看看．本以为multi-head-attention这个模块需要自己来实现，竟然发现tf.keras中已经实现了multi-head-attention的接口，发现是真的方便（tensorflow的最新版本tf2.4才有的一个接口）．</p>
+<a id="more"></a>
 <p>跑了一个官方给的cifar的例子，效果还行．于是就打算在自己的数据上跑跑看效果，在这个过程中，发现官方给你例子还远远达不到训练速度最优化的程度．于是就把官方例子就改了一下，最终达到了一个满意的训练速度，本篇就是记录一下tf2.4下的训练性能调优全过程．最终调优后的代码会共享出来．</p>
 <h1 id="单卡到多卡"><a href="#单卡到多卡" class="headerlink" title="单卡到多卡"></a>单卡到多卡</h1><p>官方给的vit(Vision Transformer)的例子是基于单卡的，但是现在训练大型网络已经离不开多卡，于是把官方例子改成多卡训练的版本（这里主要说明一下单机多卡的设置）．</p>
 <p><strong>首先根据你手上卡的数量来建立一个strategy的对象</strong>．</p>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="The evloution of the activation style in Residual BlocksThe activation style is different between different resiudal structure.">
+<meta name="description" content="The evolution of the Activation Style in Residual BlocksThe Activation Style is different between different residual structures.">
 <meta name="keywords" content="Deeplearning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Network &gt; Understanding the activation of the residual block">
+<meta property="og:title" content="&lt; Network &gt; Understanding the activation style in residual block">
 <meta property="og:url" content="http://yoursite.com/2018/12/14/newwork/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="The evloution of the activation style in Residual BlocksThe activation style is different between different resiudal structure.">
+<meta property="og:description" content="The evolution of the Activation Style in Residual BlocksThe Activation Style is different between different residual structures.">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2020-11-17T11:29:40.899Z">
+<meta property="og:updated_time" content="2021-03-11T09:42:28.356Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Network &gt; Understanding the activation of the residual block">
-<meta name="twitter:description" content="The evloution of the activation style in Residual BlocksThe activation style is different between different resiudal structure.">
+<meta name="twitter:title" content="&lt; Network &gt; Understanding the activation style in residual block">
+<meta name="twitter:description" content="The evolution of the Activation Style in Residual BlocksThe Activation Style is different between different residual structures.">
 
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>< Network > Understanding the activation of the residual block | Billy's Blog</title>
+  <title>< Network > Understanding the activation style in residual block | Billy's Blog</title>
   
 
 
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Network > Understanding the activation of the residual block</h1>
+          <h1 class="post-title" itemprop="name headline">< Network > Understanding the activation style in residual block</h1>
         
 
         <div class="post-meta">
@@ -357,16 +357,20 @@
       
 
       
-        <h1 id="The-evloution-of-the-activation-style-in-Residual-Blocks"><a href="#The-evloution-of-the-activation-style-in-Residual-Blocks" class="headerlink" title="The evloution of the activation style in Residual Blocks"></a>The evloution of the activation style in Residual Blocks</h1><p>The activation style is different between different resiudal structure.<br><a id="more"></a></p>
+        <h1 id="The-evolution-of-the-Activation-Style-in-Residual-Blocks"><a href="#The-evolution-of-the-Activation-Style-in-Residual-Blocks" class="headerlink" title="The evolution of the Activation Style in Residual Blocks"></a>The evolution of the <strong>Activation Style</strong> in Residual Blocks</h1><p>The <strong>Activation Style</strong> is different between different residual structures.<br><a id="more"></a></p>
 <ul>
-<li><p>resnet_v1<br>shortcut: activation after if there is conv operation on shortcut<br>residual : no activaion after<br>add: activation after</p>
+<li><p>Resnet_v1<br>After shortcut: Activation<br>After residual : No Activation<br>After add: Activation </p>
 </li>
-<li><p>resnet_v2<br>shorcut: no activation after<br>residual: no acitvation after<br>add: activation after</p>
+<li><p>Resnet_v2<br>After shortcut: No Activation<br>After residual: No Activation<br>After add: Activation </p>
 </li>
-<li><p>mobilenet_v2<br>shortcut: no acitvation after<br>residual: no activation after<br>add: no acitvation after</p>
+<li><p>Mobilenet_v2<br>After shortcut: No Activation<br>After residual: No Activation<br>After add: No Activation </p>
 </li>
 </ul>
-<h1 id="The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><a href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks" class="headerlink" title="The thought behind the activation style changing in Residual Blocks"></a>The thought behind the activation style changing in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residul together. We use activation for nonlinear transformation. <strong>However, the “add” operation is actually a kind of nonlinear transformation for both shortcut and residual</strong>. So there is no need to use activation before and after “add” operation. On the other side, if we use the common “relu” for activation before or after add operation, the information could be lost because the relu function is a truncation function. So I think it is wisely to not use the activation before and after the “add” operation in the resiudal structure.</p>
+<h1 id="The-thought-behind-the-changing-of-Activation-Style-in-Residual-Blocks"><a href="#The-thought-behind-the-changing-of-Activation-Style-in-Residual-Blocks" class="headerlink" title="The thought behind the changing of Activation Style  in Residual Blocks"></a>The thought behind the changing of <strong>Activation Style</strong>  in Residual Blocks</h1><p>The main idea of the residual structure is to add the shortcut and the residual together. </p>
+<p>We use activation for nonlinear transformation. </p>
+<p><strong>However, the additive action is actually a kind of nonlinear transformation for both shortcut and residual</strong>. So there is no need to use activation before and after additive action. </p>
+<p>On the other side, if we use the common “Relu” for activation after both residual and shortcut, the more useful information could be lost because the “Relu” function is a truncation function. </p>
+<p>So I think it is wisely to not use the activation before and after the additive action in the residual structure.</p>
 
       
     </div>
@@ -582,7 +586,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-evloution-of-the-activation-style-in-Residual-Blocks"><span class="nav-number">1.</span> <span class="nav-text">The evloution of the activation style in Residual Blocks</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-thought-behind-the-activation-style-changing-in-Residual-Blocks"><span class="nav-number">2.</span> <span class="nav-text">The thought behind the activation style changing in Residual Blocks</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-evolution-of-the-Activation-Style-in-Residual-Blocks"><span class="nav-number">1.</span> <span class="nav-text">The evolution of the Activation Style in Residual Blocks</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-thought-behind-the-changing-of-Activation-Style-in-Residual-Blocks"><span class="nav-number">2.</span> <span class="nav-text">The thought behind the changing of Activation Style  in Residual Blocks</span></a></li></ol></div>
             
 
           </div>

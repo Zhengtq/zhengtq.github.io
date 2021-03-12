@@ -1,81 +1,17 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-cn,en,default">
+<html lang="zh-cn">
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="theme-color" content="#222">
 
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
 
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Deeplearning,Antispoofing,RNN,">
-
-
-
-
-
-
-
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="Billy">
 
 
 
@@ -92,271 +28,284 @@
 <meta name="twitter:title" content="&lt; Deeplearning &gt; Use CNN and RNN to detect blink in a video">
 <meta name="twitter:description" content="Let’s do it!If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check whether you are a real person or not.  So as you see, facial mot">
 
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    <link rel="alternate" href="/atom.xml" title="Billy&#39;s Blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>&lt; Deeplearning &gt; Use CNN and RNN to detect blink in a video | Billy&#39;s Blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: 
     }
-  };
 </script>
 
 
-
-  <link rel="canonical" href="http://yoursite.com/2019/04/19/motion-blink-rnn/">
-
+    <script> yiliaConfig.jquery_ui = [false]; </script>
 
 
 
-
-  <title>< Deeplearning > Use CNN and RNN to detect blink in a video | Billy's Blog</title>
-  
+    <script> yiliaConfig.rootUrl = "\/";</script>
 
 
 
 
 
 
-
-
-</head>
-
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Billy's Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-      
-        <p class="site-subtitle">Make It Simple</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
-            
-            Home
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
-            
-            Tags
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
-            
-            Categories
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
-            
-            Archives
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/motion-blink-rnn/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Billy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Billy's Blog">
-    </span>
-
-    
-      <header class="post-header">
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Billy</a></h1>
+        </hgroup>
 
         
+        <p class="header-subtitle">Make It Simple</p>
         
-          <h1 class="post-title" itemprop="name headline">< Deeplearning > Use CNN and RNN to detect blink in a video</h1>
+
         
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T16:04:59+08:00">
-                2019-04-19
-              </time>
-            
 
-            
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>Menu</li>
+                        <li>Tags</li>
+                        
+                        <li>Friends</li>
+                        
+                        
+                        <li>About Me</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
 
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
-                  </a>
-                </span>
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Antispoofing/">Antispoofing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DEMO/">DEMO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deeplearning/">Deeplearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NCNN/">NCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Other/">Other</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RNN/">RNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/">Tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
 
                 
                 
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/19/motion-blink-rnn/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/19/motion-blink-rnn/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-            <span class="post-meta-divider">|</span>
-            <span class="page-pv"><i class="fa fa-file-o"></i>
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>p
-            </span>
-          
-
-          
-
-          
-
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
         </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Billy</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Billy</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Make It Simple</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="Tags" friends="Friends" about="About Me">
+</nav>
+      <div class="body-wrap"><article id="post-motion-blink-rnn" class="article article-type-post" itemscope="" itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/04/19/motion-blink-rnn/" class="article-date">
+      <time datetime="2019-04-19T08:04:59.000Z" itemprop="datePublished">2019-04-19</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt; Deeplearning &gt; Use CNN and RNN to detect blink in a video
+    </h1>
+  
+
       </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Deeplearning/">Deeplearning</a>
+    </div>
 
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Antispoofing/">Antispoofing</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Deeplearning/">Deeplearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RNN/">RNN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
         <h1 id="Let’s-do-it"><a href="#Let’s-do-it" class="headerlink" title="Let’s do it!"></a>Let’s do it!</h1><p>If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check whether you are a real person or not. </p>
 <p>So as you see, facial motion detection is  actually being used in many circumstances. You may want to figure out how to detect facial motion. </p>
 <p>In this post, I will take motion blink as a example to demonstrate how to do realize it. </p>
@@ -369,283 +318,90 @@
       
     </div>
     
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Deeplearning/" rel="tag"># Deeplearning</a>
-          
-            <a href="/tags/Antispoofing/" rel="tag"># Antispoofing</a>
-          
-            <a href="/tags/RNN/" rel="tag"># RNN</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/04/19/linux-install-config/" rel="next" title="< Linux > As a AI-practitioner, what I install in my linux system">
-                <i class="fa fa-chevron-left"></i> < Linux > As a AI-practitioner, what I install in my linux system
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/24/op-summary/" rel="prev" title="<Deeplarning> A simple way to distinguish different optimizers in DeepLearning">
-                <deeplarning> A simple way to distinguish different optimizers in DeepLearning <i class="fa fa-chevron-right"></i>
-              </deeplarning></a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
   </div>
   
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
+    
+    <div class="copyright">
+        <p><span>Title:</span><a href="/2019/04/19/motion-blink-rnn/">&lt; Deeplearning &gt; Use CNN and RNN to detect blink in a video</a></p>
+        <p><span>Author:</span><a href="/" title="Back to Homepage">Billy</a></p>
+        <p><span>Created:</span>2019-04-19, 16:04:59</p>
+        <p><span>Updated:</span>2021-03-12, 16:02:05</p>
+        <p>
+            <span>Full URL:</span><a class="post-url" href="/2019/04/19/motion-blink-rnn/" title="&lt; Deeplearning &gt; Use CNN and RNN to detect blink in a video">http://yoursite.com/2019/04/19/motion-blink-rnn/</a>
+            <span class="copy-path" data-clipboard-text="From http://yoursite.com/2019/04/19/motion-blink-rnn/　　By Billy" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>License:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target="_blank">"CC BY-NC-SA 4.0"</a> Keep Link &amp; Author if Distribute.
+        </p>
     </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-  
 
 
 
-        </div>
+    <nav id="article-nav">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="/images/head.png" alt="Billy">
-            
-              <p class="site-author-name" itemprop="name">Billy</p>
-              <p class="site-description motion-element" itemprop="description"></p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/">
-              
-                  <span class="site-state-item-count">45</span>
-                  <span class="site-state-item-name">posts</span>
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2019/04/24/op-summary/">
+                    &lt;Deeplarning&gt; A simple way to distinguish different optimizers in DeepLearning
                 </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
-                  <span class="site-state-item-name">categories</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
-                  <span class="site-state-item-name">tags</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-            <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/Zhengtq" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:ztqstd@163.com" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="https://zhengtq.github.io/2019/05/27/DEMO/" target="_blank" title="DEMO">
-                      
-                        <i class="fa fa-fw fa-angle-right"></i>DEMO</a>
-                  </span>
-                
             </div>
-          
-
-          
-          
-
-          
-          
-            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-              <div class="links-of-blogroll-title">
-                <i class="fa  fa-fw fa-link"></i>
-                Friends
-              </div>
-              <ul class="links-of-blogroll-list">
-                
-                  <li class="links-of-blogroll-item">
-                    <a href="https://www.cnblogs.com/zjutzz" title="ChrisZZ" target="_blank">ChrisZZ</a>
-                  </li>
-                
-              </ul>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/04/19/linux-install-config/">
+                    &lt; Linux &gt; As a AI-practitioner, what I install in my linux system
+                </a>
             </div>
-          
+        
+    </nav>
 
-          
+  
+</article>
 
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Let’s-do-it"><span class="nav-number">1.</span> <span class="nav-text">Let’s do it!</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-to-‘make’-data-if-you-do-not-have"><span class="nav-number">2.</span> <span class="nav-text">How to ‘make’ data if you do not have</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Build-your-blinking-detection-system"><span class="nav-number">3.</span> <span class="nav-text">Build your blinking detection system ?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#To-make-the-system-more-accurate"><span class="nav-number">4.</span> <span class="nav-text">To make the system more accurate.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Is-not-over"><span class="nav-number">5.</span> <span class="nav-text">Is not over.</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Let’s-do-it"><span class="toc-number">1.</span> <span class="toc-text">Let’s do it!</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#How-to-‘make’-data-if-you-do-not-have"><span class="toc-number">2.</span> <span class="toc-text">How to ‘make’ data if you do not have</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Build-your-blinking-detection-system"><span class="toc-number">3.</span> <span class="toc-text">Build your blinking detection system ?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#To-make-the-system-more-accurate"><span class="toc-number">4.</span> <span class="toc-text">To make the system more accurate.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Is-not-over"><span class="toc-number">5.</span> <span class="toc-text">Is not over.</span></a></li></ol>
+        
     </div>
-  </aside>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
 
+    <input type="button" id="tocButton" value="Hide" title="Show or Hide Table of Contents">
 
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Billy</span>
-
-  
-</div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+    <script>
+        yiliaConfig.toc = ["Hide", "Show", !!"false"];
+    </script>
 
 
 
-  <span class="post-meta-divider">|</span>
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"< Deeplearning > Use CNN and RNN to detect blink in a video　| Billy's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
 
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
-
-
-
-
-        
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="site-uv">
-      <i class="fa fa-user"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-      p
-    </span>
-  
-
-  
-    <span class="site-pv">
-      <i class="fa fa-eye"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-      p
-    </span>
-  
+    
 </div>
 
 
@@ -654,189 +410,121 @@
 
 
 
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2019/04/24/op-summary/" title="Pre: &lt;Deeplarning&gt; A simple way to distinguish different optimizers in DeepLearning">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="Mini Archives"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
+            <a href="/2019/04/19/linux-install-config/" title="Next: &lt; Linux &gt; As a AI-practitioner, what I install in my linux system">
+                <i class="fa fa-angle-right"></i>
+            </a>
         
-      </div>
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/01/27/tf2-x-best-practice/">< Tensorflow >Tensorflow2.4 最佳实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/28/ncnn-lesson-start/">< NCNN-Lession-Start >　Start</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/21/ncnn-lesson-10/">< NCNN-Lession-10 >　Forward Net</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/21/ncnn-lesson-9/">< NCNN-Lession-9 >　Load Image</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/18/ncnn-lesson-8/">< NCNN-Lession-8 >　读取网络的权重信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/15/ncnn-lesson-7/">< NCNN-Lession-7 >　Mat类的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/11/ncnn-lesson6/">< NCNN-Lession-6 >　内存管理，allocator的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/10/ncnn-lession-5/">< NCNN-Lession-5 >　create_layer的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/10/ncnn-lession-4/">< NCNN-Lession-４ >　创建layer子类</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/09/ncnn-lession-3/">< NCNN-Lession-3 >　读取网络的proto信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/09/ncnn-lession-2/">< NCNN-Lession-2 >　Net/Layer/Blob</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/12/08/ncnn-lession-1/">< NCNN-Lession-1 >　数据读取类DataReader</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/11/13/A-new-FaceQnet/">< Deeplearning > 博采众长，一个更加全面的人脸质量评价库</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/30/pri-knowledge-1/">< Deeplearning > 给模型加入先验知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/20/advnoise/">< Deeplearning > TF实操Game of Noise</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/17/advAS/">< Antispoofing >　如何科学的攻破活体识别系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/19/saferm/">< Linux > A Safe Way to Use Deletion Command In Linux.</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/27/linux-multi-thread/">< Linux > A simple way to run program with mult-thread</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/27/DEMO/">< DEMO > My work and DEMO</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/15/gru-bp1/">< Deeplarning > Understand Backpropagation of RNN/GRU and Implement It in Pure Python---1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/op-summary/"><deeplarning> A simple way to distinguish different optimizers in DeepLearning</deeplarning></a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/19/motion-blink-rnn/">< Deeplearning > Use CNN and RNN to detect blink in a video</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/19/linux-install-config/">< Linux > As a AI-practitioner, what I install in my linux system</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/29/network-depthwise/">< Network > Understanding DepthWiseConv</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/25/tf-quant/">< Tensorflow >How dose TensorFlow do Quant Aware Training?</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/antispoof-multi-task-learn/">< Antispoofing > Multi-Task-Learning in Face Antispoofing</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/06/dataset-cut/">< DeepLearning > The Support Vectors in DeepLearning</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/01/face-as-1/">< Antispoofing > Data Augmentation in Face Antispoofing</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/30/face-as/">< Antispoofing > Does we should align in Face Antispoofing</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/09/tf-read-data/">< Tensorflow > Data flow in Tensorflow</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/05/tf-rnn-gru/">< Tensorflow > What is the implementation of GRU in tensorflow</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/03/softmax-sigmoid-cross-entropy/">< Tensorflow > Softmax cross entropy & Sigmoid cross entropy</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/02/dl-question/"><deeplarning> Some DeepLearning Questions to Think About</deeplarning></a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/30/tf-lsoftmax/">< Tensorflow > How to implement the larget margin softmax loss in tensorflow.</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/22/tf-rgb-disturb/">< Tensorflow >Tensorflow Data Augmentation RGB distortation</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/tf-tur-perspective-transform/">< Tensorflow >Tensorflow Data Augmentation affine transformation</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/14/newwork/">< Network > Understanding the activation style in residual block</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/11/LINUX-COMMOND/">< Linux > Commond</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/09/bp-simple/">< Deeplearning > Break up backpropagation</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/05/python-tricks-1/">< Python > Some python tricks you may never use But you should know</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/02/tensorflow-disturb-yuv/">< Tensorflow >Tensorflow Data Augmentation YUV distortation</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/30/c-c-1/">< C\C++ > Compile on linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/28/network-shufflenet-v2/">< Network > Understanding Shufflenet_v2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/algorithm-hash-table/">< Algorithm > Hash table and decision tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/04/py-check/">< Python > To check elements in Python</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2021 Billy
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="A fast, simple &amp; powerful blog framework">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="Another simple and elegant theme for Hexo  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style="display:none">
+                        <span id="site-visit" title="Site Visitors"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style="display:none">
+                        <span id="page-visit" title="Page Hits"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
     
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="Back to Top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="Comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="Go to Bottom"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
     
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
 </script>
 
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-  
-  <script type="text/javascript">
-    var GUEST = ['nick','mail','link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item=>{
-      return GUEST.indexOf(item)>-1;
-    });
-    new Valine({
-        el: '#comments' ,
-        verify: false,
-        notify: false,
-        appId: 'BGzxkVpRtr5PoQUppRDqiC1V-gzGzoHsz',
-        appKey: 'K9tU9mVpjknHh8SNOWrqXqDV',
-        placeholder: 'Just go go',
-        avatar:'mm',
-        guest_info:guest,
-        pageSize:'10' || 10,
-    });
-  </script>
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
 </body>
 </html>

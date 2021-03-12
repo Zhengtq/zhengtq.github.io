@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>&lt; NCNN-Lession-3 &gt;　读取网络的proto信息 - Billy&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Billy&#039;s Blog"><meta name="msapplication-TileImage" content="/img/1.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Billy&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗："><meta property="og:type" content="blog"><meta property="og:title" content="&lt; NCNN-Lession-3 &gt;　读取网络的proto信息"><meta property="og:url" content="https://zhengtq.github.io/2020/12/09/ncnn-lession-3/"><meta property="og:site_name" content="Billy&#039;s Blog"><meta property="og:description" content="开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗："><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://zhengtq.github.io/2020/12/09/ncnn-lession-3/lession_3.png"><meta property="og:image" content="https://zhengtq.github.io/2020/12/09/ncnn-lession-3/proto.png"><meta property="og:image" content="https://zhengtq.github.io/2020/12/09/ncnn-lession-3/tree.png"><meta property="article:published_time" content="2020-12-09T08:14:58.000Z"><meta property="article:modified_time" content="2021-03-11T02:37:08.675Z"><meta property="article:author" content="Billy"><meta property="article:tag" content="Deeplearning"><meta property="article:tag" content="NCNN"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2020/12/09/ncnn-lession-3/lession_3.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhengtq.github.io/2020/12/09/ncnn-lession-3/"},"headline":"Billy's Blog","image":["https://zhengtq.github.io/2020/12/09/ncnn-lession-3/lession_3.png","https://zhengtq.github.io/2020/12/09/ncnn-lession-3/proto.png","https://zhengtq.github.io/2020/12/09/ncnn-lession-3/tree.png"],"datePublished":"2020-12-09T08:14:58.000Z","dateModified":"2021-03-11T02:37:08.675Z","author":{"@type":"Person","name":"Billy"},"description":"开始今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗："}</script><link rel="canonical" href="https://zhengtq.github.io/2020/12/09/ncnn-lession-3/"><link rel="icon" href="/img/1.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-1-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="Billy&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Zhengtq"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-12"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-12-09T08:14:58.000Z" title="12/9/2020, 4:14:58 PM">2020-12-09</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-03-11T02:37:08.675Z" title="3/11/2021, 10:37:08 AM">2021-03-11</time></span><span class="level-item"><a class="link-muted" href="/categories/Deeplearning/">Deeplearning</a></span><span class="level-item">11 分钟 read (About 1596 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">&lt; NCNN-Lession-3 &gt;　读取网络的proto信息</h1><div class="content"><h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>今天我们开始第三课，来说一些如何读取网络的proto信息，所以我们又要插上一个小红旗：<br> <img src="/2020/12/09/ncnn-lession-3/lession_3.png" alt=""><br><span id="more"></span><br>今天的讲解和之前的不太一样, 之前的都是讲类的实现．今天更加侧重讲解函数处理流程．让我们开始吧。</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>当我们要把训练好的网络部署到移动端的时候，网络结构的表达就非常重要．因为部署框架需要把你的网络结构读取它的自己的数据结构中．</p>
+<p>我们上一节讲的Net/Layer/Blob就是ncnn自己的网络数据结构，所以我们要把自己的模型的网络结构load到ncnn的Net/Layer/Blob中．</p>
+<p>我们先用一个例子来看一下ncnn读取的是怎样的网络结构（把它称为proto）：<br> <img src="/2020/12/09/ncnn-lession-3/proto.png" alt="proto"> </p>
+<p>这是一个经典的squeezenet的网络结构(非全部)，我们可以看到，第一行只有一个数字，它没有任何意义，只是一个标记，<strong>然后第二行有两个数字，分别代表layer的总数和blob的总数</strong>。从第三行开始的每一行代表一个网络的layer op操作和对应的layer信息。我们以卷积层为例子，来说明每一列代表什么含义：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">layer_type</th>
+<th style="text-align:right">layer_name</th>
+<th style="text-align:center">bottom_count</th>
+<th>top_bount</th>
+<th>bottom_name</th>
+<th>top_name</th>
+<th>参数1</th>
+<th>参数2</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Convolution</td>
+<td style="text-align:right">data</td>
+<td style="text-align:center">1</td>
+<td>1</td>
+<td>data</td>
+<td>conv1</td>
+<td>0=227</td>
+<td>1=225</td>
+<td>…</td>
+</tr>
+<tr>
+<td style="text-align:left">Relu</td>
+<td style="text-align:right">relu_conv1</td>
+<td style="text-align:center">1</td>
+<td>1</td>
+<td>data1</td>
+<td>conv1_relu_conv1</td>
+<td>0=0.00000</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中</p>
+<blockquote>
+<ul>
+<li><strong>layer_type</strong>:这个layer op是哪种op</li>
+<li><strong>layer_name</strong>: 这个layer op的名字</li>
+<li><strong>bottom_count</strong>: 输入blob的个数</li>
+<li><strong>top_bount</strong>: 输出blob的个数</li>
+<li><strong>bottom_name</strong>:输入blob的名字</li>
+<li><strong>top_name</strong>:输出blob的名字</li>
+<li><strong>参数</strong>: 该layer op的参数</li>
+</ul>
+</blockquote>
+<p>这样的一个proto可以完备的表达一个网络的数据流向， 所以我们可以用它来描述自己的网络结构．我们现在先不讲知道这个proto是怎样来的，今天主要要研究一下ncnn是怎样把这个proto给读到自己的数据结构中．</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>要把网络的proto读到ncnn自己定义的Net/Layer/Blob中，就要用到我们之前第一课中学习到的datareader类，因为网络proto中都是一些固定格式的信息，所以我们主要用到datareader类中的scan函数，这个其实就是fscan的一种包装，它比较适合读一些结构化的数据。</p>
+<p>我们可以把proto中的信息分成3类：</p>
+<blockquote>
+<ol>
+<li><p>字符串如layer_type, layer_name, blob_name</p>
+</li>
+<li><p>数字如layer_num, blob_num</p>
+</li>
+<li><p>带有”=”的参数信息</p>
+</li>
+</ol>
+</blockquote>
+<p>我们要通过不同的format格式去读取上述三种信息，对应的方式如下：</p>
+<h6 id="对于字符串的话，我们需要用如下的方法去读："><a href="#对于字符串的话，我们需要用如下的方法去读：" class="headerlink" title="对于字符串的话，我们需要用如下的方法去读："></a>对于字符串的话，我们需要用如下的方法去读：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FILE* fp;</span><br><span class="line"><span class="function">DataReaderFromStdio <span class="title">dr</span><span class="params">(fp)</span></span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">256</span>];</span><br><span class="line">dr.scan(<span class="string">&quot;%255&quot;</span>, buf); <span class="comment">// fscan(fp, &quot;%255&quot;, buf)</span></span><br></pre></td></tr></table></figure>
+<p>注意，我们规定读取字符串的最大长度为256，如果你的字符的长度大于256，则会出现错误．同时，由于函数fscanf遇到空格对停止读取操作，所以不必担心256过长．</p>
+<h6 id="对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示："><a href="#对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示：" class="headerlink" title="对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示："></a>对于数字的话，由于不确定数字的写法（比如是否是用科学计数法），我们还是需要用读字符串的方式去读，然后再转化为数字，如下所示：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FILE* fp;</span><br><span class="line"><span class="function">DataReaderFromStdio <span class="title">dr</span><span class="params">(fp)</span></span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">char</span> vstr[<span class="number">16</span>];</span><br><span class="line">dr.scan(<span class="string">&quot;%15s&quot;</span>, vstr);</span><br><span class="line"><span class="keyword">bool</span> is_float = vstr_is_float(vstr);</span><br><span class="line"><span class="keyword">if</span>(is_float)</span><br><span class="line">    <span class="keyword">float</span> now_param = vstr_to_float(vstr);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">int</span> now_param = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">sscanf</span>(vstr, <span class="string">&quot;%d&quot;</span>, &amp;now_param);</span><br></pre></td></tr></table></figure>
+<p>如上所示，我们需要先判断读取的字符串是不是float，如果是float，我们需要先将其转化为float，如果不是float，我们直接调用sscanf去读取字符串的数字．</p>
+<h6 id="对于带有”-”的参数信息，我们需要用如下的方式去读："><a href="#对于带有”-”的参数信息，我们需要用如下的方式去读：" class="headerlink" title="对于带有”=”的参数信息，我们需要用如下的方式去读："></a>对于带有”=”的参数信息，我们需要用如下的方式去读：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FILE* fp;</span><br><span class="line"><span class="function">DataReaderFromStdio <span class="title">dr</span><span class="params">(fp)</span></span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">int</span> id = <span class="number">0</span>;</span><br><span class="line">dr.scan(<span class="string">&quot;%d=&quot;</span>, id); <span class="comment">//fscan(fp, &quot;%d=&quot;, id)</span></span><br></pre></td></tr></table></figure>
+<h2 id="给layer和blob分配id"><a href="#给layer和blob分配id" class="headerlink" title="给layer和blob分配id"></a>给layer和blob分配id</h2><p>由于后面在前向推理的时候，我们要通过id去找对应的layer和blob，所以给layer和blob分配id就是一件非常重要的事情．</p>
+<p>对于layer的id是非常自然的，因为在你的proto中，从第三行开始的每一行都是一个layer op的操作，所以我们就根据行数，给每一个layer<strong>顺序的</strong>分配自己的id.</p>
+<p>给blob分配id的思想类似，在前面我们介绍过，每一层layer信息中，有一个参数代表着这个layer的top个数，我们可以根据layer的id和top的个数给blob分配id信息．</p>
+<p>layer类还有两个重要的参数，那就是layer-&gt;tops和layer-&gt;bottoms，前者是layer的top blob的id的集合，后者是layer的bottom blob的id集合．</p>
+<p>我们在赋值layer-&gt;tops的时候可以直接用blob的id．我们在赋值layer-&gt;bottoms的时候，就需要从之前的blob中去找对应的名字的blob的id，<strong>这也就是我们需要blob的name的原因</strong>．</p>
+<p>具体的代码可以如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> blob_index = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; layer_count; i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> layer_id = i;<span class="comment">//layer_id</span></span><br><span class="line">   	<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; bottom_count; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> bottom_index = find_blob_index_by_name(bottom_name);</span><br><span class="line">        layer-&gt;bottoms[j] = bottom_index;    <span class="comment">//layer-&gt;bottoms</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; top_count; j++)</span><br><span class="line">    &#123;</span><br><span class="line">       　Blob&amp; blob = blobs[blob_index];  <span class="comment">// 获取这时候的blob_id  </span></span><br><span class="line">     	<span class="keyword">int</span> now_blob_index = blob_index;<span class="comment">//blob id</span></span><br><span class="line">        layer-&gt;tops[j] = blob_index;  <span class="comment">//layer-&gt;tops</span></span><br><span class="line">        blob_index++;  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>有一个小trick需要说一下：</strong></p>
+<p>由于我们需要频繁的调用如下的函数接口：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dr.scan(format, buf);</span><br></pre></td></tr></table></figure>
+<p>我们可以通过宏函数来调用这个函数，这样就会比较简单明了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define SCAN_VALUE(fmt, v) dr.scan(fmt, &amp;v);</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p><a target="_blank" rel="noopener" href="https://github.com/Zhengtq/ncnn_breakdown/tree/main/lesson/lesson_3">关于这一节的测试程序在这里</a>，代码结构如下：</p>
+<p><img src="/2020/12/09/ncnn-lession-3/tree.png" alt=""></p>
+<p>大家可以看到，我们这里多了一个paramdict的实现，这是由于在读取数字的时候，涉及到判断是否是float，和char转float等等操作，会比较繁琐，所以ncnn把这部分的实现放到了paramdict这个类去实现．</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>&lt; NCNN-Lession-3 &gt;　读取网络的proto信息</p><p><a href="https://zhengtq.github.io/2020/12/09/ncnn-lession-3/">https://zhengtq.github.io/2020/12/09/ncnn-lession-3/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Billy</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2020-12-09</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-03-11</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Deeplearning/">Deeplearning</a><a class="link-muted mr-2" rel="tag" href="/tags/NCNN/">NCNN</a></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/12/10/ncnn-lession-4/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">&lt; NCNN-Lession-４ &gt;　创建layer子类</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/12/09/ncnn-lession-2/"><span class="level-item">&lt; NCNN-Lession-2 &gt;　Net/Layer/Blob</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://zhengtq.github.io/2020/12/09/ncnn-lession-3/';
+            this.page.identifier = '2020/12/09/ncnn-lession-3/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'Billy' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><!--!--><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="Billy&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2021 Billy</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Zhengtq"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Tensorflow,">
+  <meta name="keywords" content="python,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Using data queue to read data(abandoned, not support in future Tensorflow version)If you store you data in traditional hard disk, I suggest you read data through the data format of  tfrecord. However,">
-<meta name="keywords" content="Tensorflow">
+<meta name="description" content="LISTIf you contain your elements in a list, then the complexity of checking a element in your container is O(n).">
+<meta name="keywords" content="python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt; Tensorflow &gt; Data flow in Tensorflow">
-<meta property="og:url" content="http://yoursite.com/2019/01/09/tf-read-data/index.html">
+<meta property="og:title" content="&lt; Python &gt; To check elements in Python">
+<meta property="og:url" content="http://yoursite.com/2017/06/04/py-check/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="Using data queue to read data(abandoned, not support in future Tensorflow version)If you store you data in traditional hard disk, I suggest you read data through the data format of  tfrecord. However,">
+<meta property="og:description" content="LISTIf you contain your elements in a list, then the complexity of checking a element in your container is O(n).">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2021-03-12T06:16:24.603Z">
+<meta property="og:updated_time" content="2021-03-12T07:28:32.558Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt; Tensorflow &gt; Data flow in Tensorflow">
-<meta name="twitter:description" content="Using data queue to read data(abandoned, not support in future Tensorflow version)If you store you data in traditional hard disk, I suggest you read data through the data format of  tfrecord. However,">
+<meta name="twitter:title" content="&lt; Python &gt; To check elements in Python">
+<meta name="twitter:description" content="LISTIf you contain your elements in a list, then the complexity of checking a element in your container is O(n).">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/09/tf-read-data/">
+  <link rel="canonical" href="http://yoursite.com/2017/06/04/py-check/">
 
 
 
 
 
-  <title>< Tensorflow > Data flow in Tensorflow | Billy's Blog</title>
+  <title>< Python > To check elements in Python | Billy's Blog</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/tf-read-data/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/04/py-check/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Billy">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">< Tensorflow > Data flow in Tensorflow</h1>
+          <h1 class="post-title" itemprop="name headline">< Python > To check elements in Python</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T19:04:09+08:00">
-                2019-01-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-04T10:11:04+08:00">
+                2017-06-04
               </time>
             
 
@@ -305,8 +305,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">Deeplearning</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -323,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/tf-read-data/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/tf-read-data/" itemprop="commentCount"></span>
+                <a href="/2017/06/04/py-check/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/06/04/py-check/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -357,19 +357,8 @@
       
 
       
-        <h1 id="Using-data-queue-to-read-data-abandoned-not-support-in-future-Tensorflow-version"><a href="#Using-data-queue-to-read-data-abandoned-not-support-in-future-Tensorflow-version" class="headerlink" title="Using data queue to read data(abandoned, not support in future Tensorflow version)"></a>Using data queue to read data(abandoned, not support in future Tensorflow version)</h1><p>If you store you data in traditional hard disk, I suggest you read data through the data format of  tfrecord. However, if you store your data in solid state drives , I suggest that you read by FIFO Queue to directly read image by its root.<br>Firstly, you have to set up a FIFO Queue:<br><a id="more"></a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input_queue = data_flow_ops.FIFOQueue(capacity=<span class="number">3000000</span>,</span><br><span class="line">		                    dtypes=[tf.string, tf.int64],</span><br><span class="line">		                    shapes=[(<span class="number">1</span>,), (<span class="number">1</span>,)],</span><br><span class="line">		                    shared_name=<span class="keyword">None</span>, name=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
-<p>The queue above contain two values. The first is image root, and the second is image label.<br>To load image roots and labels to the FIFO Queue,  you have to use the a enqueue_op.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enqueue_op = input_queue.enqueue_many([image_paths_placeholder, labels_placeholder], name=&apos;enqueue_op&apos;)</span><br></pre></td></tr></table></figure>
-<p>Next, you should open up a session to feed your image roots and labels to respective placeholder.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess.run(enqueue_op, &#123;image_paths_placeholder: image_paths_array, labels_placeholder: labels_array&#125;)</span><br></pre></td></tr></table></figure>
-<p>During training, you have to dequeue the FIFO Queue and use multi-thread to accelerate the process. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">images_and_labels_list = []</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(preprocess_threads):</span><br><span class="line">	filenames, label= input_queue.dequeue()</span><br><span class="line">	images = []</span><br><span class="line">               image_depths = []</span><br><span class="line">	<span class="keyword">for</span> filename, single_label <span class="keyword">in</span> zip(tf.unstack(filenames), tf.unstack(label)):</span><br><span class="line">	    file_contents = tf.read_file(filename)</span><br><span class="line">   		    image = tf.image.decode_bmp(file_contents, channels=<span class="number">3</span>)</span><br><span class="line">   		    image = tf.reshape(image, original_img_shape)</span><br><span class="line">	    images.append(image)</span><br><span class="line">	images_and_labels_list.append([images, label])</span><br></pre></td></tr></table></figure>
-<p>Finally, to create batches of examples, you should use “tf.train.batch_join” api.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">img_batch, img_depth_batch,label_batch = tf.train.batch_join(</span><br><span class="line">	images_and_labels_list, batch_size=batch_size, </span><br><span class="line">	shapes=[[to_height, to_width, channels], ()], enqueue_many=True,</span><br><span class="line">	capacity=4 * preprocess_threads * 100,</span><br><span class="line">	allow_smaller_final_batch=True)</span><br></pre></td></tr></table></figure>
-<h1 id="Using-tf-data-API"><a href="#Using-tf-data-API" class="headerlink" title="Using tf.data API"></a>Using tf.data API</h1><p>Tensorflow officially promote using tf.data API for data processing. Using tf.data API is relatively easy to coding.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">_parse_data</span><span class="params">(line)</span>:</span></span><br><span class="line">       file_contents = tf.read_file(image_filepath)</span><br><span class="line">image = tf.image.decode_bmp(file_contents, channels=<span class="number">3</span>)</span><br><span class="line">       image = tf.reshape(image, original_img_shape)</span><br><span class="line">       <span class="keyword">return</span> image, single_label</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   dataset = tf.data.TextLineDataset([file_root])</span><br><span class="line"></span><br><span class="line">   dataset = dataset.map(map_func=_parse_data,  num_parallel_calls=<span class="number">4</span>)</span><br><span class="line">   dataset = dataset.shuffle(buffer_size=batch_size * <span class="number">3</span>)</span><br><span class="line">   dataset = dataset.batch(batch_size)</span><br><span class="line">   dataset = dataset.repeat(epoc)</span><br><span class="line">   dataset = dataset.prefetch(<span class="number">2000</span>)</span><br><span class="line">   data_iterator = dataset.make_one_shot_iterator()</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> data_iterator</span><br></pre></td></tr></table></figure>
-<p>To accelerate the reading process, <strong>do not forget to use dataset.prefetch and num_parallel_calls</strong>. </p>
+        <h1 id="LIST"><a href="#LIST" class="headerlink" title="LIST"></a>LIST</h1><p>If you contain your elements in a list, then the complexity of checking a element in your container is O(n).<br><a id="more"></a></p>
+<h1 id="SET"><a href="#SET" class="headerlink" title="SET"></a>SET</h1><p>If you contain your elements in a set, then the complexity of checking a element in your container is O(1). </p>
 
       
     </div>
@@ -387,7 +376,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+            <a href="/tags/python/" rel="tag"># python</a>
           
         </div>
       
@@ -400,18 +389,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/05/tf-rnn-gru/" rel="next" title="< Tensorflow > What is the implementation of GRU in tensorflow">
-                <i class="fa fa-chevron-left"></i> < Tensorflow > What is the implementation of GRU in tensorflow
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/30/face-as/" rel="prev" title="< Antispoofing > Does we should align in Face Antispoofing">
-                < Antispoofing > Does we should align in Face Antispoofing <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/26/algorithm-hash-table/" rel="prev" title="< Algorithm > Hash table and decision tree">
+                < Algorithm > Hash table and decision tree <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -585,7 +570,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-data-queue-to-read-data-abandoned-not-support-in-future-Tensorflow-version"><span class="nav-number">1.</span> <span class="nav-text">Using data queue to read data(abandoned, not support in future Tensorflow version)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-tf-data-API"><span class="nav-number">2.</span> <span class="nav-text">Using tf.data API</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LIST"><span class="nav-number">1.</span> <span class="nav-text">LIST</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SET"><span class="nav-number">2.</span> <span class="nav-text">SET</span></a></li></ol></div>
             
 
           </div>

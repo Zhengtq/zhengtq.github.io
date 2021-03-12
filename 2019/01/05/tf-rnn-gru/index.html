@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:">
+<meta name="description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demonstrate the GRU cell implementation in Tensorflow, and let’s take a two cells GRU for example:">
 <meta name="keywords" content="Deeplearning,RNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt; Tensorflow &gt; What is the implementation of GRU in tensorflow">
 <meta property="og:url" content="http://yoursite.com/2019/01/05/tf-rnn-gru/index.html">
 <meta property="og:site_name" content="Billy&#39;s Blog">
-<meta property="og:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:">
+<meta property="og:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demonstrate the GRU cell implementation in Tensorflow, and let’s take a two cells GRU for example:">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/2019/01/05/tf-rnn-gru/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/05/tf-rnn-gru/2.png">
-<meta property="og:updated_time" content="2020-11-17T11:29:41.531Z">
+<meta property="og:updated_time" content="2021-03-12T06:06:09.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt; Tensorflow &gt; What is the implementation of GRU in tensorflow">
-<meta name="twitter:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:">
+<meta name="twitter:description" content="What’s the implementation of GRU cell in tensorflow?We can use a chart to demonstrate the GRU cell implementation in Tensorflow, and let’s take a two cells GRU for example:">
 <meta name="twitter:image" content="http://yoursite.com/2019/01/05/tf-rnn-gru/1.png">
 
 
@@ -360,8 +360,10 @@
       
 
       
-        <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demenstrate the GRU cell implementation in tensorflow, and let’s a two cells for example:<br> <img src="/2019/01/05/tf-rnn-gru/1.png" alt=""><br><a id="more"></a><br>The chart above shows how a two-cells gru network to process sequence on time t and time t+1 on tensorflow. x_t is the input sequence at time t. h(0)_t-1 is the hidden state of cell zero at time t-1. h(1)_t is the hidden state of cell one at time t. y_t is the final output of the gru network at time t. <strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memery of h_now to h_prev for evry cell. </p>
-<p>The inner structure of a gru cell can be demenstrated as the follow picture:<br> <img src="/2019/01/05/tf-rnn-gru/2.png" alt=""><br>In the picture, “c” is concatenation. “w/b” demenstrates for multiply with learned weights and add bias. “sig” means sigmoid operation. </p>
+        <h1 id="What’s-the-implementation-of-GRU-cell-in-tensorflow"><a href="#What’s-the-implementation-of-GRU-cell-in-tensorflow" class="headerlink" title="What’s the implementation of GRU cell in tensorflow?"></a>What’s the implementation of GRU cell in tensorflow?</h1><p>We can use a chart to demonstrate the GRU cell implementation in Tensorflow, and let’s take a two cells GRU for example:<br> <img src="/2019/01/05/tf-rnn-gru/1.png" alt=""><br><a id="more"></a><br>The chart above shows how a two-cells GRU network process sequences at time t and time t+1 in Tensorflow. </p>
+<p>x_t is the input sequence at time t. h(0)_t-1  is the hidden state of cell zero at time t-1, while h(1)_t is the hidden state of cell one at time t. y_t is the final output of the GRU network at time t. </p>
+<p><strong>So as you can see, we have to maintain two variables h(0)_t-1 and h(1)_h-1 in order to proceed the two cells gru network.</strong><br>So at the end of each time step, we should copy the memory of h_now to h_prev for every cell. </p>
+<p>The inner structure of a Gru cell can be demonstrate as the picture below:<br> <img src="/2019/01/05/tf-rnn-gru/2.png" alt=""><br>In this chart, “c” is concatenation. “w/b” demonstrate for the inner product with learned weights and add bias. “sig” means sigmoid operation. </p>
 
       
     </div>
@@ -404,8 +406,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/09/tf-read-data/" rel="prev" title="< Tensorflow > Data flow in tensorflow">
-                < Tensorflow > Data flow in tensorflow <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/09/tf-read-data/" rel="prev" title="< Tensorflow > Data flow in Tensorflow">
+                < Tensorflow > Data flow in Tensorflow <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

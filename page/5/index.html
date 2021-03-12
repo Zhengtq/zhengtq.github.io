@@ -516,7 +516,10 @@
 
       
         
-          <h1 id="Let’s-do-it"><a href="#Let’s-do-it" class="headerlink" title="Let’s do it!"></a>Let’s do it!</h1><p>If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check you are a real person. So as you see, facial motion detection is interesting because it is acutally used in many circumstances. You may want to figure out how to detect facial motion. In this artical, I will take motion blink as a example to demenstion how to do it. So Let’s do it.<br></p>
+          <h1 id="Let’s-do-it"><a href="#Let’s-do-it" class="headerlink" title="Let’s do it!"></a>Let’s do it!</h1><p>If you use your face to pay a sum of money by ALIPAY, you may find that it requires you to do some facial movement to check whether you are a real person or not. </p>
+<p>So as you see, facial motion detection is  actually being used in many circumstances. You may want to figure out how to detect facial motion. </p>
+<p>In this post, I will take motion blink as a example to demonstrate how to do realize it. </p>
+<p>So Let’s do it.<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/04/19/motion-blink-rnn/" rel="contents">
@@ -806,7 +809,10 @@
 
       
         
-          <h1 id="Some-knowledge-about-DepthWiseConv"><a href="#Some-knowledge-about-DepthWiseConv" class="headerlink" title="Some knowledge about DepthWiseConv"></a>Some knowledge about DepthWiseConv</h1><p>As we all know, people invent DepthWiseConv for more efficient computation cost without accuracy loss. DepthwiseConv coupled with PointWiseConv could be equal to normal convlution. DepthWiseConv means that we assign a single kernel to each feature channel. PointWiseConv is a normal convolution kernel with kernel size 1 and stride 1. DepthWiseConv aims to extract the spatial feature of a feature map, while PointWiseConv aims to extrate the correlation of different feature maps.<br></p>
+          <h1 id="Some-knowledge-about-DepthWiseConv"><a href="#Some-knowledge-about-DepthWiseConv" class="headerlink" title="Some knowledge about DepthWiseConv"></a>Some knowledge about DepthWiseConv</h1><p>As we all know, people invent DepthWiseConv for more efficient computation cost without accuracy loss. </p>
+<p>DepthwiseConv coupled with PointWiseConv could be equal to normal convlution. </p>
+<p>DepthWiseConv means that we assign a single kernel to each feature channel. PointWiseConv is a normal convolution kernel with kernel size 1 and stride 1. </p>
+<p>DepthWiseConv aims to extract the spatial feature of a feature map, while PointWiseConv aims to extracte the correlation of different feature maps.<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/03/29/network-depthwise/" rel="contents">
@@ -962,20 +968,20 @@
 
       
         
-          <h1 id="Let-firstly-simplify-the-quant-process-in-TF"><a href="#Let-firstly-simplify-the-quant-process-in-TF" class="headerlink" title="Let　firstly simplify the quant process in TF"></a>Let　firstly simplify the quant process in TF</h1><h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)</span><br></pre></td></tr></table></figure>
+          <h1 id="Let-firstly-simplify-the-Quant-process-in-TF"><a href="#Let-firstly-simplify-the-Quant-process-in-TF" class="headerlink" title="Let firstly simplify the Quant process in TF"></a>Let firstly simplify the Quant process in TF</h1><h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S_a1(q_a1 + Z_a1) = S_w1(q_w1 + Z_w1) * S_a0(q_a0 + Z_a0)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>q_a1:Quanted activation value in layer 1</li>
-<li><p>S_a1, Z_a1: <strong>Estimated</strong> scale and zero point in layer 1</p>
+<li>q_a1: Quanted activation value in layer 1</li>
+<li><p>S_a1, Z_a1:  <strong>Estimated</strong> scale and zero point in layer 1</p>
 </li>
-<li><p>q_w1:Quanted weight in layer 1</p>
+<li><p>q_w1: Quanted weight in layer 1</p>
 </li>
-<li><p>S_w1, Z_w1: <strong>Statistical</strong> scale and zero point in layer 1</p>
+<li><p>S_w1, Z_w1:  <strong>Statistical</strong> scale and zero point in layer 1</p>
 </li>
-<li><p>q_a0:Quanted activation value in layer 0</p>
+<li><p>q_a0: Quanted activation value in layer 0</p>
 </li>
-<li>S_a0, Z_a0: <strong>Estimated</strong> scale and zero point in layer 0</li>
+<li>S_a0, Z_a0:  <strong>Estimated</strong> scale and zero point in layer 0</li>
 </ul>
-<p>As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S_a0, Z_a0, q_a1, Z_a1.To get S_w1/Z_w1 is simple, we can get the Statistical maximum of the weights in each layer we want. The only tricky thing is how to get S_a1/Z_a1/S_a0/Z_a0, which have to be estimated from the training data.<br></p>
+<p>As we can see, in order to compute q_a1(Quanted activation value in layer 1), we have to get S_w1, Z_w1, S_a0, Z_a0, q_a1, Z_a1. To get S_w1/Z_w1 is simple, we can get the Statistical maximum of the weights in each layer we want. The only tricky thing is how to get S_a1/Z_a1/S_a0/Z_a0, which have to be estimated from the training data.<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/03/25/tf-quant/" rel="contents">

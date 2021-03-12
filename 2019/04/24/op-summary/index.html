@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Billy&#39;s Blog">
 <meta property="og:description" content="The optimizersLet’s simply list the optimizers that may or may not be used in your project.  SGDOptimizer MomentumOptimizer NesterovOptimizer AdagradOptimizer AdadeltaOptimizer RMSPropOptimizer AdamOp">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2020-11-17T11:29:40.719Z">
+<meta property="og:updated_time" content="2021-03-12T07:43:34.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;Deeplarning&gt; A simple way to distinguish different optimizers in DeepLearning">
 <meta name="twitter:description" content="The optimizersLet’s simply list the optimizers that may or may not be used in your project.  SGDOptimizer MomentumOptimizer NesterovOptimizer AdagradOptimizer AdadeltaOptimizer RMSPropOptimizer AdamOp">
@@ -371,10 +371,10 @@
 </ul>
 <p>We can categorize these optimizers into Four types:</p>
 <ul>
-<li>Type1:  Base type(SGDOptimizer)</li>
-<li>Type2: Add Momentum to gradient(Base on the historical gradient)(MomentumOptimizer, AdamOptimizer, NadamOptimizer)</li>
-<li>Type3: Change LearningRate accordingly(According to the changing speed(second derivative of the gradient) of each variable)(AdagradOptimizer, Adadelta, RMSPropOptimizer, NadamOptimizer)</li>
-<li>Type4: Change direction of the gradient(Weight firstly update by the historical gradient, and then compute the new gradient)(NesterovOptimizer, NadamOptimizer)</li>
+<li>Type1:  Base type: SGDOptimizer</li>
+<li>Type2: Add Momentum to gradient(Base on the historical gradient): MomentumOptimizer, AdamOptimizer, NadamOptimizer</li>
+<li>Type3: Change LearningRate accordingly(According to the changing speed(second derivative of the gradient) of each variable): AdagradOptimizer, Adadelta, RMSPropOptimizer, NadamOptimizer</li>
+<li>Type4: Change direction of the gradient(Weight firstly update by the historical gradient, and then compute the new gradient): NesterovOptimizer, NadamOptimizer</li>
 </ul>
 <h1 id="Let-make-some-equations"><a href="#Let-make-some-equations" class="headerlink" title="Let make some equations"></a>Let make some equations</h1><ul>
 <li>SGDOptimizer = T1</li>
@@ -383,7 +383,7 @@
 <li>AdagradOptimizer = T1 + T3</li>
 <li>Adadelta = T1 + T3(Add window on the squared gradient)</li>
 <li>RMSPropOptimizer = T1 + T3(Add window on the squared gradient)</li>
-<li>AdamOptimizer = T1 + T3(Add window on the squared gradient  And add window on the gradient(momentum) itself)</li>
+<li>AdamOptimizer = T1 + T3(Add window on the squared gradient. And add window on the gradient(momentum) itself)</li>
 <li>NadamOptimizer = T1 + T3 + T4</li>
 </ul>
 
